@@ -1,12 +1,22 @@
-import React from 'react'
+import  {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import Homepage from './pages/Homepage'
 import './App.css'
+import Header from './components/Header'
+import Trial from './pages/Trial'
 
 function App() {
   return (
 
-    <div className='text-3xl font-bold'>
-      hello World!
-    </div>
+    <>
+    <Router>
+      <div className='container'>
+      <Header/>
+      <Routes>
+        <Route path='/' element={<Homepage/>}/>
+      </Routes>
+      </div>
+      </Router>
+    </>
   )
 }
 

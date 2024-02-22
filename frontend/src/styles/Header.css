@@ -1,0 +1,155 @@
+/* Navbar.css */
+
+.header {
+    /* position: fixed; */
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: transparent;
+    z-index: 100;
+    padding: 0.1rem 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    height: 3.5rem;
+    margin: 1rem;
+  }
+  
+  .nav__logo {
+    color: black;
+    transition: color 0.4s;
+    letter-spacing: 0.2cm;
+    font-weight: 600;
+    font-size: 2.813rem;
+  }
+  
+  .nav__toggle,
+  .nav__close {
+    font-size: 1.5rem;
+    color: black;
+    cursor: pointer;
+  }
+  
+  .nav__cta {
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .nta_cta:hover{
+    transform: scale(0.98);
+  }
+  
+  @media screen and (max-width: 1150px) {
+    .nav__menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      background-color: hsla(0, 0%, 6%, 0.2);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      width: 80%;
+      height: 100%;
+      padding: 6rem 3rem 0;
+      transition: right 0.4s;
+    }
+  }
+  @media screen and (max-width: 300px) {
+    .nav__menu {
+      padding: 4rem 1rem 2rem;
+    }
+  
+    .nav__list {
+      row-gap: 1rem;
+    }
+  
+    .nav__link,
+    .nav__cta {
+      font-size: 0.813rem;
+    }
+  
+    .nav__cta {
+      padding: 8px 16px;
+      font-size: 12px;
+      margin-top: 1rem;
+      width: auto;
+      white-space: nowrap;
+    }
+  }
+  
+  .nav__list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2.5rem;
+    align-items: center;
+  }
+  
+  .nav__link {
+    color: black;
+    font-weight: 600;
+    transition: color 0.4s;
+  }
+  
+  .nav__link:hover {
+    color: black;
+  }
+  
+  .nav__close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+  }
+  
+  .show-menu {
+    right: 0;
+  }
+  .nav__listt {
+    display: flex;
+    flex-direction: row;
+    column-gap: 2.5rem;
+  }
+  
+  .nav__menu_mobile {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    background-color: hsla(0, 0%, 6%, 0.2);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    width: 80%;
+    height: 100%;
+    padding: 6rem 3rem 0;
+    transition: right 0.4s;
+  }
+  @media screen and (min-width: 1150px) {
+    .nav {
+      height: calc(3.5rem + 1rem);
+    }
+    .nav__toggle,
+    .nav__close {
+      display: none;
+    }
+  
+    .nav__list {
+      flex-direction: row;
+      column-gap: 2.5rem;
+    }
+  }
+  
+  .nav__list__web {
+    display: flex;
+    flex-direction: row;
+    column-gap: 2.5rem;
+    align-items: center;
+    list-style-type: none;
+    padding: 0;
+  }
+  
