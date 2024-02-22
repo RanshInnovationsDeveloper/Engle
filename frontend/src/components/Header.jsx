@@ -21,7 +21,6 @@ const Header = () => {
   const renderNavLinks = () => {
     const listClassName = isMobile ? "nav__list" : "nav__list__web";
     const linkClassName = "nav__link";
-    const buttonClassName = "nav__cta";
 
     return (
         <>
@@ -63,16 +62,16 @@ const Header = () => {
         <li>
           <NavLink
             to="/login"
-            className={`${linkClassName} ${buttonClassName}`}
+            className={`${linkClassName} `}
             onClick={closeMobileMenu}
           >
-            <button className="btn px-3 py-2">Log In</button>
+            <button className="btn px-3 py-2 lg:mt-0 mt-2">Log In</button>
           </NavLink>
         </li>
         <li>
           <NavLink
             to="/register"
-            className={`${linkClassName} ${buttonClassName}`}
+            className={`${linkClassName} `}
             onClick={closeMobileMenu}
           >
             <button className="btn px-3 py-2">Sign Up</button>
@@ -85,7 +84,7 @@ const Header = () => {
 
   return (
     <header className="header">
-      <nav className="nav container">
+      <nav className="nav">
         <NavLink to="/" className="nav__logo">
           ENGLE
         </NavLink>
