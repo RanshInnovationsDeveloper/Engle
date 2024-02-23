@@ -1,4 +1,4 @@
-import  {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+import  {Routes, Route} from 'react-router-dom'
 import Homepage from './pages/Homepage'
 import './App.css'
 import Header from './components/Header'
@@ -9,14 +9,13 @@ function App() {
   return (
 
     <>
-    <Router>
       <Header/>
       <Routes>
         <Route path='/' element={<Homepage/>}/>
         <Route path='/login' element={<Loginpage/>}/>
         <Route path='/register' element={<Registerpage/>}/>
       </Routes>
-      </Router>
+    
     </>
   )
 }
