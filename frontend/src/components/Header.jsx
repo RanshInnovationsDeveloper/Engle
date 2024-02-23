@@ -65,7 +65,7 @@ const Header = () => {
             className={`${linkClassName} `}
             onClick={closeMobileMenu}
           >
-            <button className="btn px-3 py-2 lg:mt-0 mt-2">Log In</button>
+            <button className="btn px-3 py-3 lg:mt-0 mt-2">Log In</button>
           </NavLink>
         </li>
         <li>
@@ -74,7 +74,7 @@ const Header = () => {
             className={`${linkClassName} `}
             onClick={closeMobileMenu}
           >
-            <button className="btn px-3 py-2">Sign Up</button>
+            <button className="btn px-3 py-3">Sign Up</button>
           </NavLink>
         </li>
       </ul>
