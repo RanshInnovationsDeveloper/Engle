@@ -1,4 +1,5 @@
-import React, {useState} from 'react'
+import React, {useState, useContext} from 'react'
+import { AuthContext } from '../contexts/AuthContext';
 
 function Registercard() {
 
@@ -6,10 +7,17 @@ function Registercard() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmpass, setConfirmpass] = useState('');
+
+    const { signup, isFetching, isLoading } = useContext(AuthContext);
   
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
-  
+      const res=await signup(email,password,username);
+      if(res.error){
+        console.log(res.error);
+      }else{
+        console.log("signed up successfully")
+      }
     }
 
   return (
