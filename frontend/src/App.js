@@ -7,7 +7,6 @@ import Registerpage from './pages/Registerpage'
 
 function App() {
   return (
-
     <>
     <Router>
       <Header/>
