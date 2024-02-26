@@ -4,6 +4,7 @@ import './App.css'
 import Header from './components/Header'
 import Loginpage from './pages/Loginpage'
 import Registerpage from './pages/Registerpage'
+import Footer from './components/Footer'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path='/register' element={<Registerpage/>}/>
       </Routes>
     
+ 
     </>
   )
 }
