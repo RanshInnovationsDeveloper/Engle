@@ -1,27 +1,62 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    signupData: null,
+    userEmail: null,
+    userName:null,
     loading: false,
-    token: localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : null,
+    authUserData:null
 };
 
 const authSlice = createSlice({
     name: "auth",
     initialState: initialState,
     reducers: {
-        setSignupData(state, value) {
-            state.signupData = value.payload;
+        setauthUserData(state, value) {
+            state.authUserData = value.payload;
+        },
+        setuserEmail(state, value) {
+            state.userEmail = value.payload;
+        },
+        setuserName(state, value) {
+            state.userName = value.payload;
         },
         setLoading(state, value) {
             state.loading = value.payload;
         },
-        setToken(state, value) {
-            state.token = value.payload;
-        },
+        
     },
 });
-
-export const { setSignupData, setLoading, setToken } = authSlice.actions;
+// console.log("our auth slice data is ",authSlice.actions);
+export const { setuserEmail,setuserName, setauthUserData , setLoading } = authSlice.actions;
 
 export default authSlice.reducer;
+
+
+
+
+
+
+
+
+// example to explain how redux work -
+// import { createSlice } from '@reduxjs/toolkit';
+
+// const initialState = {
+//   count: 0,
+// };
+
+// const counterSlice = createSlice({
+//   name: 'counter',
+//   initialState,
+//   reducers: {
+//     increment(state) {
+//       state.count += 1;
+//     },
+//     decrement(state) {
+//       state.count -= 1;
+//     },
+//   },
+// });
+
+// export const { increment, decrement } = counterSlice.actions;
+// export default counterSlice.reducer;
