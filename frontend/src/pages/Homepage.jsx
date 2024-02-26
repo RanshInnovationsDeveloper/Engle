@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom"
+import Footer from "../components/Footer"
 
 function Homepage() {
   return (
@@ -68,8 +70,7 @@ function Homepage() {
             </div>
       </div>
 
-
-
+      <Footer/>
     </div>
   )
 }

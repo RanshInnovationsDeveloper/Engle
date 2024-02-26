@@ -6,6 +6,9 @@ import { signin } from '../services/operations/authServices';
 import { logout } from '../services/operations/authServices';
 import { setLoading } from '../slices/authSlice';
 import { useDispatch,useSelector } from "react-redux"
+import { IoPerson } from "react-icons/io5";
+import { MdLock } from "react-icons/md";
+import { RiEyeFill, RiEyeCloseFill, RiEyeOffFill } from 'react-icons/ri';
 
 
 function Logincard() {
@@ -30,6 +33,12 @@ function Logincard() {
     dispatch(setLoading(false));
 
   }
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handlesignout=()=>{
 
     console.log(" logout function call in logincard just to check logout functionalitiy ");
@@ -44,16 +53,16 @@ function Logincard() {
       <ToastContainer/>
       <button onClick={handlesignout} >logout</button>
       <div>
-        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">   
           Login
         </h2>
       </div>
       <form onSubmit={handleSubmit} className="mt-8 space-y-6" action="#" method="POST">
         <input type="hidden" name="remember" value="true" />
         <div className="rounded-md shadow-sm -space-y-px">
-          <div>
-            <label htmlFor="useremail" className="sr-only">
-              Useremail
+          <div className='flex flex-row mb-5'>
+            <label htmlFor="useremail" className="flex flex-col justify-center rounded-l-lg px-4 py-4 bg-[#F4F6FC] ">
+              <IoPerson />
             </label>
             <input
               id="useremail"
@@ -61,27 +70,37 @@ function Logincard() {
               type="useremail"
               autoComplete="useremail"
               required
-              className="appearance-none rounded-lg bg-[#F4F6FC] relative block w-full px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Email"
+              className="appearance-none rounded-r-lg bg-[#F4F6FC] relative block w-full px-3 py-4  placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Useremail"
               value={useremail}
               onChange={(e) => setUseremail(e.target.value)}
             />
           </div>
-          <div>
-            <label htmlFor="password" className="sr-only">
-              Password
+          <div className='flex flex-row '>
+            <label htmlFor="password" className="flex flex-col justify-center rounded-l-lg px-4 py-4 bg-[#F4F6FC] ">
+              <MdLock />
             </label>
             <input
               id="password"
               name="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               autoComplete="current-password"
               required
-              className="appearance-none  relative block w-full bg-[#F4F6FC] mt-3 px-3 py-4 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              className="appearance-none  relative block w-full bg-[#F4F6FC]  px-3 py-4  placeholder-gray-500 text-gray-900 rounded-r-lg focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
+            <div className='flex flex-col justify-center rounded-l-lg px-4 py-4 bg-[#F4F6FC] '>
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className=""
+            >
+              {showPassword ? <RiEyeFill /> : <RiEyeOffFill />}
+            </button>
+            </div>
+         
           </div>
         </div>
         <div className="flex items-center justify-end">
@@ -101,8 +120,6 @@ function Logincard() {
     </div>
     )
     
- 
-
   )
 }
 

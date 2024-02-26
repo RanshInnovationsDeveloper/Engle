@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import { setauthUserData,setuserEmail, setuserName } from './slices/authSlice'
 import { useDispatch } from "react-redux"
 import { auth } from './services/firebase'
+import Footer from './components/Footer'
 
 function App() {
 
@@ -32,7 +33,6 @@ function App() {
 
 
   return (
-
     <>
       <Header />
       <Routes>
@@ -41,6 +41,8 @@ function App() {
         <Route path='/register' element={<Registerpage />} />
       </Routes>
 
+    
+ 
     </>
   )
 }
