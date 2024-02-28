@@ -1,8 +1,8 @@
 import  { useEffect, useState } from 'react'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom"
-import { signin, logout } from '../services/operations/authServices';
+import { signin } from '../services/operations/authServices';
 import { setLoading } from '../slices/authSlice';
 import { useDispatch, useSelector } from "react-redux"
 import { IoMdMail } from "react-icons/io";

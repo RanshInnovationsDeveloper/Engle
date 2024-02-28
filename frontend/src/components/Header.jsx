@@ -4,13 +4,12 @@ import { IoClose, IoMenu } from "react-icons/io5";
 import { useMediaQuery } from "react-responsive";
 import "../styles/Header.css"
 import { logout } from '../services/operations/authServices';
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
   const navigate = useNavigate()
-  const dispatch = useDispatch()
   const {authUserData} = useSelector((state)=> state.auth)
 
   const handlesignout = () => {

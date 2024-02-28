@@ -1,144 +1,202 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
 import { FaFacebook } from "react-icons/fa";
 import { RiTwitterXLine } from "react-icons/ri";
 import { FaLinkedin } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
+import '../styles/Footer.css'
 export default function Footer() {
     return (
+        // <footer className="bg-black relative bottom-0 py-12 ">
+        //     <div className=" flex flex-col justify-center items-center">
+        //         <div className="flex lg:flex-row flex-col justify-center items-center  gap-40">
+        //             <div className="flex lg:flex-row flex-col justify-center items-center gap-28">
+        //                 <div className="flex flex-row gap-28 ">
+        //                     <div>
+        //                         <h2 className="mb-6 text-2xl text-white">Company</h2>
+        //                         <ul className="text-white opacity-60 font-medium">
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">About us</a>
+        //                             </li>
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">Why Choose Us</a>
+        //                             </li>
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">Pricing</a>
+        //                             </li>
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">Testimonial</a>
+        //                             </li>
+        //                         </ul>
+        //                     </div>
+        //                     <div>
+        //                         <h2 className="mb-6 text-2xl text-white ">Resouces</h2>
+        //                         <ul className="text-white opacity-60 font-medium">
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline ">Privacy Policy</a>
+        //                             </li>
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">Terms and Conditions</a>
+        //                             </li>
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">Blog</a>
+        //                             </li>
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">Contact Us</a>
+        //                             </li>
+        //                         </ul>
+        //                     </div>
 
 
+        //                     <div>
+        //                         <h2 className="mb-6 text-2xl text-white">Product</h2>
+        //                         <ul className="text-white opacity-60 font-medium">
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">Project Management</a>
+        //                             </li>
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">Time Tracker</a>
+        //                             </li>
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">Time schedule</a>
+        //                             </li>
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">Lead Generate</a>
+        //                             </li>
+        //                             <li className="mb-3">
+        //                                 <a href='/' className="hover:underline">Remote Collaboration</a>
+        //                             </li>
+        //                         </ul>
+        //                     </div>
+        //                 </div>
+        //             </div>
+        //             <div className="px-10">
+        //                 <div className="flex flex-row justify-center items-center">
+        //                 <h1 className='text-5xl  text-white mb-9 font-semibold'>
+        //                     Engle
+        //                 </h1>
+        //                 </div>
 
-        <footer className="bg-black relative bottom-0 w-full">
-            <div className="md:m-2 max-w-screen-3xl mx-40 my-20 w-full justify-center items-center">
-                <div className="md:flex sm-gap-6 gap-80">
-                    <div className="flex items-center">
-                        <div className="grid grid-cols-2 gap-2 sm:gap-40 sm:grid-cols-3">
-                            <div>
-                                <h2 className="mb-6 text-2xl  text-gray-900 dark:text-white">Company</h2>
-                                <ul className="text-gray-500  font-medium">
-                                    <li className="mb-3 text-white">
-                                        <Link to="/" className="hover:underline">About us</Link>
-                                    </li>
-                                    <li className="mb-3">
-                                        <Link to="/" className="hover:underline">Why Choose Us</Link>
-                                    </li>
-                                    <li className="mb-3">
-                                        <Link to="/" className="hover:underline">Pricing</Link>
-                                    </li>
-                                    <li className="mb-3">
-                                        <Link to="/" className="hover:underline">Testimonial</Link>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h2 className="mb-6 text-2xl text-gray-900 dark:text-white">Resouces</h2>
-                                <ul className="text-gray-500 dark:text-gray-400 font-medium">
-                                    <li className="mb-3">
-                                        <Link to="#" className="hover:underline ">Privacy Policy</Link>
-                                    </li>
-                                    <li className="mb-3">
-                                        <Link to="" className="hover:underline">Terms and Conditions</Link>
-                                    </li>
-                                    <li className="mb-3">
-                                        <Link to="" className="hover:underline">Blog</Link>
-                                    </li>
-                                    <li className="mb-3">
-                                        <Link to="" className="hover:underline">Contact Us</Link>
-                                    </li>
-                                </ul>
-                            </div>
+        //                 <ul>
+        //                     <li className="mb-3 text-white opacity-60 font-medium">
+        //                         <a href='/' className="hover:underline">Subscribe to our Newsletter</a>
+        //                     </li>
+        //                     <li>
+        //                         <div className="flex border-gradient rounded-2xl ">
+        //                             <input className="bg-black px-7 py-3 lg:w-[80%] w-[100%] rounded-l-xl" type="text" placeholder="Enter your Email" />
+        //                             <button className="btn2 border-l px-6 py-4 text-white rounded-r-xl">Subscribe</button>
+        //                         </div>
+        //                     </li>
+        //                 </ul>
+        //             </div>
+        //         </div>
+
+        //         <div className="sm:flex sm:items-center sm:justify-center gap-48 flex mt-28 ">
+        //             <span className="text-lg text-white lg:text-center">Copyright @2023
+        //             </span>
+        //             <div className="flex mt-4 sm:justify-center sm:mt-0">
+        //                 <a href='/' className="text-white hover:text-gray-900">
+        //                     <FaFacebook className='w-6 h-6' />
+
+        //                 </a>
+        //                 <a href='/' className="text-white hover:text-gray-900 ms-5">
+        //                     <RiTwitterXLine className='w-6 h-6' />
+
+        //                 </a>
+
+        //                 <a href='/' className="text-white hover:text-gray-900 ms-5">
+        //                     <FaLinkedin className='w-6 h-6' />
+
+        //                 </a>
 
 
-                            <div>
-                                <h2 className="mb-6 text-2xl text-gray-900 dark:text-white">Product</h2>
-                                <ul className="text-gray-500 dark:text-gray-400 font-medium">
-                                    <li className="mb-3">
-                                        <Link to="#" className="hover:underline">Project Management</Link>
-                                    </li>
-                                    <li className="mb-3">
-                                        <Link to="#" className="hover:underline">Time Tracker</Link>
-                                    </li>
-                                    <li className="mb-3">
-                                        <Link to="#" className="hover:underline">Time schedule</Link>
-                                    </li>
-                                    <li className="mb-3">
-                                        <Link to="#" className="hover:underline">Lead Generate</Link>
-                                    </li>
-                                    <li className="mb-3">
-                                        <Link to="#" className="hover:underline">Remote Collaboration</Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <p className='text-5xl md:flex text-white mb-9 font-semibold'>
-                            Engle
-                        </p>
-                        <ul>
-                            <li className="mb-3 text-gray-500 dark:text-gray-400 font-medium">
-                                <Link to="#" className="hover:underline">Subscribe to our Newsletter</Link>
+        //                 <a href='/' className="text-white hover:text-gray-900 ms-5">
+        //                     <FaInstagram className='w-6 h-6' />
+
+        //                 </a>
+        //             </div>
+        //         </div>
+        //     </div>
+        // </footer>
+        <>
+            <footer className=" bg-black relative">
+                <div className="flex flex-col py-10 lg:mx-12 mx-6">
+                    <div className="flex flex-row flex-wrap  mb-10">
+                     <div className="text-white lg:px-8 px-4  m-4">
+                        <h1 className="text-2xl">Company</h1>
+                        <ul className="opacity-60">
+                            <li className="mb-2">
+                                <a href="/">About Us</a>
                             </li>
-                            <li>
-                                <div className="max-w-md mx-auto overflow-hidden relative bottom-0">
-                                    <form className="max-w-md mx-auto">
-                                        <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Enter Your Email</label>
-                                        <div className="relative flex items-stretch">
-                                            <input
-                                                type="search"
-                                                id="default-search"
-                                                className="block w-full  px-10 py-4 text-md text-gray-900 border-4 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white rounded-l-lg dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                placeholder="Enter Your Email"
-                                                required
-                                                style={{ borderImage: 'linear-gradient(to right, #C7D800, #10B981, #2BD500 )', borderImageSlice: 1 }}
-                                            />
-                                            <button
-                                                type="submit"
-                                                className="text-white  bg-gradient-to-r from-green-600 via-green-500 to-yellow-300 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium text-md px-10 py-2 rounded-r-lg dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                                            >
-                                                Subscribe
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-
-
+                            <li className="mb-2">
+                            <a href="/">Why Choose Us</a>
+                            </li>
+                            <li className="mb-2">
+                                <a href="/">Pricing</a>
+                                </li>
+                            <li className="mb-2">
+                            <a href="/">Testimonial</a>
                             </li>
                         </ul>
-
+                     </div>
+                     <div className="text-white lg:px-8 px-4  m-4">
+                     <h1 className="text-2xl">Resources</h1>
+                        <ul className="opacity-60 ">
+                            <li className="mb-2">
+                                <a href="/">Privacy Policy</a>
+                            </li>
+                            <li className="mb-2">
+                            <a href="/">Terms and conditions</a>
+                            </li>
+                            <li className="mb-2">
+                                <a href="/">Blog</a>
+                                </li>
+                            <li className="mb-2">
+                            <a href="/">Contact Us</a>
+                            </li>
+                        </ul>
+                     </div>
+                     <div className="text-white lg:px-8 px-4  m-4">
+                     <h1 className="text-2xl">Product</h1>
+                        <ul className="opacity-60">
+                            <li className="mb-2">
+                                <a href="/">Project management</a>
+                            </li>
+                            <li className="mb-2">
+                            <a href="/">Time tracker</a>
+                            </li>
+                            <li className="mb-2">
+                                <a href="/">Time schedule</a>
+                                </li>
+                            <li className="mb-2">
+                            <a href="/">Lead generate</a>
+                            </li>
+                            <li className="mb-2">
+                            <a href="/">Remote Collaboration</a>
+                            </li>
+                        </ul>
+                     </div>
+                     <div className="text-white lg:pl-40 px-4 lg:pr-10  m-4 ">
+                        <h1 className=" text-5xl tracking-wider mb-6 ">Engle</h1>
+                        <p className="text-white opacity-60">Subscribe to our newsletter</p>
+                        <div className="flex flex-row w-full  justify-center my-4 border-gradient rounded-2xl">
+                            <input type="email" placeholder="Enter your email" className=" relative block w-full px-4 lg:px-7 py-4 text-white bg-black focus:outline-none rounded-2xl text-left " />
+                            <button className="rounded-r-2xl lg:px-5 px-2 py-4 font-semibold">Subscribe</button>
+                        </div>
+                     </div>
+                    </div>
+                    <div className="flex flex-row justify-center mt-16 mb-6 lg:gap-36 gap-14">
+                        <div className="flex flex-col justify-center">
+                            <p className="text-white">Copyright @2023</p>
+                        </div>
+                        <div className='inline-flex items-center justify-center lg:gap-8 gap-4 '>
+                            <button><FaFacebook className='w-[1.5rem] h-[1.5rem] text-white' /></button>
+                            <button><RiTwitterXLine className='w-[1.5rem] h-[1.5rem] text-white' /></button>
+                            <button><FaLinkedin className='w-[1.5rem] h-[1.5rem] text-white' /></button>
+                            <button><FaInstagram className='w-[1.5rem] h-[1.5rem] text-white' /></button>
+                        </div>
                     </div>
                 </div>
 
-                <div className="sm:flex sm:items-center sm:justify-center gap-48 flex mt-28 mr-60">
-                    <span className="text-lg text-white font-semibold lg:text-center dark:text-gray-400">Copyright @2023
-                    </span>
-                    <div className="flex mt-4 sm:justify-center sm:mt-0">
-                        <Link to="#" className="text-white hover:text-gray-900 dark:hover:text-white">
-                            <FaFacebook className='w-6 h-6' />
-                            <span className="sr-only">Facebook page</span>
-                        </Link>
-                        <Link to="#" className="text-white hover:text-gray-900 dark:hover:text-white ms-5">
-                            <RiTwitterXLine className='w-6 h-6' />
-                            <span className="sr-only">Twitter page</span>
-                        </Link>
-
-                        <Link to="#" className="text-white hover:text-gray-900 dark:hover:text-white ms-5">
-                            <FaLinkedin className='w-6 h-6' />
-                            <span className="sr-only">LinkedIn account</span>
-                        </Link>
-
-
-                        <Link to="#" className="text-white hover:text-gray-900 dark:hover:text-white ms-5">
-                            <FaInstagram className='w-6 h-6' />
-                            <span className="sr-only">Instagram account</span>
-                        </Link>
-
-                    </div>
-                </div>
-            </div>
-        </footer>
-
-
+            </footer>
+        </>
     )
 }

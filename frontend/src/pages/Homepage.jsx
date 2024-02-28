@@ -2,7 +2,12 @@ import { useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
 
 function Homepage() {
+
+  const navigate = useNavigate();
+
+
   return (
+    <>
     <div className="container mt-12">
       <div className="bg-[rgb(0,8,52)] mt-10 text-white p-10 lg:mx-10 rounded-3xl shadow-2xl flex flex-col ">
         <header className="flex-grow flex lg:flex-row flex-col justify-center items-center">
@@ -17,7 +22,7 @@ function Homepage() {
             <p className="text-xl mt-2 lg:text-right hidden lg:block">Learn, Connect, and Excel with Our Interactive Language </p>
             <p className="text-xl mt-2 lg:text-right hidden lg:block">Learning Platform!</p>
             <div className="flex lg:flex-row-reverse flex-row justify-center lg:justify-start">
-              <button className="text-xl mt-10 btn lg:w-[35%] w-[80%] py-3 px-2 ">Explore Categories Now</button>
+              <button className="text-xl mt-10 btn lg:w-[35%] w-[100%] py-3 px-2 " onClick={() => {navigate("/category")}}>Explore Categories Now</button>
             </div>
 
           </div>
@@ -66,12 +71,13 @@ function Homepage() {
           </div>
         </div>
         <div className="flex flex-row justify-center my-[5rem] ">
-              <button className="text-xl  btn lg:w-[28%] w-[70%] py-2 px-3 ">Start Learning Now -&gt;</button>
+              <button className="text-xl  btn lg:w-[28%] w-[100%] py-2 px-3 " onClick={() => {navigate("/login")}}>Start Learning Now -&gt;</button>
             </div>
       </div>
 
-      <Footer/>
     </div>
+    <Footer/>
+    </>
   )
 }
 

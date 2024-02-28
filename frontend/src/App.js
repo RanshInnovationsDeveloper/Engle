@@ -8,7 +8,6 @@ import { useEffect } from 'react'
 import { setauthUserData,setuserEmail, setuserName } from './slices/authSlice'
 import { useDispatch } from "react-redux"
 import { auth } from './services/firebase'
-import Footer from './components/Footer'
 import { ToastContainer } from 'react-toastify'
 
 
