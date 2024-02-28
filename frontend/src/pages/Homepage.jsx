@@ -3,8 +3,8 @@ import Footer from "../components/Footer"
 
 function Homepage() {
   return (
-    <div className="container">
-      <div className="bg-[rgb(0,8,52)] text-white p-10 lg:mx-10 rounded-3xl shadow-2xl flex flex-col ">
+    <div className="container mt-12">
+      <div className="bg-[rgb(0,8,52)] mt-10 text-white p-10 lg:mx-10 rounded-3xl shadow-2xl flex flex-col ">
         <header className="flex-grow flex lg:flex-row flex-col justify-center items-center">
           <img className="lg:w-[30%] lg:h-[30%] w-[90%] h-[90%]  " src='home_1_img.png' alt='home_image' />
           <div className='flex-grow flex flex-col lg:pr-5'>

@@ -1,26 +1,23 @@
-/* Navbar.css */
-
 .header {
-    /* position: fixed; */
     width: 100%;
     top: 0;
     left: 0;
     background-color: transparent;
-    z-index: 100;
-    padding: 0.1rem 0;
+    z-index: 20;
     margin-bottom: 0.5rem;
     margin: 0 auto;
-    padding: 0 50px;
+    padding: 0 3rem;
     text-align: center;
-  }
+}
   
   .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: relative;
-    height: 3.5rem;
-    margin: 1rem;
+    height: 3rem;
+    margin: 0.75rem 1rem;
+    padding: 1rem 0;
   }
   
   .nav__logo {
@@ -115,7 +112,8 @@
   }
   @media screen and (min-width: 1150px) {
     .nav {
-      height: calc(3.5rem + 1rem);
+      height: 4rem;
+      padding: 0 0;
     }
     .nav__toggle,
     .nav__close {
