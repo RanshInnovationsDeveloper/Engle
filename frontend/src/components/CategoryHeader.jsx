@@ -2,20 +2,16 @@ import  { useState} from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { useMediaQuery } from "react-responsive";
-import "../styles/Header.css"
+import "../styles/CategoryHeader.css"
 import { logout } from '../services/operations/authServices';
 import {  useSelector } from "react-redux";
 
-const Header = () => {
+const CategoryHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
   const navigate = useNavigate()
-  const {authUserData, header} = useSelector((state)=> state.auth)
+  const {authUserData} = useSelector((state)=> state.auth)
 
-  const handlesignout = () => {
-    logout();
-    navigate('/');
-  }
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -28,100 +24,95 @@ const Header = () => {
   };
 
   const renderNavLinks = () => {
-    const listClassName = isMobile ? "nav__list" : "nav__list__web";
-    const linkClassName = "nav__link";
+    const listClassName = isMobile ? "cat__list" : "cat__list__web";
+    const linkClassName = "cat__link";
 
     return (
         <>
       <ul className={listClassName}>
         <li>
-          <NavLink to="/"      
-          className={`${linkClassName} ${header === 0 ? "text-[#2E3D79]" : "text-black"}`}
+          <NavLink to="/flashcards"      
+          className={`${linkClassName}`}
            onClick={closeMobileMenu} >
-            Home
+            FlashCards
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="/category"
-            className={`${linkClassName} ${header === 1 ? "text-[#2E3D79]" : "text-black"}`}
+            to="/ambiguouswords"
+            className={`${linkClassName} `}
             onClick={closeMobileMenu}
           >
-            Category
+            Ambigous Words
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="/contact"
-            className={`${linkClassName} ${header === 2 ? "text-[#2E3D79]" : "text-black"}`}
+            to="/context"
+            className={`${linkClassName} `}
             onClick={closeMobileMenu}
           >
-            Contact Us
+            Learn with Context
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="/about"
-            className={`${linkClassName} ${header === 3 ? "text-[#2E3D79]" : "text-black"}`}
+            to="/story"
+            className={`${linkClassName} `}
             onClick={closeMobileMenu}
           >
-            About Us
+            Learn with Story
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/friends"
+            className={`${linkClassName} `}
+            onClick={closeMobileMenu}
+          >
+            Learn with Friends
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/favourites"
+            className={`${linkClassName} `}
+            onClick={closeMobileMenu}
+          >
+           Favourites
+          </NavLink>
+        </li>
+        <li>
+          <NavLink
+            to="/notes"
+            className={`${linkClassName} `}
+            onClick={closeMobileMenu}
+          >
+           My Notes
           </NavLink>
         </li>
         </ul>
-        <ul className={`${listClassName}  lg:mt-0 mt-3` }>
-        {authUserData ? (
-          <li>
-          <button className='btn px-5 py-2' onClick={handlesignout}>
-           Logout
-          </button>
-      </li>
-        ):(<>
-          <li>
-          <NavLink
-            to="/login"
-            className={`${linkClassName} `}
-            onClick={closeMobileMenu}
-          >
-            <button className="btn px-5 py-2">Log In</button>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/register"
-            className={`${linkClassName} `}
-            onClick={closeMobileMenu}
-          >
-            <button className="btn px-5 py-2 ">Sign Up</button>
-          </NavLink>
-        </li>
-        </>
-        )}
-      </ul>
+
       </>
     );
   };
 
   return (
-    <header className="header">
-      <nav className="nav">
-        <NavLink to="/" className="nav__logo">
-          ENGLE
-        </NavLink>
-
+    <header className="cat_header">
+      <nav className="cat">
         {isMobile && (
-          <div className="nav__toggle" id="nav-toggle" onClick={toggleMenu}>
+          <div className="cat__toggle" id="cat-toggle" onClick={toggleMenu}>
             <IoMenu />
           </div>
         )}
 
         {isMobile ? (
           <div
-            className={`nav__menu  ${isMenuOpen ? "show-menu" : ""} z-20`}
-            id="nav-menu"
+            className={`cat__menu  ${isMenuOpen ? "show-menu" : ""} z-20`}
+            id="cat-menu"
           >
             {renderNavLinks()}
-            <div className="nav__close" id="nav-close" onClick={toggleMenu}>
+            <div className="cat__close" id="cat-close" onClick={toggleMenu}>
               <IoClose />
             </div>
           </div>
@@ -133,4 +124,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default CategoryHeader;

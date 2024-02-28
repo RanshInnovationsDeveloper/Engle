@@ -1,10 +1,13 @@
 import { useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
-
+import { useDispatch, useSelector } from "react-redux";
+import { setHeader } from '../slices/authSlice';
 function Homepage() {
 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  const { header } = useSelector((state) => state.auth);
+  dispatch(setHeader(0));
 
   return (
     <>

@@ -4,7 +4,8 @@ const initialState = {
     userEmail: null,
     userName:null,
     loading: false,
-    authUserData:null
+    authUserData:null,
+    header:null
 };
 
 const authSlice = createSlice({
@@ -23,11 +24,14 @@ const authSlice = createSlice({
         setLoading(state, value) {
             state.loading = value.payload;
         },
+        setHeader(state, value) {
+            state.header = value.payload;
+        },
         
     },
 });
 // console.log("our auth slice data is ",authSlice.actions);
-export const { setuserEmail,setuserName, setauthUserData , setLoading } = authSlice.actions;
+export const { setuserEmail,setuserName, setauthUserData , setLoading, setHeader } = authSlice.actions;
 
 export default authSlice.reducer;
 

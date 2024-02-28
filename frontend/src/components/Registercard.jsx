@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {  toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom"
@@ -12,6 +12,8 @@ import { AiFillGoogleCircle } from "react-icons/ai";
 import { FaGithub } from "react-icons/fa";
 import { setLoading } from '../slices/authSlice';
 import Spinner from './Spinner';
+
+
 function Registercard() {
 
   const navigate = useNavigate();

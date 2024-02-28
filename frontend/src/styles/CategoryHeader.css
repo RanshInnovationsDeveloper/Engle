@@ -1,35 +1,28 @@
-.header {
+.cat_header {
     width: 100%;
     top: 0;
     left: 0;
-    background-color: transparent;
+    background-color: #2E3D79;
     z-index: 20;
     margin-bottom: 0.5rem;
+    margin-top: 1rem;
     margin: 0 auto;
     padding: 0 3rem;
     text-align: center;
 }
   
-  .nav {
+  .cat {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     position: relative;
-    height: 3rem;
+    height: 2.75rem;
     margin: 0.75rem 1rem;
     padding: 1rem 0;
   }
-  
-  .nav__logo {
-    color: black;
-    transition: color 0.4s;
-    letter-spacing: 0.2cm;
-    font-weight: 600;
-    font-size: 2.813rem;
-  }
-  
-  .nav__toggle,
-  .nav__close {
+
+  .cat__toggle,
+  .cat__close {
     font-size: 1.5rem;
     color: black;
     cursor: pointer;
@@ -38,7 +31,7 @@
 
   
   @media screen and (max-width: 1150px) {
-    .nav__menu {
+    .cat__menu {
       position: fixed;
       top: 0;
       right: -100%;
@@ -52,37 +45,39 @@
     }
   }
   @media screen and (max-width: 300px) {
-    .nav__menu {
+    .cat__menu {
       padding: 4rem 1rem 2rem;
     }
   
-    .nav__list {
+    .cat__list {
       row-gap: 1rem;
     }
   
-    .nav__link {
+    .cat__link {
       font-size: 0.813rem;
     }
 
   }
   
-  .nav__list {
+  .cat__list {
     display: flex;
     flex-direction: column;
-    row-gap: 1.5rem;
+    row-gap: 2.5rem;
     align-items: center;
+ 
   }
   
-  .nav__link {
-    font-weight: 600;
+  .cat__link {
     transition: color 0.4s;
+    color: white;
+    opacity: 0.9;
   }
   
-  .nav__link:hover {
-    color: #2E3D79;
+  .cat__link:hover {
+    opacity: 1;
   }
   
-  .nav__close {
+  .cat__close {
     position: absolute;
     top: 1rem;
     right: 1.5rem;
@@ -91,13 +86,13 @@
   .show-menu {
     right: 0;
   }
-  .nav__listt {
+  .cat__listt {
     display: flex;
     flex-direction: row;
     column-gap: 1.5rem;
   }
   
-  .nav__menu_mobile {
+  .cat__menu_mobile {
     position: fixed;
     top: 0;
     right: -100%;
@@ -110,25 +105,25 @@
     transition: right 0.4s;
   }
   @media screen and (min-width: 1150px) {
-    .nav {
-      height: 4rem;
+    .cat {
+      height: 3.75rem;
       padding: 0 0;
     }
-    .nav__toggle,
-    .nav__close {
+    .cat__toggle,
+    .cat__close {
       display: none;
     }
   
-    .nav__list {
+    .cat__list {
       flex-direction: row;
       column-gap: 1.5rem;
     }
   }
   
-  .nav__list__web {
+  .cat__list__web {
     display: flex;
     flex-direction: row;
-    column-gap: 2rem;
+    column-gap: 3.5rem;
     align-items: center;
     list-style-type: none;
     padding: 0;

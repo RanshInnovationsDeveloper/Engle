@@ -9,6 +9,11 @@ import { setauthUserData,setuserEmail, setuserName } from './slices/authSlice'
 import { useDispatch } from "react-redux"
 import { auth } from './services/firebase'
 import { ToastContainer } from 'react-toastify'
+import ForgotPasspage from './pages/ForgotPasspage'
+import Categorypage from './pages/Categorypage'
+import ContactUspage from './pages/ContactUspage'
+import AboutUspage from './pages/AboutUspage'
+import FlashCardpage from './pages/FlashCardpage'
 
 
 function App() {
@@ -40,6 +45,11 @@ function App() {
         <Route path='/' element={<Homepage />} />
         <Route path='/login' element={<Loginpage />} />
         <Route path='/register' element={<Registerpage />} />
+        <Route path='/forgotpass' element={<ForgotPasspage />} />
+        <Route path='/category' element={<Categorypage />} />
+        <Route path='/contact' element={<ContactUspage />} />
+        <Route path='/about' element={<AboutUspage />} />
+        <Route path='/flashcards' element={<FlashCardpage />} />
       </Routes>
       <ToastContainer />
     

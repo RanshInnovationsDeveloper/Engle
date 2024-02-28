@@ -106,7 +106,7 @@ if(loading)
 
             </div>
             <div className="flex items-center justify-end">
-              <a href="/" className="text-pretty font-medium text-sm text-gray-600 hover:text-red-500 mt-3">
+              <a href="/forgotpass" className="text-pretty font-medium text-sm text-gray-600 hover:text-red-500 mt-3">
                 Forgot password?
               </a>
             </div>
