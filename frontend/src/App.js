@@ -1,13 +1,13 @@
 import { Routes, Route } from 'react-router-dom'
+import React, { useEffect, useState, createContext } from "react";
 import Homepage from './pages/Homepage'
 import './App.css'
 import Header from './components/Header'
 import Loginpage from './pages/Loginpage'
 import Registerpage from './pages/Registerpage'
-import { useEffect } from 'react'
 import { setauthUserData,setuserEmail, setuserName } from './slices/authSlice'
 import { useDispatch } from "react-redux"
-import { auth } from './services/firebase'
+import { auth,db } from './services/firebase'
 import { ToastContainer } from 'react-toastify'
 import ForgotPasspage from './pages/ForgotPasspage'
 import Categorypage from './pages/Categorypage'
@@ -18,24 +18,23 @@ import FlashCardpage from './pages/FlashCardpage'
 
 function App() {
 
-  const dispatch = useDispatch();
+  const [fetchingUser, setFetchingUser] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+  // const dispatch = useDispatch();
 
-    auth.onAuthStateChanged((userCrendential) => {      
-        if(userCrendential!==null){
-          dispatch(setauthUserData(userCrendential.uid));
-          dispatch(setuserEmail(userCrendential.email));
-          dispatch(setuserName(userCrendential.displayName));         
-        }
-        else{
-          dispatch(setauthUserData(null));
-          dispatch(setuserEmail(null));
-          dispatch(setuserName(null));
-        }       
-      });
-      
-  }, [dispatch])
+  // useEffect(() => {
+  //   auth.onAuthStateChanged(async (user) => {
+  //     if (user) {
+  //       const snapshot = await db.collection("users").doc(user.uid).get();
+  //       setCurrentUser({ ...snapshot.data(), userId: user.uid });
+  //     } else {
+  //       setCurrentUser(null);
+  //     }
+  //     setFetchingUser(false);
+  //   });
+  // }, []);
 
 
   return (
