@@ -1,0 +1,4 @@
+.border-gradient { 
+    border: 0.2rem solid transparent; 
+    background:linear-gradient(90deg, #C7D800 0%, #2BD500 100%) border-box;   
+  }

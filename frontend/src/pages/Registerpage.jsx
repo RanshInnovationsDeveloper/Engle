@@ -4,8 +4,8 @@ import Registercard from '../components/Registercard'
 function Registerpage() {
   return (
     <>
-    <div className="h-[90vh] w-full z-0 flex flex-col items-center justify-center bg-[#4A5995] overflow-hidden">
-    <div className='w-[100%]  absolute flex flex-row justify-center rounded'>
+    <div className="lg:h-[90vh] h-screen w-full flex lg:flex-col items-center justify-center bg-[#4A5995] ">
+    <div className='w-[100%] absolute flex flex-row justify-center'>
     <Registercard />
    
     </div>

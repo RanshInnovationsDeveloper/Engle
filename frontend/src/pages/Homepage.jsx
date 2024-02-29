@@ -1,10 +1,18 @@
 import { useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
-
+import { useDispatch, useSelector } from "react-redux";
+import { setHeader } from '../slices/authSlice';
 function Homepage() {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { header } = useSelector((state) => state.auth);
+  dispatch(setHeader(0));
+
   return (
-    <div className="container">
-      <div className="bg-[rgb(0,8,52)] text-white p-10 lg:mx-10 rounded-3xl shadow-2xl flex flex-col ">
+    <>
+    <div className="container mt-12">
+      <div className="bg-[rgb(0,8,52)] mt-10 text-white p-10 lg:mx-10 rounded-3xl shadow-2xl flex flex-col ">
         <header className="flex-grow flex lg:flex-row flex-col justify-center items-center">
           <img className="lg:w-[30%] lg:h-[30%] w-[90%] h-[90%]  " src='home_1_img.png' alt='home_image' />
           <div className='flex-grow flex flex-col lg:pr-5'>
@@ -17,7 +25,7 @@ function Homepage() {
             <p className="text-xl mt-2 lg:text-right hidden lg:block">Learn, Connect, and Excel with Our Interactive Language </p>
             <p className="text-xl mt-2 lg:text-right hidden lg:block">Learning Platform!</p>
             <div className="flex lg:flex-row-reverse flex-row justify-center lg:justify-start">
-              <button className="text-xl mt-10 btn lg:w-[35%] w-[80%] py-3 px-2 ">Explore Categories Now</button>
+              <button className="text-xl mt-10 btn lg:w-[35%] w-[100%] py-3 px-2 " onClick={() => {navigate("/category")}}>Explore Categories Now</button>
             </div>
 
           </div>
@@ -66,12 +74,13 @@ function Homepage() {
           </div>
         </div>
         <div className="flex flex-row justify-center my-[5rem] ">
-              <button className="text-xl  btn lg:w-[28%] w-[70%] py-2 px-3 ">Start Learning Now -&gt;</button>
+              <button className="text-xl  btn lg:w-[28%] w-[100%] py-2 px-3 " onClick={() => {navigate("/login")}}>Start Learning Now -&gt;</button>
             </div>
       </div>
 
-      <Footer/>
     </div>
+    <Footer/>
+    </>
   )
 }
 
