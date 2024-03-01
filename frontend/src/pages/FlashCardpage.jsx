@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth,db } from "../services/firebase";
 import CategoryHeader from "../components/CategoryHeader";
 import Words from "../resources/words.json";
-import { generateRandomNumber } from "../services/operations/dataServices";
+import { generateRandomNumber, saveIndexToFirestore } from "../services/operations/dataServices";
 
 function FlashCardpage() {
   const [words, setWords] = useState([]);
@@ -27,7 +27,10 @@ function FlashCardpage() {
   const handleClick = async () => {
     const number = await generateRandomNumber(currentUser);
     setRandomNumber(number);
-    console.log(words)
+  };
+
+  const handleSaveIndex = () => {
+    saveIndexToFirestore(currentUser, randomNumber);
   };
 
   return (
@@ -35,9 +38,12 @@ function FlashCardpage() {
       <CategoryHeader/>
       <h1 className='text-center mt-10 text-4xl text-black'>FlashCards</h1>
 
-      <button onClick={handleClick}>Generate Random Number</button>
+      <button onClick={handleClick}>Generate Random Word</button>
       {randomNumber && <p>{words[randomNumber].word} : {words[randomNumber].definitions}</p>}
 
+      {randomNumber !== null && (
+        <button onClick={handleSaveIndex}>Save Index to Firestore</button>
+      )}
     </>
   );
 }
