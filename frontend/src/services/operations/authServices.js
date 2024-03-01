@@ -18,7 +18,7 @@ export const signup = async (email, password, username) => {
     });
 
     // Add user data to Firestore
-    await db.collection("users").doc(userCredential.user.uid).set({
+    await db.collection("users").doc(userCredential.user.uid).collection("user_info").doc().set({
       userId: userCredential.user.uid,
       userName: username,
     });

@@ -17,3 +17,14 @@ export const generateRandomNumber = async (currentUser) => {
   return randomNumber;
   };
 
+export const saveIndexToFirestore = async (currentUser, randomNumber) => {
+    if (currentUser && randomNumber !== null) {
+      try {
+        await db.collection("users").doc(currentUser.userId).collection('saved_index').doc(randomNumber.toString()).set({})
+        console.log("Random index saved to Firestore.");
+      } catch (error) {
+        console.error("Error saving random index to Firestore: ", error);
+      }
+    }
+  };
+
