@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { auth,db } from "../firebase";
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 
 
@@ -12,7 +14,7 @@ export const signup = async (email, password, username) => {
 
     // Set user display name
     await userCredential.user.updateProfile({
-      displayName: username
+      displayName: username,
     });
 
     // Add user data to Firestore
@@ -96,5 +98,20 @@ export const logout = () => {
   };
 
 
+
+export const forgotPassword=async({useremail,navigate})=>{
+  try{
+    await auth.sendPasswordResetEmail(useremail).then(()=>{
+    navigate("/");
+    toast.success("email verification link sent successfully to your email");
+
+    }).catch((err)=>{
+       toast.error(err);
+    });
+
+  }catch(error){
+      console.log(error);
+  }
+}
 
 

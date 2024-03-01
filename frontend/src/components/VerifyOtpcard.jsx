@@ -14,8 +14,6 @@ function VerifyOtpcard() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-
   }
 
 

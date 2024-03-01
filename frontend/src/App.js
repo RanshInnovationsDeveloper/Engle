@@ -1,13 +1,9 @@
 import { Routes, Route } from 'react-router-dom'
-import React, { useEffect, useState, createContext } from "react";
 import Homepage from './pages/Homepage'
 import './App.css'
 import Header from './components/Header'
 import Loginpage from './pages/Loginpage'
 import Registerpage from './pages/Registerpage'
-import { setauthUserData,setuserEmail, setuserName } from './slices/authSlice'
-import { useDispatch } from "react-redux"
-import { auth,db } from './services/firebase'
 import { ToastContainer } from 'react-toastify'
 import ForgotPasspage from './pages/ForgotPasspage'
 import Categorypage from './pages/Categorypage'
@@ -18,9 +14,10 @@ import FlashCardpage from './pages/FlashCardpage'
 
 function App() {
 
-  const [fetchingUser, setFetchingUser] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+
+  // const [fetchingUser, setFetchingUser] = useState(true);
+  // const [currentUser, setCurrentUser] = useState(null);
+  // const [isLoading, setIsLoading] = useState(false);
 
   // const dispatch = useDispatch();
 
@@ -38,7 +35,7 @@ function App() {
 
 
   return (
-    <>
+    <>   
       <Header/>
       <Routes>
         <Route path='/' element={<Homepage />} />
@@ -57,4 +54,4 @@ function App() {
   )
 }
 
-export default App
+export default App 

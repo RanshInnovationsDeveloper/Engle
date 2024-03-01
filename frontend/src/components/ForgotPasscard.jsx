@@ -1,21 +1,32 @@
 import  { useState } from 'react'
 import { useNavigate } from "react-router-dom"
-
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoMdMail } from 'react-icons/io';
 import VerifyOtpcard from './VerifyOtpcard';
+import { forgotPassword } from '../services/operations/authServices';
+import { useDispatch,useSelector } from 'react-redux';
+import { setLoading } from '../slices/authSlice';
+import Spinner from './Spinner';
 
-function ForgotPasscard({onClick}) {
+function ForgotPassword() {
 
   const navigate = useNavigate();
+ const dispatch=useDispatch();
+  const { loading } = useSelector((state) => state.auth);
 
-
-  const [useremail, setUseremail] = useState('');
+  const [useremail, setUseremail] = useState("");
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    onClick();
+    dispatch(setLoading(true));
+    await forgotPassword({useremail,navigate});
+    dispatch(setLoading(false));
+  }
+
+  if(loading)
+  {
+    return <Spinner/>
   }
 
 
@@ -74,4 +85,4 @@ function ForgotPasscard({onClick}) {
   )
 }
 
-export default ForgotPasscard
+export default ForgotPassword

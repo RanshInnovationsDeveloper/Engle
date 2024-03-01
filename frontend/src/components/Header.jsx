@@ -1,16 +1,39 @@
-import  { useState} from "react";
+import  { useState,useEffect} from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoClose, IoMenu } from "react-icons/io5";
 import { useMediaQuery } from "react-responsive";
 import "../styles/Header.css"
 import { logout } from '../services/operations/authServices';
-import {  useSelector } from "react-redux";
+import {  useSelector,useDispatch } from "react-redux";
+import { setauthUserData,setuserEmail, setuserName } from '../slices/authSlice'
+import { auth } from '../services/firebase'
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
   const navigate = useNavigate()
   const {authUserData, header} = useSelector((state)=> state.auth)
+
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+
+    auth.onAuthStateChanged((userCrendential) => {      
+        if(userCrendential!==null){
+          dispatch(setauthUserData(userCrendential.uid));
+          dispatch(setuserEmail(userCrendential.email));
+          dispatch(setuserName(userCrendential.displayName));         
+        }
+        else{
+          dispatch(setauthUserData(null));
+          dispatch(setuserEmail(null));
+          dispatch(setuserName(null));
+        }       
+      });
+      
+  }, [dispatch])
+
 
   const handlesignout = () => {
     logout();
