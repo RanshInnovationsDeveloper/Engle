@@ -1,11 +1,13 @@
 import  { useState,useEffect} from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoClose, IoMenu } from "react-icons/io5";
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import { useMediaQuery } from "react-responsive";
 import "../styles/Header.css"
 import { logout } from '../services/operations/authServices';
 import {  useSelector,useDispatch } from "react-redux";
-import { setauthUserData,setuserEmail, setuserName } from '../slices/authSlice'
+import { setauthUserData,setuserEmail, setuserName,setLoading } from '../slices/authSlice'
 import { auth } from '../services/firebase'
 
 const Header = () => {
@@ -20,7 +22,7 @@ const Header = () => {
   useEffect(() => {
 
     auth.onAuthStateChanged((userCrendential) => {      
-        if(userCrendential!==null){
+        if(userCrendential!==null&&userCrendential?.emailVerified===true){
           dispatch(setauthUserData(userCrendential.uid));
           dispatch(setuserEmail(userCrendential.email));
           dispatch(setuserName(userCrendential.displayName));         
@@ -36,8 +38,12 @@ const Header = () => {
 
 
   const handlesignout = () => {
+    dispatch(setLoading(true));
     logout();
     navigate('/');
+    toast.success("logout successfully");
+    dispatch(setLoading(false));
+    
   }
 
   const toggleMenu = () => {
