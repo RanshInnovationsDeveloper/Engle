@@ -18,8 +18,8 @@ app.use(
 	})
 );
 
-app.use("/auth",authRoute);
-app.use("/word",wordRoute);
+app.use("/api/v1/auth",authRoute);
+app.use("/api/v1//word",wordRoute);
 
 
 // Testing the server
