@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setHeader } from "../slices/authSlice";
+import { demosignup } from "../services/operations/apiDemo";
+
 function ContactUspage() {
 
   const dispatch = useDispatch();
@@ -8,9 +10,13 @@ function ContactUspage() {
 
 
   return (
-    <div>
+    <>
+      <div>
       Contact Us
     </div>
+    <button onClick={demosignup}> click me to check demo api</button>
+    </>
+  
   )
 }
 

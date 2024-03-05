@@ -1,27 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { auth,db } from "../firebase";
+import { auth, db } from "../firebase";
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 
 
 export const signup = async (email, password, username) => {
+
   let error = "";
 
   try {
+
     // Create user with email and password
     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
 
-    // Set user display name
-    await userCredential.user.updateProfile({
-      displayName: username,
-    });
+    await auth.currentUser.sendEmailVerification().then(async () => {
 
-    // Add user data to Firestore
-    await db.collection("users").doc(userCredential.user.uid).collection("user_info").doc().set({
-      userId: userCredential.user.uid,
-      userName: username,
-    });
+      // Set user display name
+      await userCredential.user.updateProfile({
+        displayName: username,
+      });
+
+      // Add user data to Firestore
+      await db.collection("users").doc(userCredential.user.uid).collection("user_info").doc().set({
+        userId: userCredential.user.uid,
+        userName: username,
+      });
+
+    }).catch((err) => {
+      console.log(err);
+    })
+
 
   } catch (err) {
     // Handle sign-up errors
@@ -39,78 +47,60 @@ export const signup = async (email, password, username) => {
 
 
 
-export const signin=async(email,password)=>{
+export const signin = async (email, password) => {
 
-  let  error="";
-  let userData="";
-  let userName="";
-  try{
-
-    await auth.signInWithEmailAndPassword(email,password)
-    .then(async(userCrendential)=>{
-
-      // user signin successfully 
-      userData=userCrendential.user;
-
-      // get uername from database
-     await db.collection("users").doc(userCrendential.user.uid).get()
-      .then((doc) => {
-        if (doc.exists) {
-          
-          const docData = doc?.data();
-          userName=docData.userName;
-  
-        } else {
-          error="No such user exist!";
-        }
-      })
-      .catch((error) => {
-        error=error.message;
-      });
+  let error = "";
+  try {
     
-    }) 
-    .catch((err) => {
+    await auth.signInWithEmailAndPassword(email, password)
+      .then(async (userCrendential) => {
+         
+        if(userCrendential?.user?.emailVerified!==true)
+        error="user not exist!";
+      
+      })
+      .catch((err) => {
 
-      // Handle sign-up errors
-       let errorCode = err.code;
-      if (errorCode === "auth/internal-error") {
-        // The email address is already in use by another account
-        error="Email or Password do not match!";
-        
-      } else {
-        // Handle other sign-up errors
-        error=err.message;
-        // console.error(error);
-      }
-    });
+        // Handle sign-up errors
+        let errorCode = err.code;
+        if (errorCode === "auth/internal-error") {
+          // The email address is already in use by another account
+          error = "Email or Password do not match!";
 
-  }catch(err){
-    error=err.message;
+        } else {
+          // Handle other sign-up errors
+          error = err.message;
+          // console.error(error);
+        }
+      });
+
+  } catch (err) {
+    error = err.message;
   }
 
-  return {userData,error,userName};
+  return { error};
 }
 
 
 
 export const logout = () => {
-    auth.signOut();
-  };
+  auth.signOut();
+};
 
 
 
-export const forgotPassword=async({useremail,navigate})=>{
-  try{
-    await auth.sendPasswordResetEmail(useremail).then(()=>{
-    navigate("/");
-    toast.success("email verification link sent successfully to your email");
+export const forgotPassword = async ({ useremail, navigate }) => {
+  try {
+    await auth.sendPasswordResetEmail(useremail).then(() => {
+      navigate("/");
+      toast.success("email verification link sent successfully to your email");
 
-    }).catch((err)=>{
-       toast.error(err);
+    }).catch((err) => {
+      toast.error(err);
     });
 
-  }catch(error){
-      console.log(error);
+  } catch (error) {
+    console.log(error);
   }
 }
 

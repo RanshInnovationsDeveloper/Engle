@@ -31,6 +31,7 @@ function Logincard() {
       toast.error(error);
     } else {
       navigate("/");
+      toast.success("login successfully")
     }
     dispatch(setLoading(false));
 

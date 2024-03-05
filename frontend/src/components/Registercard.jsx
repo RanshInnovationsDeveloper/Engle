@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {  toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom"
@@ -18,7 +18,7 @@ function Registercard() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, authUserData } = useSelector((state) => state.auth);
+  const { loading} = useSelector((state) => state.auth);
 
 
   const [username, setUsername] = useState('');
@@ -37,7 +37,9 @@ function Registercard() {
       if (error) {
         toast.error(error);
       } else {
+
         navigate("/");
+        toast.success("check your email for verification")
      
     }
   } else {
@@ -46,11 +48,11 @@ function Registercard() {
     dispatch(setLoading(false));
   }
 
-  useEffect(()=> {
-    if(authUserData){
-      navigate("/");
-    }
-  },[authUserData, navigate])
+  // useEffect(()=> {
+  //   if(authUserData){
+  //     navigate("/");
+  //   }
+  // },[authUserData, navigate])
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
