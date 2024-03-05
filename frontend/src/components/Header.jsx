@@ -10,11 +10,11 @@ import {  useSelector,useDispatch } from "react-redux";
 import { setauthUserData,setuserEmail, setuserName,setLoading } from '../slices/authSlice'
 import { auth } from '../services/firebase'
 
-const Header = () => {
+const Header = ({val}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
   const navigate = useNavigate()
-  const {authUserData, header} = useSelector((state)=> state.auth)
+  const {authUserData} = useSelector((state)=> state.auth)
 
 
   const dispatch = useDispatch();
@@ -65,15 +65,15 @@ const Header = () => {
       <ul className={listClassName}>
         <li>
           <NavLink to="/"      
-          className={`${linkClassName} ${header === 0 ? "text-[#2E3D79]" : "text-black"}`}
+          className={`${linkClassName} ${val === 0 ? "text-[#2E3D79]" : "text-black"}`}
            onClick={closeMobileMenu} >
             Home
           </NavLink>
         </li>
         <li>
           <NavLink
-            to="/category"
-            className={`${linkClassName} ${header === 1 ? "text-[#2E3D79]" : "text-black"}`}
+            to="/flashcards"
+            className={`${linkClassName} ${val === 1 ? "text-[#2E3D79]" : "text-black"}`}
             onClick={closeMobileMenu}
           >
             Category
@@ -82,7 +82,7 @@ const Header = () => {
         <li>
           <NavLink
             to="/contact"
-            className={`${linkClassName} ${header === 2 ? "text-[#2E3D79]" : "text-black"}`}
+            className={`${linkClassName} ${val === 2 ? "text-[#2E3D79]" : "text-black"}`}
             onClick={closeMobileMenu}
           >
             Contact Us
@@ -91,7 +91,7 @@ const Header = () => {
         <li>
           <NavLink
             to="/about"
-            className={`${linkClassName} ${header === 3 ? "text-[#2E3D79]" : "text-black"}`}
+            className={`${linkClassName} ${val === 3 ? "text-[#2E3D79]" : "text-black"}`}
             onClick={closeMobileMenu}
           >
             About Us

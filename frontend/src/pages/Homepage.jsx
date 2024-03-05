@@ -1,23 +1,21 @@
 import { useNavigate } from "react-router-dom"
 import Footer from "../components/Footer"
-import { useDispatch, useSelector } from "react-redux";
-import { setHeader } from '../slices/authSlice';
+import Header from "../components/Header";
 function Homepage() {
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { header } = useSelector((state) => state.auth);
-  dispatch(setHeader(0));
+
 
   return (
     <>
+    <Header val={0} />
     <div className="container mt-12">
       <div className="bg-[rgb(0,8,52)] mt-10 text-white p-10 lg:mx-10 rounded-3xl shadow-2xl flex flex-col ">
         <header className="flex-grow flex lg:flex-row flex-col justify-center items-center">
           <img className="lg:w-[30%] lg:h-[30%] w-[90%] h-[90%]  " src='home_1_img.png' alt='home_image' />
           <div className='flex-grow flex flex-col lg:pr-5'>
 
-            <h1 class="lg:text-[4rem] text-[2.25rem] lg:text-right font-bold bg-gradient-to-r from-green-500 via-green-600 to-yellow-200 text-transparent bg-clip-text">
+            <h1 className="lg:text-[4rem] text-[2.25rem] lg:text-right font-bold bg-gradient-to-r from-green-500 via-green-600 to-yellow-200 text-transparent bg-clip-text">
               Elevate your English
             </h1>
 
