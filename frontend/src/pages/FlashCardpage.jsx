@@ -10,6 +10,8 @@ import { FaHeart } from "react-icons/fa";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import "../styles/FlashCard.css";
+import Header from '../components/Header';
+
 
 
 function FlashCardpage() {
@@ -19,6 +21,10 @@ function FlashCardpage() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+
+
+
+
 
   const handleFlip = async () => {
       setIsFlipped(!isFlipped);
@@ -59,6 +65,7 @@ function FlashCardpage() {
 
   return (
     <>
+    <Header val={1}/>
       <CategoryHeader/>
       <div className='h-[90vh] flex flex-col mt-10 gap-4 items-center '>    
       <h1 className='text-center text-4xl text-black'>FlashCards</h1>

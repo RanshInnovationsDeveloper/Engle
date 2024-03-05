@@ -1,20 +1,18 @@
-import { useDispatch, useSelector } from "react-redux";
-import { setHeader } from "../slices/authSlice";
-import { demosignup } from "../services/operations/apiDemo";
+
+import Header from "../components/Header";
 
 function ContactUspage() {
 
-  const dispatch = useDispatch();
-  const { header } = useSelector((state) => state.auth);
-  dispatch(setHeader(2));
+
 
 
   return (
     <>
+    <Header val={2}/>
       <div>
       Contact Us
     </div>
-    <button onClick={demosignup}> click me to check demo api</button>
+
     </>
   
   )
