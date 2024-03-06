@@ -4,7 +4,7 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const authRoute=require("./routes/authRoute");
 const wordRoute=require("./routes/wordRoute");
-
+const notesRoute= require("./routes/notesRoute");
 
 // Loading environment variables from .env file
 dotenv.config();
@@ -20,7 +20,7 @@ app.use(
 
 app.use("/api/v1/auth",authRoute);
 app.use("/api/v1//word",wordRoute);
-
+app.use('/api/v1/notes',notesRoute)
 
 // Testing the server
 app.get("/", (req, res) => {
