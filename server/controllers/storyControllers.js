@@ -3,7 +3,7 @@ const {
   serverTimestamp,
   collection,
   getDocs,
-} = require("firebase/firestore");
+} = require("firebase/firestore/lite");
 
 const { db } = require("../config/firebase");
 

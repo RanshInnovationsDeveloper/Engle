@@ -7,14 +7,13 @@ const {
   collection,
   setDoc,
   Timestamp,
-} = require("firebase/firestore");
+} = require("firebase/firestore/lite");
 
 // for better understanding of functioning of this you can check for this github repo
 // https://github.com/whiteknight16/ENGLE-Stuff
 const fetchFavouriteButtonStatus = async (req, res) => {
   try {
     const { itemId, type, userId } = req.body;
-    console.log(userId, itemId, type);
     if (userId) {
       const docRef = doc(db, "favourite", userId);
       const docSnap = await getDoc(docRef);

@@ -1,11 +1,9 @@
-const firebase = require("firebase/app");
-const { getFirestore } = require("firebase/firestore");
-const { FieldValue } = require("@firebase/firestore");
-const dotenv = require("dotenv");
-
-dotenv.config();
+const { initializeApp } = require('firebase/app');
+const { getFirestore, collection, addDoc, getDocs } = require('firebase/firestore/lite');
+const { getAuth } = require('firebase/auth');
 
 // Loading environment variables from .env file
+const dotenv = require('dotenv');
 dotenv.config();
 
 // Initialize Firebase
@@ -19,9 +17,20 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
-const app = firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+//if app not initialised
+if (!app) {
+  console.error('Firebase initialization failed');
+}
 
 const db = getFirestore(app);
-// const FieldValue = firebase.firestore.FieldValue;
+//if db is not initialised
+if (!db) {
+  console.error('Database initialization failed');
+}
+const auth = getAuth(app);
+//creating notes collection
+const notesCollection = collection(db, 'notes');
 
-module.exports = { db, FieldValue };
+// Exporting using CommonJS syntax
+module.exports = { db, auth, notesCollection, addDoc, getDocs };

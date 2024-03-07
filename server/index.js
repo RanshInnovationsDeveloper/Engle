@@ -9,6 +9,7 @@ const wordRoute = require("./routes/wordRoute");
 const storyRoute = require("./routes/storyRoute");
 const unseenRoute = require("./routes/unseenRoute");
 const favouriteRoute = require("./routes/favouriteRoute");
+const notesRoute = require('./routes/notesRoute')
 
 // Loading environment variables from .env file
 dotenv.config();
@@ -27,6 +28,7 @@ app.use("/api/v1/word", wordRoute);
 app.use("/api/v1/story", storyRoute);
 app.use("/api/v1/unseen", unseenRoute);
 app.use("/api/v1/favourite", favouriteRoute);
+app.use('/api/v1/notes',notesRoute)
 
 // Testing the server
 app.get("/", (req, res) => {
