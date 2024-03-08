@@ -21,6 +21,9 @@ function FlashCardpage() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
+  const [myArray, setMyArray] = useState([]);
+  const [numgenerated,SetNumgenerated]=useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
 
 
@@ -41,6 +44,9 @@ function FlashCardpage() {
 
   useEffect(() => {
     setWords(Words);
+    // if (currentIndex !== -1 && myArray[currentIndex] !== undefined) {
+    //   setRandomNumber(myArray[currentIndex]);
+    // }
     auth.onAuthStateChanged(async (user) => {
       if (user) {
         const snapshot = await db.collection("users").doc(user.uid).get();
@@ -50,13 +56,24 @@ function FlashCardpage() {
       }
       setFetchingUser(false);
     });
-  }, []);
+  }, [myArray, currentIndex]);
 
   const handleSave = () => {
   }
-  const handleClick = async () => {
+
+  const handleClickRight = async () => {
     const number = await generateRandomNumber(currentUser);
-    setRandomNumber(number);
+    setMyArray(prevArray => {
+      const updatedArray = [...prevArray, number];
+      setCurrentIndex(currentIndex+1);
+      return updatedArray;
+    });
+    setRandomNumber(myArray[currentIndex-1]);
+  };
+
+  const handleClickLeft = async () => {
+    setCurrentIndex(currentIndex - 1);
+    setRandomNumber(myArray[currentIndex-2]);
   };
 
   const handleSaveIndex = () => {
@@ -155,12 +172,9 @@ function FlashCardpage() {
         </div>
         
         <div className='flex flex-row gap-10'>
-          <button onClick={handleClick}>        <FaArrowAltCircleLeft className='text-blue-900 h-10 w-10'/></button>
-
-            <button className='text-white text-lg font-mukta bg-blue-900 rounded-lg px-20 py-2' onClick={handleFlip}>
-               Show
-            </button>
-        <button onClick={handleClick}><FaArrowAltCircleRight className='text-blue-900 h-10 w-10' /></button>
+          <button onClick={handleClickLeft} disabled={currentIndex === 1} ><FaArrowAltCircleLeft className='text-blue-900 h-10 w-10'/></button>
+          <button className='text-white text-lg font-mukta bg-blue-900 rounded-lg px-20 py-2' onClick={handleFlip}> Show </button>
+          <button onClick={handleClickRight}><FaArrowAltCircleRight className='text-blue-900 h-10 w-10' /></button>
         </div>
         </div>
 
