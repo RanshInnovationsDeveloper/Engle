@@ -46,7 +46,7 @@ function ContactUspage() {
     <>
       <Header></Header>
       <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
-        <form className="w-1/3 bg-white rounded-lg shadow-md p-6">
+        <form className="w-full sm:w-1/2 lg:w-1/3 bg-white rounded-lg shadow-md p-6 mx-4 sm:mx-0">
           <label className="block text-gray-700 text-sm font-bold mb-2">
             Name:
           </label>
