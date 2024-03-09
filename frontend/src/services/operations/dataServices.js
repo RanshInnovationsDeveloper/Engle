@@ -2,7 +2,7 @@ import { auth,db } from "../firebase"
 
 export const generateRandomNumber = async (currentUser) => {
     let randomNumber;
-    const numbersCollection = db.collection('users').doc(currentUser.userId).collection('randomNumbers');
+    const numbersCollection = db.collection('users').doc(currentUser?.userId).collection('randomNumbers');
     const min = 1; // Minimum value for the random number
     const max = 35492; // Maximum value for the random number
   do {

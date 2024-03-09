@@ -7,14 +7,14 @@ import { useMediaQuery } from "react-responsive";
 import "../styles/Header.css"
 import { logout } from '../services/operations/authServices';
 import {  useSelector,useDispatch } from "react-redux";
-import { setauthUserData,setuserEmail, setuserName,setLoading } from '../slices/authSlice'
+import { setauthUserId,setuserEmail, setuserName,setLoading } from '../slices/authSlice'
 import { auth } from '../services/firebase'
 
 const Header = ({val}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
   const navigate = useNavigate()
-  const {authUserData} = useSelector((state)=> state.auth)
+  const {authUserId} = useSelector((state)=> state.auth)
 
 
   const dispatch = useDispatch();
@@ -23,12 +23,12 @@ const Header = ({val}) => {
 
     auth.onAuthStateChanged((userCrendential) => {      
         if(userCrendential!==null&&userCrendential?.emailVerified===true){
-          dispatch(setauthUserData(userCrendential.uid));
+          dispatch(setauthUserId(userCrendential.uid));
           dispatch(setuserEmail(userCrendential.email));
           dispatch(setuserName(userCrendential.displayName));         
         }
         else{
-          dispatch(setauthUserData(null));
+          dispatch(setauthUserId(null));
           dispatch(setuserEmail(null));
           dispatch(setuserName(null));
         }       
@@ -99,7 +99,7 @@ const Header = ({val}) => {
         </li>
         </ul>
         <ul className={`${listClassName}  lg:mt-0 mt-3` }>
-        {authUserData ? (
+        {authUserId ? (
           <li>
           <button className='btn px-5 py-2' onClick={handlesignout}>
            Logout
