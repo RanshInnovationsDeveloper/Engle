@@ -29,3 +29,9 @@ export const unseenEndpoints = {
   GETUNSEEN_API: BASE_URL + "/unseen/getUnseen",
   ADDUNSEEN_API: BASE_URL + "/unseen/addUnseen",
 };
+
+
+export const contactEndpoints = {
+  //unseenRoute Endpoints
+  CONTACT_API: BASE_URL + "/contact/",
+};
