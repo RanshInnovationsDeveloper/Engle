@@ -1,18 +1,18 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux"
 
-
-import Homepage from "./pages/Homepage";
-import "./App.css";
-import Header from "./components/Header";
-import Loginpage from "./pages/Loginpage";
-import Registerpage from "./pages/Registerpage";
-import { ToastContainer } from "react-toastify";
-import ForgotPasspage from "./pages/ForgotPasspage";
-import Categorypage from "./pages/Categorypage";
-import ContactUspage from "./pages/ContactUspage";
-import AboutUspage from "./pages/AboutUspage";
-import FlashCardpage from "./pages/FlashCardpage";
+import Homepage from './pages/Homepage'
+import './App.css'
+import Header from './components/Header'
+import Loginpage from './pages/Loginpage'
+import Registerpage from './pages/Registerpage'
+import { ToastContainer } from 'react-toastify'
+import ForgotPasspage from './pages/ForgotPasspage'
+import Categorypage from './pages/Categorypage'
+import ContactUspage from './pages/ContactUspage'
+import AboutUspage from './pages/AboutUspage'
+import FlashCardpage from './pages/FlashCardpage'
+import FavouritesPage from './pages/FavouritesPage'
 
 import PrivateRoute from "./components/auth/PrivateRoute";
 import OpenRoute from "./components/auth/OpenRoute";
@@ -82,11 +82,11 @@ function App() {
         />
 
         <Route
-          path="/favourite"
+          path="/favourites"
           element={
 
             <PrivateRoute>
-              {/* < favourite /> */}
+              <FavouritesPage/>
             </PrivateRoute>
 
           }

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import ForgotPasscard from "../components/ForgotPasscard"
 import VerifyOtpcard from "../components/VerifyOtpcard";
+import Header from "../components/Header";
 
 
 function ForgotPasspage() {
@@ -14,6 +15,7 @@ function ForgotPasspage() {
 
   return (
     <>
+    <Header/>
     <div className=" lg:h-[90vh] h-[85vh] w-full z-0 flex flex-col items-center justify-center bg-[#4A5995] ">
     <div className='w-[100%]  relative flex flex-row justify-center'>
   {clicked ? <VerifyOtpcard/>:<ForgotPasscard onClick={handleClicked}/>}

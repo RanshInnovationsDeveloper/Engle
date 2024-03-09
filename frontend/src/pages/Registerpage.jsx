@@ -1,9 +1,11 @@
 import React from 'react'
 import Registercard from '../components/Registercard'
+import Header from '../components/Header'
 
 function Registerpage() {
   return (
     <>
+    <Header/>
     <div className="lg:h-[90vh] h-screen w-full flex lg:flex-col items-center justify-center bg-[#4A5995] ">
     <div className='w-[100%] absolute flex flex-row justify-center'>
     <Registercard />

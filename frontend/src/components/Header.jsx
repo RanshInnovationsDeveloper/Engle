@@ -1,6 +1,6 @@
 import  { useState,useEffect} from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { IoClose, IoMenu } from "react-icons/io5";
+import { IoClose, IoMenu, IoPerson } from "react-icons/io5";
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useMediaQuery } from "react-responsive";
@@ -9,6 +9,7 @@ import { logout } from '../services/operations/authServices';
 import {  useSelector,useDispatch } from "react-redux";
 import { setauthUserId,setuserEmail, setuserName,setLoading } from '../slices/authSlice'
 import { auth } from '../services/firebase'
+import { FaBell } from "react-icons/fa";
 
 const Header = ({val}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,7 +66,7 @@ const Header = ({val}) => {
       <ul className={listClassName}>
         <li>
           <NavLink to="/"      
-          className={`${linkClassName} ${val === 0 ? "text-[#2E3D79]" : "text-black"}`}
+          className={`${linkClassName} ${val === 0 ? "text-[#2E3D79] font-[600]" : "text-black "}`}
            onClick={closeMobileMenu} >
             Home
           </NavLink>
@@ -73,7 +74,7 @@ const Header = ({val}) => {
         <li>
           <NavLink
             to="/flashcards"
-            className={`${linkClassName} ${val === 1 ? "text-[#2E3D79]" : "text-black"}`}
+            className={`${linkClassName} ${val === 1 ? "text-[#2E3D79] font-semibold" : "text-black font-normal"}`}
             onClick={closeMobileMenu}
           >
             Category
@@ -82,7 +83,7 @@ const Header = ({val}) => {
         <li>
           <NavLink
             to="/contact"
-            className={`${linkClassName} ${val === 2 ? "text-[#2E3D79]" : "text-black"}`}
+            className={`${linkClassName} ${val === 2 ? "text-[#2E3D79] font-semibold" : "text-black"}`}
             onClick={closeMobileMenu}
           >
             Contact Us
@@ -91,21 +92,27 @@ const Header = ({val}) => {
         <li>
           <NavLink
             to="/about"
-            className={`${linkClassName} ${val === 3 ? "text-[#2E3D79]" : "text-black"}`}
+            className={`${linkClassName} ${val === 3 ? "text-[#2E3D79] font-semibold" : "text-black"}`}
             onClick={closeMobileMenu}
           >
             About Us
           </NavLink>
         </li>
         </ul>
-        <ul className={`${listClassName}  lg:mt-0 mt-3` }>
         {authUserId ? (
-          <li>
-          <button className='btn px-5 py-2' onClick={handlesignout}>
-           Logout
+        <>
+          {/* <li>
+          <button className='btn2 pr-1 pl-3 py-3' >
+           <FaBell className="w-[1.75rem] h-[1.75rem]"/>
           </button>
       </li>
-        ):(<>
+          <li>
+          <button className='btn pr-1 pl-3 py-3' onClick={handlesignout}>
+           <IoPerson className="w-[1.75rem] h-[1.75rem]"/>
+          </button>
+      </li> */}
+      </>
+        ):(<ul className={`${listClassName}  lg:mt-0 mt-3` }>
           <li>
           <NavLink
             to="/login"
@@ -124,10 +131,10 @@ const Header = ({val}) => {
             <button className="btn px-5 py-2 ">Sign Up</button>
           </NavLink>
         </li>
-        </>
+        </ul>
         )}
-      </ul>
       </>
+
     );
   };
 
@@ -137,11 +144,15 @@ const Header = ({val}) => {
         <NavLink to="/" className="nav__logo">
           ENGLE
         </NavLink>
+        
 
-        {isMobile && (
+        {isMobile && (<>
+             
           <div className="nav__toggle" id="nav-toggle" onClick={toggleMenu}>
             <IoMenu />
           </div>
+        </>
+        
         )}
 
         {isMobile ? (
@@ -157,6 +168,19 @@ const Header = ({val}) => {
         ) : (
           renderNavLinks()
         )}
+{authUserId ? (  <div className="flex flex-row gap-4 justify-center">
+              <div>
+          <button className='btn2 pr-1 pl-3 py-3' >
+           <FaBell className="w-[1.75rem] h-[1.75rem]"/>
+          </button>
+      </div>
+          <div>
+          <button className='btn pr-1 pl-3 py-3' onClick={handlesignout}>
+           <IoPerson className="w-[1.75rem] h-[1.75rem]"/>
+          </button>
+      </div>
+        </div>):(<></>)}
+      
       </nav>
     </header>
   );
