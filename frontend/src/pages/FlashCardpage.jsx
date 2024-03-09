@@ -24,8 +24,6 @@ function FlashCardpage() {
 
 
 
-
-
   const handleFlip = async () => {
       setIsFlipped(!isFlipped);
       console.log(isFlipped);

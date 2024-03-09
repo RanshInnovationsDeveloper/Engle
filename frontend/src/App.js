@@ -10,6 +10,7 @@ import Categorypage from './pages/Categorypage'
 import ContactUspage from './pages/ContactUspage'
 import AboutUspage from './pages/AboutUspage'
 import FlashCardpage from './pages/FlashCardpage'
+import FavouritesPage from './pages/FavouritesPage'
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         <Route path='/contact' element={<ContactUspage />} />
         <Route path='/about' element={<AboutUspage />} />
         <Route path='/flashcards' element={<FlashCardpage />} />
+        <Route path='/favourites' element={<FavouritesPage />} />
       </Routes>
       <ToastContainer />
     
