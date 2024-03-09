@@ -60,11 +60,28 @@ h3 {
   justify-content: center;
 }
 
-.btn svg {
+.btn2 {
+
+  border: 1px solid #34468A;
+  border-radius: 10px;
+  background: #34468A;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 550;
+  letter-spacing: 0em;
+  cursor: pointer;
+  text-align: center;
+  appearance: button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn svg, .btn2 svg {
   margin-right: 8px;
 }
 
-.btn-reverse {
+.btn-reverse  {
   background: #fff;
   color: #000;
 }
@@ -74,7 +91,7 @@ h3 {
   margin-bottom: 20px;
 }
 
-.btn:hover {
+.btn:hover, .btn:hover {
   transform: scale(0.98);
 }
 

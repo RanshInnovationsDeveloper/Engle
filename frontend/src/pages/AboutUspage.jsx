@@ -1,13 +1,9 @@
 
 function AboutUspage() {
-
-
-
-
   return (
-    <div>
-      
-    </div>
+  
+<>
+</>
   )
 }
 

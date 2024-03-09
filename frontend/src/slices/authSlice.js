@@ -4,15 +4,15 @@ const initialState = {
     userEmail: null,
     userName:null,
     loading: false,
-    authUserData:null,
+    authUserId:null,
 };
 
 const authSlice = createSlice({
     name: "auth",
     initialState: initialState,
     reducers: {
-        setauthUserData(state, value) {
-            state.authUserData = value.payload;
+        setauthUserId(state, value) {
+            state.authUserId = value.payload;
         },
         setuserEmail(state, value) {
             state.userEmail = value.payload;
@@ -30,7 +30,7 @@ const authSlice = createSlice({
     },
 });
 // console.log("our auth slice data is ",authSlice.actions);
-export const { setuserEmail,setuserName, setauthUserData , setLoading, setHeader } = authSlice.actions;
+export const { setuserEmail,setuserName, setauthUserId , setLoading, setHeader } = authSlice.actions;
 
 export default authSlice.reducer;
 

@@ -10,7 +10,7 @@ const CategoryHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
   const navigate = useNavigate()
-  const {authUserData} = useSelector((state)=> state.auth)
+  const {authUserId} = useSelector((state)=> state.auth)
 
 
   const toggleMenu = () => {
@@ -84,7 +84,7 @@ const CategoryHeader = () => {
         </li>
         <li>
           <NavLink
-            to="/notes"
+            to="/mynotes"
             className={`${linkClassName} `}
             onClick={closeMobileMenu}
           >

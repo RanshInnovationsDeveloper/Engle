@@ -16,7 +16,7 @@ function Logincard() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, authUserData } = useSelector((state) => state.auth);
+  const { loading, authUserId } = useSelector((state) => state.auth);
 
   const [useremail, setUseremail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,11 +43,11 @@ function Logincard() {
   };
 
 useEffect(() => {
-  if(authUserData)
+  if(authUserId)
   {
     navigate("/")
   }
-},[authUserData, navigate])
+},[authUserId, navigate])
 
 if(loading)
 {

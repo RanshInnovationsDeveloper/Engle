@@ -27,8 +27,6 @@ function FlashCardpage() {
 
 
 
-
-
   const handleFlip = async () => {
       setIsFlipped(!isFlipped);
       console.log(isFlipped);
@@ -49,8 +47,8 @@ function FlashCardpage() {
     // }
     auth.onAuthStateChanged(async (user) => {
       if (user) {
-        const snapshot = await db.collection("users").doc(user.uid).get();
-        setCurrentUser({ ...snapshot.data(), userId: user.uid });
+        const snapshot = await db.collection("users").doc(user?.uid).get();
+        setCurrentUser({ ...snapshot.data(), userId: user?.uid });
       } else {
         setCurrentUser(null);
       }
