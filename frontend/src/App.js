@@ -16,6 +16,7 @@ import FavouritesPage from './pages/FavouritesPage'
 
 import PrivateRoute from "./components/auth/PrivateRoute";
 import OpenRoute from "./components/auth/OpenRoute";
+import MynotesPage from "./pages/MynotesPage";
 
 function App() {
 
@@ -87,7 +88,7 @@ function App() {
 
             <PrivateRoute>
               <FavouritesPage/>
-            </PrivateRoute>
+              </PrivateRoute>
 
           }
         />
@@ -97,7 +98,7 @@ function App() {
           element={
 
             <PrivateRoute>
-              {/* < MyNotes /> */}
+              <MynotesPage />
             </PrivateRoute>
 
           }

@@ -84,7 +84,7 @@ const CategoryHeader = () => {
         </li>
         <li>
           <NavLink
-            to="/notes"
+            to="/mynotes"
             className={`${linkClassName} `}
             onClick={closeMobileMenu}
           >
