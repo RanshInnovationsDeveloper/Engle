@@ -1,35 +1,50 @@
 import Header from "../components/Header";
 import { useState } from "react";
+import { apiConnector } from "../services/apiConnector";
+import { contactEndpoints } from "../services/apis";
+
+const { CONTACT_API } = contactEndpoints;
 function ContactUspage() {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [email, setEmail] = useState("");
+  const [button, setButton] = useState("Contact Us");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !message || !subject) {
+    if (!name || !message || !subject || !email) {
       setErrorMessage("Please fill out all fields.");
       setTimeout(() => {
-        setErrorMessage("");
+        setErrorMessage(null);
       }, 5000);
       return;
     }
-    if (name && message && subject) {
-      window.location.href = `mailto:${String(
-        process.env.REACT_APP_EMAIL
-      )}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
-        message
-      )}`;
+    if (name && message && subject && email) {
+      setButton("Sending...");
+      const response = await apiConnector("POST", CONTACT_API, {
+        name,
+        message,
+        subject,
+        email,
+      });
+      setButton("Contact Us");
+      setSuccessMessage(response?.data?.message);
+      setTimeout(() => {
+        setSuccessMessage(null);
+      }, 5000);
       setName("");
       setMessage("");
       setSubject("");
+      setEmail("");
     }
   };
 
   return (
     <>
-      <Header></Header>;
+      <Header></Header>
       <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
         <form className="w-1/3 bg-white rounded-lg shadow-md p-6">
           <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -39,6 +54,15 @@ function ContactUspage() {
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
+          />
+          <label className="block text-gray-700 text-sm font-bold mb-2">
+            Email:
+          </label>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
           />
           <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -65,11 +89,20 @@ function ContactUspage() {
             type="submit"
             onClick={handleSubmit}
           >
-            Submit
+            {button}
           </button>
         </form>
-        <div className="text-red-500 mt-6">
-          {errorMessage && <p>{errorMessage}</p>}
+        <div className="absolute top-20 right-0 m-6">
+          {errorMessage && (
+            <div className="text-white bg-red-500 mb-4 p-2 border border-red-500 rounded">
+              <p>{errorMessage}</p>
+            </div>
+          )}
+          {successMessage && (
+            <div className="text-white bg-green-500 p-2 border border-green-500 rounded">
+              {successMessage && <p>{successMessage}</p>}
+            </div>
+          )}
         </div>
       </div>
     </>

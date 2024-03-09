@@ -9,7 +9,8 @@ const wordRoute = require("./routes/wordRoute");
 const storyRoute = require("./routes/storyRoute");
 const unseenRoute = require("./routes/unseenRoute");
 const favouriteRoute = require("./routes/favouriteRoute");
-const notesRoute = require('./routes/notesRoute')
+const notesRoute = require("./routes/notesRoute");
+const contact = require("./routes/contactRoute");
 
 // Loading environment variables from .env file
 dotenv.config();
@@ -22,13 +23,13 @@ app.use(
     credentials: true,
   })
 );
-
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/word", wordRoute);
 app.use("/api/v1/story", storyRoute);
 app.use("/api/v1/unseen", unseenRoute);
 app.use("/api/v1/favourite", favouriteRoute);
-app.use('/api/v1/notes',notesRoute)
+app.use("/api/v1/notes", notesRoute);
+app.use("/api/v1/contact", contact);
 
 // Testing the server
 app.get("/", (req, res) => {
