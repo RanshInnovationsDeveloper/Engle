@@ -4,7 +4,10 @@ import { apiConnector } from "../services/apiConnector";
 import { contactEndpoints } from "../services/apis";
 
 const { CONTACT_API } = contactEndpoints;
+
 function ContactUspage() {
+
+
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
@@ -14,31 +17,43 @@ function ContactUspage() {
   const [button, setButton] = useState("Contact Us");
 
   const handleSubmit = async (e) => {
+
+
     e.preventDefault();
-    if (!name || !message || !subject || !email) {
+    if (name && message && subject && email) {
+      try {
+        setButton("Sending...");
+        const response = await apiConnector("POST", CONTACT_API, {
+          name,
+          message,
+          subject,
+          email,
+        });
+        setButton("Contact Us");
+        setSuccessMessage(response?.data?.message);
+        setTimeout(() => {
+          setSuccessMessage(null);
+        }, 2000);
+        setName("");
+        setMessage("");
+        setSubject("");
+        setEmail("");
+
+      } catch (error) {
+        console.log("server error:", error);
+        setErrorMessage("Something went wrong!");
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 2000);
+        setButton("Contact Us");
+      }
+    }
+    else {
       setErrorMessage("Please fill out all fields.");
       setTimeout(() => {
         setErrorMessage(null);
-      }, 5000);
+      }, 2000);
       return;
-    }
-    if (name && message && subject && email) {
-      setButton("Sending...");
-      const response = await apiConnector("POST", CONTACT_API, {
-        name,
-        message,
-        subject,
-        email,
-      });
-      setButton("Contact Us");
-      setSuccessMessage(response?.data?.message);
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 5000);
-      setName("");
-      setMessage("");
-      setSubject("");
-      setEmail("");
     }
   };
 
