@@ -9,42 +9,54 @@ const {
   Timestamp,
 } = require("firebase/firestore/lite");
 
-// for better understanding of functioning of this you can check for this github repo
-// https://github.com/whiteknight16/ENGLE-Stuff
+//Every time you add new json file add that over here as of now
+const words = require("../resources/words.json");
+const sampleStory = require("../resources/sampleStory.json");
+const keyArr = { words, sampleStory };
+
 const fetchFavouriteButtonStatus = async (req, res) => {
+  //this is to fetch the status of favourite button if item is in favourite it will give true else false so can be used to
+  //set the status of button on frontend
   try {
     const { itemId, type, userId } = req.body;
-    if (userId) {
-      const docRef = doc(db, "favourite", userId);
-      const docSnap = await getDoc(docRef);
+    try {
+      if (userId) {
+        const docRef = doc(db, "favourite", userId);
+        const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        const itemInArray = data[type].find((item) => item.itemId === itemId);
-        if (itemInArray) {
-          res.status(200).json({ isFavourite: true });
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const itemInArray = data[type].find((item) => item.itemId === itemId);
+          if (itemInArray) {
+            res.status(200).json({ isFavourite: true });
+          } else {
+            res.status(200).json({ isFavourite: false });
+          }
         } else {
           res.status(200).json({ isFavourite: false });
         }
-      } else {
-        res.status(200).json({ isFavourite: false });
       }
-    } else {
-      res.status(200).json({ status: "No user ID provided" });
+    } catch (error) {
+      res.status(401).json({ status: "No user ID provided" });
     }
   } catch (error) {
     res.status(500).json({ status: "Error", message: error.message });
   }
 };
-
+//This is used to add new item to favourite list it takes 4 input from body
 const addToFavourite = async (req, res) => {
   try {
-    const { itemId, type, userId } = req.body;
+    //itemId is the index of object
+    //type is the file name from which item to be fetched
+    //userId is id of user
+    // name is name of from which it
+    const { itemId, type, userId, name } = req.body;
     const docRef = doc(db, "favourite", userId);
     const obj = {
       itemId,
       createdAt: new Date(),
       isFavourite: true,
+      name,
     };
     const docSnap = await getDoc(docRef);
 
@@ -64,10 +76,12 @@ const addToFavourite = async (req, res) => {
   }
 };
 
+// This is used to remove item from favourite list
 const removeFromFavourite = async (req, res) => {
   //this controller to be called when we want to remove item from favourite list
   try {
-    //again these needed to be passed from frontend by any means here using body for all can be changed as per conviencnece
+    //these needed to be passed from frontend by any means here using body for all can be changed as per conviencnece
+    //int type need to pass the name of file in which item is there originally
     const { itemId, type, userId } = req.body;
     const docRef = doc(db, "favourite", userId);
     const docSnap = await getDoc(docRef);
@@ -85,74 +99,46 @@ const removeFromFavourite = async (req, res) => {
     console.log(error);
   }
 };
+//This is used to fetch all the contents of favourite
 const fetchFavouriteItems = async (req, res) => {
   try {
-    const userId = req.body.userId;
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ status: "No user ID provided" });
+    }
+
     const docRef = doc(db, "favourite", userId);
     const docSnap = await getDoc(docRef);
 
     if (!docSnap.exists()) {
-      res.status(404).json({ status: "No favourite" });
-    } else {
-      const favouriteItems = [];
-      const promises = [];
-
-      for (let key in docSnap.data()) {
-        const values = docSnap.data()[key];
-        const collectionRef = collection(db, key);
-
-        values.forEach((value) => {
-          const createdAt = Timestamp.fromMillis(
-            value.createdAt.seconds * 1000 +
-              value.createdAt.nanoseconds / 1000000
-          ).toDate();
-          const itemDocRef = doc(collectionRef, value.itemId);
-
-          const promise = getDoc(itemDocRef).then((itemDocSnap) => {
-            if (itemDocSnap.exists()) {
-              const final_object = {
-                data: itemDocSnap.data()[key],
-                createdAt: createdAt,
-                type: key,
-                id: value.itemId,
-              };
-              favouriteItems.push(final_object);
-            }
-          });
-
-          promises.push(promise);
-        });
-      }
-
-      Promise.all(promises)
-        .then(() => {
-          res.status(200).json({ favouriteItems });
-        })
-        .catch((error) => {
-          console.error(error);
-          res.status(500).json({ status: "Error", message: error.message });
-        });
+      return res
+        .status(404)
+        .json({ status: "No favourite found for this user" });
     }
-    //A valid response will look like this
-    /*{
-   "favouriteItems":[
-      {
-         "data":"A new Story",
-         "createdAt":"2024-03-03T02:44:38.117Z",
-         "type":"story",
-         "id":"P8Giul8tMqVIQnISFdg5"
-      },
-      {
-         "data":"It is here to be part of unseen",
-         "createdAt":"2024-03-03T02:45:34.294Z",
-         "type":"unseen",
-         "id":"ud2DERZWPzlEFhC4tsC7"
+
+    const data = docSnap.data();
+    const result = [];
+
+    for (const key in data) {
+      if (Array.isArray(data[key])) {
+        data[key].forEach((item) => {
+          // Convert Firestore Timestamp to JavaScript Date
+          const createdAt = new Date(item.createdAt.seconds * 1000);
+          // Format date as needed
+          const createdAtFormatted = createdAt.toISOString();
+          result.push({
+            ...item,
+            val: keyArr[key][Number(item.itemId)],
+            createdAt: createdAtFormatted,
+          });
+        });
       }
-   ]
-}
-     */
+    }
+    result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    res.status(200).json(result);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ status: "Error", message: error.message });
   }
 };
