@@ -18,26 +18,23 @@ const fetchFavouriteButtonStatus = async (req, res) => {
   //this is to fetch the status of favourite button if item is in favourite it will give true else false so can be used to
   //set the status of button on frontend
   try {
-    const { itemId, type, userId } = req.body;
-    try {
-      if (userId) {
-        const docRef = doc(db, "favourite", userId);
-        const docSnap = await getDoc(docRef);
+    const { itemId, type, userId } = req.params;
+    if (userId) {
+      //Looking for doc
+      const docRef = doc(db, "favourite", userId);
+      const docSnap = await getDoc(docRef);
 
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          const itemInArray = data[type].find((item) => item.itemId === itemId);
-          if (itemInArray) {
-            res.status(200).json({ isFavourite: true });
-          } else {
-            res.status(200).json({ isFavourite: false });
-          }
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const itemInArray = data[type].find((item) => item.itemId === itemId);
+        if (itemInArray) {
+          res.status(200).json({ isFavourite: true });
         } else {
           res.status(200).json({ isFavourite: false });
         }
+      } else {
+        res.status(200).json({ isFavourite: false });
       }
-    } catch (error) {
-      res.status(401).json({ status: "No user ID provided" });
     }
   } catch (error) {
     res.status(500).json({ status: "Error", message: error.message });
@@ -49,7 +46,7 @@ const addToFavourite = async (req, res) => {
     //itemId is the index of object
     //type is the file name from which item to be fetched
     //userId is id of user
-    // name is name of from which it
+    // name is name of from which it is to be displayed in () at favourite page
     const { itemId, type, userId, name } = req.body;
     const docRef = doc(db, "favourite", userId);
     const obj = {
@@ -102,18 +99,17 @@ const removeFromFavourite = async (req, res) => {
 //This is used to fetch all the contents of favourite
 const fetchFavouriteItems = async (req, res) => {
   try {
-    const { userId } = req.body;
-
+    const { userId } = req.query;
     if (!userId) {
       return res.status(400).json({ status: "No user ID provided" });
     }
-
     const docRef = doc(db, "favourite", userId);
     const docSnap = await getDoc(docRef);
-
+    //Check if favourite exists
     if (!docSnap.exists()) {
+      await setDoc(docRef, { userId });
       return res
-        .status(404)
+        .status(200)
         .json({ status: "No favourite found for this user" });
     }
 
