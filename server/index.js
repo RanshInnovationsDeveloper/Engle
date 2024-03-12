@@ -23,6 +23,8 @@ app.use(
     credentials: true,
   })
 );
+app.use(express.urlencoded());
+
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/word", wordRoute);
 app.use("/api/v1/story", storyRoute);

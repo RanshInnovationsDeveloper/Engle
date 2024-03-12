@@ -12,10 +12,10 @@ export const authEndpoints = {
 
 export const favouriteEndpoints = {
   //favouriteRoute Endpoints
-  REMOVEFAVOURITE_API: BASE_URL + "/favourite/remove",
-  ADDFAVOURITE_API: BASE_URL + "/favourite/add",
-  GETFAVOURITE_API: BASE_URL + "/favourite/fetchItems",
-  GETFAVOURITESTATUS_API: BASE_URL + "/favourite/fetchStatus",
+  REMOVE_FAVOURITE_API: BASE_URL + "/favourite/remove",
+  ADD_FAVOURITE_API: BASE_URL + "/favourite/add",
+  GET_FAVOURITE_API: BASE_URL + "/favourite/fetchItems",
+  GET_FAVOURITE_STATUS_API: BASE_URL + "/favourite/fetchStatus",
 };
 
 export const storyEndpoints = {
@@ -29,7 +29,6 @@ export const unseenEndpoints = {
   GETUNSEEN_API: BASE_URL + "/unseen/getUnseen",
   ADDUNSEEN_API: BASE_URL + "/unseen/addUnseen",
 };
-
 
 export const contactEndpoints = {
   //unseenRoute Endpoints
