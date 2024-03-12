@@ -18,7 +18,7 @@ const fetchFavouriteButtonStatus = async (req, res) => {
   //this is to fetch the status of favourite button if item is in favourite it will give true else false so can be used to
   //set the status of button on frontend
   try {
-    const { itemId, type, userId } = req.params;
+    const { itemId, type, userId } = req.query;
     if (userId) {
       //Looking for doc
       const docRef = doc(db, "favourite", userId);
@@ -26,8 +26,9 @@ const fetchFavouriteButtonStatus = async (req, res) => {
 
       if (docSnap.exists()) {
         const data = docSnap.data();
-        const itemInArray = data[type].find((item) => item.itemId === itemId);
-        if (itemInArray) {
+        console.log(data[type]);
+        const itemExists = data[type].some((item) => item.itemId == itemId);
+        if (itemExists) {
           res.status(200).json({ isFavourite: true });
         } else {
           res.status(200).json({ isFavourite: false });
