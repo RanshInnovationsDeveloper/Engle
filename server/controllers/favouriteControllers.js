@@ -125,6 +125,7 @@ const fetchFavouriteItems = async (req, res) => {
           const createdAtFormatted = createdAt.toISOString();
           result.push({
             ...item,
+            type: key,
             val: keyArr[key][Number(item.itemId)],
             createdAt: createdAtFormatted,
           });

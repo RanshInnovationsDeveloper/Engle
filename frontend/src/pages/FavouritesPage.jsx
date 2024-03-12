@@ -9,8 +9,9 @@ import { useSelector } from "react-redux";
 import { apiConnector } from "../services/apiConnector";
 import { favouriteEndpoints } from "../services/apis";
 
-const { GET_FAVOURITE_API } = favouriteEndpoints;
-
+const { GET_FAVOURITE_API, REMOVE_FAVOURITE_API } = favouriteEndpoints;
+//*TODO:important comment at all place in code have used a test userId to be removed in production
+//*TODO:also uncomment the authUserId coming from production to be used in production
 function FavouritesPage() {
   //Auth authUserId to be sent to backend for API purpose from Redux Store
   const { authUserId } = useSelector((state) => state.auth);
@@ -38,6 +39,20 @@ function FavouritesPage() {
     };
     fetchData();
   }, [authUserId]);
+
+  const hadleRemoveFromFavourite = async (type, itemId) => {
+    try {
+      const response = await apiConnector("POST", REMOVE_FAVOURITE_API, {
+        type,
+        itemId,
+        userId: "qEMYBI4erFNruO1L0iHQknbxXdD2", //this is just a test userId to be removed in production
+        // userId:authUserId
+      });
+      console.log("removed Successfully"); //*TODO:this can be replace with a toast ot other comment to show that item is removed
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // Array of objects representing sections with headings and contents
   // const sections = [
   //   {
@@ -151,12 +166,21 @@ function FavouritesPage() {
   //If the length of returned data is greater than 0, then display the data
   if (isLoading == false && data?.data.length > 0) {
     //Arranging the data into key value pair with key being the data so all items with same data will be grouped together
+    //We can even use state for group data and in that case when we will click remove button than it will be removed from
+    //page immediately but if we don;t want that to happen we can leve it like that and can call remove from favourite api
+    //on first time click and add to favourite api on second time click we also can use fetch favourite button status
+    //to dynamically display state of favourite button
     const groupedData = data.data.reduce((acc, item) => {
       const date = item.createdAt.split("T")[0]; // Extract the date part from the createdAt string
       if (!acc[date]) {
         acc[date] = []; // Initialize the array for this date if it doesn't exist
       }
-      acc[date].push({ val: item.val, name: item.name }); // Push the val into the array for this date
+      acc[date].push({
+        val: item?.val,
+        name: item?.name,
+        type: item?.type,
+        itemId: item?.itemId,
+      }); // Push the val into the array for this date
       return acc;
     }, {});
     //if data exists logging it as per group
@@ -177,6 +201,14 @@ function FavouritesPage() {
                     <>
                       <li>Word: {value.val.word}</li>
                       <li>Definition: {value.val.definitions[0]}</li>
+                      <button
+                        className="bg-red-500"
+                        onClick={() =>
+                          hadleRemoveFromFavourite(value?.type, value?.itemId)
+                        }
+                      >
+                        Remove From Favourite
+                      </button>
                     </>
                   )}
                   {/* //if name is story */}
@@ -184,6 +216,14 @@ function FavouritesPage() {
                     <>
                       <li>Title: {value.val.title}</li>
                       <li>Content: {value.val.content}</li>
+                      <button
+                        className="bg-red-500"
+                        onClick={() =>
+                          hadleRemoveFromFavourite(value?.type, value?.itemId)
+                        }
+                      >
+                        Remove From Favourite
+                      </button>
                     </>
                   )}
                 </div>
