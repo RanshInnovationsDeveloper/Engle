@@ -27,7 +27,6 @@ function FavouritesPage() {
       ]
     }
   ];
-
   return (
     <>
     <Header/>
@@ -44,7 +43,6 @@ function FavouritesPage() {
               className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
             />
           </div>
-
           <div className='border border-gray-500 rounded-lg mr-2'>
             <button>
               <MdOutlineFilterAlt className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem]' />

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const { createNote, getNotes, getNoteById } = require('../controllers/notes');
+const { createNote, getNotes, getNoteById } = require('../controllers/notesControllers');
 
 // Route for creating a new note
 router.post('/createnote', [

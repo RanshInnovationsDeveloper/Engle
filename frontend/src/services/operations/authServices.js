@@ -2,8 +2,6 @@ import { auth, db } from "../firebase";
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
-
-
 export const signup = async (email, password, username) => {
 
   let error = "";
