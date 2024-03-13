@@ -17,6 +17,7 @@ import FavouritesPage from './pages/FavouritesPage'
 import PrivateRoute from "./components/auth/PrivateRoute";
 import OpenRoute from "./components/auth/OpenRoute";
 import MynotesPage from "./pages/MynotesPage";
+import Notecard from "./components/Notecard";
 
 function App() {
 
@@ -103,7 +104,16 @@ function App() {
 
           }
         />
-
+        {/*This route is for checking notecard it can be removed/modified afterwards */}
+  <Route
+          path="/notecard"
+          element={
+            <OpenRoute>
+              <Notecard />
+              </OpenRoute>
+          }
+        />
+        {/**/}
         <Route
           path="/learnwithfriends"
           element={

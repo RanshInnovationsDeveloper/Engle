@@ -104,6 +104,7 @@ function FavouritesPage() {
   //         </div>
   //       </div>
 
+
   //       {/* Rendering section divs */}
   //       <div className="border border-[#5B7ADE] rounded-xl py-4 px-6 overflow-auto bg-[#F3F5FF] max-h-[80vh]">
   //         {sections.map((section, index) => (
