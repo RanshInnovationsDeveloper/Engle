@@ -23,7 +23,7 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/word", wordRoute);

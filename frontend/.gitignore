@@ -2,9 +2,10 @@
 
 # dependencies
 /node_modules
-/env
+.env
 /.pnp
 .pnp.js
+storage.txt
 
 # testing
 /coverage
