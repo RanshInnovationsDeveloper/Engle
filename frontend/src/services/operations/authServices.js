@@ -53,7 +53,6 @@ export const signin = async (email, password) => {
     await auth
       .signInWithEmailAndPassword(email, password)
       .then(async (userCrendential) => {
-        console.log(userCrendential?.data);
         if (userCrendential?.user?.emailVerified !== true)
           error = "user not exist!";
       })

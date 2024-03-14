@@ -33,7 +33,7 @@ function App() {
         <Route path="/category" element={<Categorypage />} />
         <Route path="/contact" element={<ContactUspage />} />
         <Route path="/about" element={<AboutUspage />} />
-        <Route path="/flashcards" element={<FlashCardpage />} />
+      
         {/* <Route path="/story" element={} /> */}
         {/* <Route path="/context" element={} /> */}
         {/* <Route path="/ambiguouswords" element={} /> */}
@@ -43,9 +43,9 @@ function App() {
           path="/login"
           element={
 
-            // <OpenRoute>
+            <OpenRoute>
               <Loginpage />
-            // </OpenRoute>
+            </OpenRoute>
 
           }
         />
@@ -84,12 +84,23 @@ function App() {
         />
 
         <Route
+          path="/flashcards"
+          element={
+
+            <PrivateRoute>
+              <FlashCardpage/>
+            </PrivateRoute>
+
+          }
+        />
+
+        <Route
           path="/favourites"
           element={
 
             <PrivateRoute>
-              <FavouritesPage/>
-              </PrivateRoute>
+              <FavouritesPage />
+            </PrivateRoute>
 
           }
         />
@@ -105,12 +116,12 @@ function App() {
           }
         />
         {/*This route is for checking notecard it can be removed/modified afterwards */}
-  <Route
+        <Route
           path="/notecard"
           element={
             <OpenRoute>
               <Notecard />
-              </OpenRoute>
+            </OpenRoute>
           }
         />
         {/**/}
