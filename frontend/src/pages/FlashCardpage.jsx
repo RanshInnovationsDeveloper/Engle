@@ -33,7 +33,7 @@ function FlashCardpage() {
 
 
     // This array is used to store the index of previous words .
-    const [unseenPreviousIndex, setunseenPreviousIndex] = useState(JSON.parse(localStorage.getItem(flashCardCategory)) || []);
+    const [unseenPreviousIndex, setunseenPreviousIndex] = useState(JSON.parse(sessionStorage.getItem(flashCardCategory)) || []);
     const [previousarrayindex, setpreviousarrayindex] = useState(unseenPreviousIndex.length);   // 1 based indexing
 
 
@@ -75,28 +75,34 @@ function FlashCardpage() {
     useEffect(() => {
         async function callOnlyWhenPageReload() {
             const response = await fetchWord("-1");
-            if (response?.data !== null) {
+            if (response?.data?.data !== null) {
 
                 setWorddata(response?.data?.data);
 
                 // update the previous word's index
-                updatelocalstoragearray(response?.data?.wordIndex);
+                updatesessionstoragearray(response?.data?.wordIndex);
                 setpreviousarrayindex(previousarrayindex + 1);
-                return;
             }
+            else
+            toast.error("no words found");
+
+            return;
         }
         callOnlyWhenPageReload();
     }, [flashCardCategory])
 
 
-    // update local storage array to store the previous word indexies 
-    const updatelocalstoragearray = (index) => {
+    // update session storage array to store the previous word indexies 
+    const updatesessionstoragearray = (index) => {
         const updatedarray = [...unseenPreviousIndex, index];
         setunseenPreviousIndex(updatedarray);
-        localStorage.setItem(flashCardCategory, JSON.stringify(updatedarray));
+        sessionStorage.setItem(flashCardCategory, JSON.stringify(updatedarray));
         return;
     }
 
+//     useEffect(()=>{
+// console.log("previousarrayindex is => ",previousarrayindex);
+//     },[previousarrayindex])
 
 
     // handler function to fetch next word 
@@ -106,14 +112,16 @@ function FlashCardpage() {
         // if currentwordindex isequal to "-1" means we fetch any random word from backend .
         if (previousarrayindex === unseenPreviousIndex.length) {
             const response = await fetchWord("-1");
-            if (response?.data !== null) {
+            if (response?.data?.data !== null) {
 
                 setWorddata(response?.data?.data);
 
                 // update the previous word index
-                updatelocalstoragearray(response?.data?.wordIndex);
+                updatesessionstoragearray(response?.data?.wordIndex);
                 setpreviousarrayindex(previousarrayindex + 1);
             }
+            else
+            toast.error("no words found");
         }
         else {
             const response = await fetchWord(JSON.stringify(unseenPreviousIndex[previousarrayindex]));
@@ -133,19 +141,20 @@ function FlashCardpage() {
     // handler function to fetch previous word
     const handleClickLeft = async () => {
 
-        // get index from the local storage 
+        // get index from the session storage 
         if (previousarrayindex === 1) {
             toast.error("no more words");
-            return;
         }
         else {
             const response = await fetchWord(JSON.stringify(unseenPreviousIndex[previousarrayindex - 2]));
-            if (response?.data !== null) {
+            if (response?.data?.data !== null) {
 
                 setWorddata(response?.data?.data);
                 setpreviousarrayindex(previousarrayindex - 1);
 
             }
+            else
+            toast.error("no words found");
         }
 
         return;
@@ -271,7 +280,7 @@ function FlashCardpage() {
                 </div>
 
                 <div className='flex flex-row gap-10'>
-                    <button onClick={handleClickLeft} disabled={previousarrayindex === 1} ><FaArrowAltCircleLeft className='text-blue-900 h-10 w-10' /></button>
+                    <button onClick={handleClickLeft}><FaArrowAltCircleLeft className='text-blue-900 h-10 w-10' /></button>
                     <button className='text-white text-lg font-mukta bg-blue-900 rounded-lg px-20 py-2' onClick={handleFlip}> Show </button>
                     <button onClick={handleClickRight}><FaArrowAltCircleRight className='text-blue-900 h-10 w-10' /></button>
                 </div>
