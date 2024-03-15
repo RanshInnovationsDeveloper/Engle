@@ -1,0 +1,131 @@
+.cat_header {
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: #2E3D79;
+    z-index: 20;
+    margin-bottom: 0.5rem;
+    margin-top: 1rem;
+    margin: 0 auto;
+    padding: 0 3rem;
+    text-align: center;
+}
+  
+  .cat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    height: 2.75rem;
+    margin: 0.75rem 1rem;
+    padding: 1rem 0;
+  }
+
+  .cat__toggle,
+  .cat__close {
+    font-size: 1.5rem;
+    color: black;
+    cursor: pointer;
+  }
+  
+
+  
+  @media screen and (max-width: 1150px) {
+    .cat__menu {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      background-color: hsla(0, 0%, 6%, 0.2);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      width: 80%;
+      height: 100%;
+      padding: 6rem 3rem 0;
+      transition: right 0.4s;
+    }
+  }
+  @media screen and (max-width: 300px) {
+    .cat__menu {
+      padding: 4rem 1rem 2rem;
+    }
+  
+    .cat__list {
+      row-gap: 1rem;
+    }
+  
+    .cat__link {
+      font-size: 0.813rem;
+    }
+
+  }
+  
+  .cat__list {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2.5rem;
+    align-items: center;
+ 
+  }
+  
+  .cat__link {
+    transition: color 0.4s;
+    color: white;
+    opacity: 0.9;
+  }
+  
+  .cat__link:hover {
+    opacity: 1;
+  }
+  
+  .cat__close {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+  }
+  
+  .show-menu {
+    right: 0;
+  }
+  .cat__listt {
+    display: flex;
+    flex-direction: row;
+    column-gap: 1.5rem;
+  }
+  
+  .cat__menu_mobile {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    background-color: hsla(0, 0%, 6%, 0.2);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    width: 80%;
+    height: 100%;
+    padding: 6rem 3rem 0;
+    transition: right 0.4s;
+  }
+  @media screen and (min-width: 1150px) {
+    .cat {
+      height: 3.75rem;
+      padding: 0 0;
+    }
+    .cat__toggle,
+    .cat__close {
+      display: none;
+    }
+  
+    .cat__list {
+      flex-direction: row;
+      column-gap: 1.5rem;
+    }
+  }
+  
+  .cat__list__web {
+    display: flex;
+    flex-direction: row;
+    column-gap: 3.5rem;
+    align-items: center;
+    list-style-type: none;
+    padding: 0;
+  }
+  
