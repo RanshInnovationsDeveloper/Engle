@@ -38,6 +38,7 @@ export const contactEndpoints = {
   CONTACT_API: BASE_URL + "/contact/",
 };
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 export const flashCardEndpoints = {
@@ -49,3 +50,5 @@ export const flashCardEndpoints = {
 }
 =======
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207

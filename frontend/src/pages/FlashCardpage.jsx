@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { useSelector } from 'react-redux';
 import CategoryHeader from "../components/CategoryHeader";
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 =======
+=======
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
 import { auth,db } from "../services/firebase";
 import CategoryHeader from "../components/CategoryHeader";
 import Words from "../resources/words.json";
 import { generateRandomNumber, saveIndexToFirestore } from "../services/operations/dataServices";
+<<<<<<< HEAD
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
 import { TiTick } from "react-icons/ti";
 import { ImCross } from "react-icons/im";
 import { CiHeart } from "react-icons/ci";
@@ -19,14 +25,18 @@ import { FaArrowAltCircleLeft } from "react-icons/fa";
 import "../styles/FlashCard.css";
 import Header from '../components/Header';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { apiConnector } from '../services/apiConnector';
 import { flashCardEndpoints } from '../services/apis';
 =======
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
 
 
 
 function FlashCardpage() {
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     const { authUserId } = useSelector((state) => state.auth);
@@ -290,6 +300,8 @@ function FlashCardpage() {
         </>
     );
 =======
+=======
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
   const [words, setWords] = useState([]);
   const [randomNumber, setRandomNumber] = useState(null);
   const [fetchingUser, setFetchingUser] = useState(true);
@@ -456,7 +468,10 @@ function FlashCardpage() {
       )} */}
     </>
   );
+<<<<<<< HEAD
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
 }
 
 export default FlashCardpage;

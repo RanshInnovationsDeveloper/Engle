@@ -9,7 +9,6 @@ const Notecard = () => {
    // Fetching userid
    const { authUserId } = useSelector((state) => state.auth);
    console.log(authUserId);
-
   // State object to store input values
   const [formData, setFormData] = useState({
     word: '',
@@ -31,7 +30,6 @@ const Notecard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-
       // Add authUserId to formData
       const formDataWithUserId = {
         ...formData,
@@ -45,7 +43,6 @@ const Notecard = () => {
         },
         body: JSON.stringify(formDataWithUserId),
       };
-
       // Send the POST request to create a new note
       const response = await fetch(notesEndpoints.CREATENOTES_API, options);
 

@@ -24,10 +24,14 @@ app.use(
   })
 );
 <<<<<<< HEAD
+<<<<<<< HEAD
 app.use(express.urlencoded({ extended: true }));
 =======
 app.use(express.urlencoded());
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+app.use(express.urlencoded());
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
 
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/word", wordRoute);

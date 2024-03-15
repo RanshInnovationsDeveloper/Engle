@@ -1,9 +1,14 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import React from "react";
 import { useEffect, useState } from "react";
 =======
 import React, { useEffect, useState } from "react";
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+import React from "react";
+import { useEffect, useState } from "react";
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
 import { FaHeart } from "react-icons/fa";
 import { GoSearch } from "react-icons/go";
 import { MdOutlineFilterAlt } from "react-icons/md";
@@ -16,6 +21,9 @@ import FavouriteButton from "../components/FavouriteButton";
 
 const { GET_FAVOURITE_API, REMOVE_FAVOURITE_API } = favouriteEndpoints;
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
 //*TODO:important comment at all place in code have used a test userId to be removed in production
 //*TODO:also uncomment the authUserId coming from production to be used in production
 function FavouritesPage() {
@@ -25,6 +33,7 @@ function FavouritesPage() {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     //fetching the data using axios
+<<<<<<< HEAD
 =======
 
 function FavouritesPage() {
@@ -35,6 +44,8 @@ function FavouritesPage() {
 
   useEffect(() => {
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
     const fetchData = async () => {
       try {
         const response = await apiConnector(
@@ -44,11 +55,16 @@ function FavouritesPage() {
           null,
           {
 <<<<<<< HEAD
+<<<<<<< HEAD
             // userId: String(authUserId), //this is the user Id of the logged in user use it in production
             userId: "qEMYBI4erFNruO1L0iHQknbxXdD2", //this is just a test userId to be removed in production
 =======
             userId: String(authUserId), // Use authUserId in production
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+            // userId: String(authUserId), //this is the user Id of the logged in user use it in production
+            userId: "qEMYBI4erFNruO1L0iHQknbxXdD2", //this is just a test userId to be removed in production
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
           }
         );
         setData(response);
@@ -62,6 +78,9 @@ function FavouritesPage() {
 
   // Array of objects representing sections with headings and contents
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
   // const sections = [
   //   {
   //     heading: "Today-31st January,2024 (Wednesday)",
@@ -242,6 +261,7 @@ function FavouritesPage() {
   }
 
   return isLoading ? <div>Loading.....</div> : <></>;
+<<<<<<< HEAD
 =======
   const sections = [
     {
@@ -315,6 +335,8 @@ function FavouritesPage() {
     </>
   );
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
 }
 
 export default FavouritesPage;

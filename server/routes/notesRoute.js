@@ -13,5 +13,4 @@ router.post('/createnote', [
 
 // Route for getting all notes
 router.get('/getnotes/:UserId',getNotesByUserId);
-
 module.exports = router;

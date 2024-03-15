@@ -1,14 +1,19 @@
 /*CSS for Notecard can be written here demo code is below which can be removed*/
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 /* .form-box {
 =======
 .form-box {
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+.form-box {
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+<<<<<<< HEAD
 <<<<<<< HEAD
   } */
   
@@ -18,12 +23,18 @@
   
   form {
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+  }
+  
+  form {
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin: auto; 
     padding: 20px;
+<<<<<<< HEAD
 <<<<<<< HEAD
   } */
   
@@ -33,10 +44,16 @@
   
   input {
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+  }
+  
+  input {
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
     margin-bottom: 10px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
+<<<<<<< HEAD
 <<<<<<< HEAD
   } */
   
@@ -46,6 +63,11 @@
   
   button {
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+  }
+  
+  button {
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
     background-color: #4caf50;
     color: black;
     padding: 10px 15px;
@@ -57,8 +79,12 @@
   button:hover {
     background-color: #45a049;
 <<<<<<< HEAD
+<<<<<<< HEAD
   } */
 =======
   }
 >>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+=======
+  }
+>>>>>>> 498c7dd66f02d8affebeda63f6c5b8590d8d2207
   

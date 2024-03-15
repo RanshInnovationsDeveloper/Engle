@@ -1,10 +1,5 @@
 const { initializeApp } = require('firebase/app');
-<<<<<<< HEAD
-const { getFirestore, collection, addDoc, getDocs,query, where } = require('firebase/firestore/lite');
-=======
-const { getFirestore, collection, addDoc, getDocs } = require('firebase/firestore/lite');
->>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
-const { getAuth } = require('firebase/auth');
+const { getFirestore, collection, addDoc, getDocs} = require('firebase/firestore/lite');
 
 // Loading environment variables from .env file
 const dotenv = require('dotenv');
@@ -37,8 +32,4 @@ const auth = getAuth(app);
 const notesCollection = collection(db, 'notes');
 
 // Exporting using CommonJS syntax
-<<<<<<< HEAD
-module.exports = { db, auth, notesCollection, addDoc, getDocs,query,where };
-=======
-module.exports = { db, auth, notesCollection, addDoc, getDocs };
->>>>>>> 4022697af3eafab744c3e908079a7a6867b83123
+module.exports = { db, auth, notesCollection, addDoc, getDocs};

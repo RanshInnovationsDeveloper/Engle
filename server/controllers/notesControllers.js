@@ -27,7 +27,6 @@ exports.createNote = async (req, res) => {
   }
 };
 
-
 // Function to get notes based on UserId
 exports.getNotesByUserId = async (req, res) => {
   try {
@@ -40,8 +39,6 @@ exports.getNotesByUserId = async (req, res) => {
     // Query notes collection where UserId matches
     const q = query(notesRef, where('UserId', '==', UserId));
     const querySnapshot = await getDocs(q);
-
-
     // Check if there are no documents
     if (!querySnapshot || querySnapshot.empty) {
       res.status(200).json({ data: [] }); // Respond with an empty array or appropriate response
@@ -58,7 +55,6 @@ exports.getNotesByUserId = async (req, res) => {
     // Respond with the retrieved notes
     res.status(200).json({ data });
   } catch (err) {
-    // Handle errors
     res.status(500).json({ success: false, message: 'Internal server error', error: err.message });
   }
 };
