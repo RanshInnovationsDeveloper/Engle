@@ -91,7 +91,6 @@ function App() {
             <PrivateRoute>
               <FlashCardpage/>
             </PrivateRoute>
-
           }
         />
 
@@ -105,7 +104,7 @@ function App() {
         />
 
         <Route
-          path="/mynotes"
+         exact path="/mynotes"
           element={
 
             <PrivateRoute>
@@ -116,11 +115,11 @@ function App() {
         />
         {/*This route is for checking notecard it can be removed/modified afterwards */}
         <Route
-          path="/notecard"
+         exact path="/notecard"
           element={
-            <OpenRoute>
+            <PrivateRoute>
               <Notecard />
-            </OpenRoute>
+            </PrivateRoute>
           }
         />
         {/**/}
