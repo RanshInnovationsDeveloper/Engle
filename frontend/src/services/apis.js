@@ -37,12 +37,8 @@ export const contactEndpoints = {
   //unseenRoute Endpoints
   CONTACT_API: BASE_URL + "/contact/",
 };
-
-
 export const flashCardEndpoints = {
 
   FETCHWORD_API : BASE_URL+ "/word/fetchword",
-  ADDWORD_API : BASE_URL+ "/word/addword",
-
-
+  ADDWORD_API : BASE_URL+ "/word/addword"
 }

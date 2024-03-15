@@ -1,8 +1,7 @@
 // ../controllers/notes.js
-const { addDoc, notesCollection, getDocs } = require('../config/firebase');
+const { db, addDoc, notesCollection } = require('../config/firebase');
 const { body, validationResult } = require('express-validator');
-const { getDoc, doc, serverTimestamp } = require('firebase/firestore/lite');
-
+const { collection, query, getDocs, where, serverTimestamp } = require('firebase/firestore/lite');
 // Function to create a new note
 exports.createNote = async (req, res) => {
   try {
@@ -28,68 +27,33 @@ exports.createNote = async (req, res) => {
   }
 };
 
-// Function to get all notes
-exports.getNotes = async (req, res) => {
+// Function to get notes based on UserId
+exports.getNotesByUserId = async (req, res) => {
   try {
-    // Retrieve all documents from the collection
-    const querySnapshot = await getDocs(notesCollection);
+    // Extract UserId from request parameters
+    const { UserId } = req.params;
 
+    // Reference to notes collection
+    const notesRef = collection(db, 'notes');
+
+    // Query notes collection where UserId matches
+    const q = query(notesRef, where('UserId', '==', UserId));
+    const querySnapshot = await getDocs(q);
     // Check if there are no documents
     if (!querySnapshot || querySnapshot.empty) {
       res.status(200).json({ data: [] }); // Respond with an empty array or appropriate response
       return;
     }
 
-    // Sort the data based on the timestamp in descending order (recent first)
-    const data = querySnapshot.docs
-      .map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }))
-      .sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    // Map and format retrieved notes
+    const data = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+      timestamp: doc.data().timestamp ? doc.data().timestamp.toDate() : null, // Convert to JavaScript Date object if timestamp exists
+    }));
 
-    // Format the timestamp to be displayed (assuming timestamp is a Firebase Timestamp)
-    data.forEach((note) => {
-      if (note.timestamp) {
-        note.timestamp = note.timestamp.toDate(); // Convert to JavaScript Date object
-      }
-    });
-
+    // Respond with the retrieved notes
     res.status(200).json({ data });
-  } catch (err) {
-    res.status(500).json({ success: false, message: 'Internal server error', error: err.message });
-  }
-};
-
-// Function to get a note by ID
-exports.getNoteById = async (req, res) => {
-  try {
-    const noteId = req.params.id; // Assuming the ID is provided in the request parameters
-
-    // Construct a reference to the document using the provided ID
-    const noteRef = doc(notesCollection, noteId);
-
-    // Check if the provided ID is valid
-    if (!noteRef) {
-      res.status(401).json({ success: false, message: "Id is invalid" });
-      return;
-    }
-
-    // Retrieve the document
-    const noteDoc = await getDoc(noteRef);
-
-    // Check if the document exists
-    if (!noteDoc.exists()) {
-      res.status(404).json({ success: false, message: 'Note not found' });
-      return;
-    }
-
-    // Respond with the document data and ID
-    const noteData = {
-      id: noteDoc.id,
-      ...noteDoc.data(),
-    };
-    res.status(200).json({ success: true, data: noteData });
   } catch (err) {
     res.status(500).json({ success: false, message: 'Internal server error', error: err.message });
   }

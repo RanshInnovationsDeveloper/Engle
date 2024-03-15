@@ -1,5 +1,6 @@
 // Importing React components and icons
 import React, { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
 import { RiFilter2Line, RiSearch2Line } from "react-icons/ri";
 import Header from "../components/Header";
 import CategoryHeader from "../components/CategoryHeader";
@@ -47,7 +48,8 @@ const groupNotesByDate = (notes) => {
 export default function MynotesPage() {
   // State to store grouped notes
   const [groupedNotes, setGroupedNotes] = useState([]);
-
+  const { authUserId } = useSelector((state) => state.auth);
+  console.log(authUserId)
   // Fetching notes from the server
   useEffect(() => {
     const fetchNotes = async () => {
@@ -56,8 +58,7 @@ export default function MynotesPage() {
         const options = { method: 'GET' };
         
         // Make the fetch request to the specified API
-        const resp = await fetch(notesEndpoints.GETNOTES_API, options);
-
+        const resp = await fetch(`${notesEndpoints.GETNOTES_API}/${authUserId}`, options);
         // Check if the response is successful; otherwise, display an error toast
         if (!resp.ok) {
           toast.error('Network response was not ok');
@@ -73,6 +74,7 @@ export default function MynotesPage() {
       } catch (error) {
         // Log an error message if there is an issue with the fetch operation
         console.error('There was a problem with the fetch operation:', error);
+        toast.error('Failed to fetch notes. Please try again later.');
       }
     };
     fetchNotes();
