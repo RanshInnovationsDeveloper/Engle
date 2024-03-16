@@ -1,7 +1,6 @@
 // Importing React components and icons
 import React, { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
-import {Link} from 'react-router-dom';
 import { RiFilter2Line, RiSearch2Line } from "react-icons/ri";
 import Header from "../components/Header";
 import CategoryHeader from "../components/CategoryHeader";
@@ -85,9 +84,7 @@ export default function MynotesPage() {
     <>
       <Header />
       <CategoryHeader />
-      <Link to ="/notecard">
-                <button>Go to notecard</button>
-            </Link>
+
       <div className='mt-4'>
         {/* Search and filter bar */}
         <div className='flex justify-between mx-28 mb-6'>
