@@ -8,6 +8,7 @@ import "../styles/Notecard.css";
 const Notecard = () => {
    // Fetching userid
    const { authUserId } = useSelector((state) => state.auth);
+   console.log(authUserId);
   // State object to store input values
   const [formData, setFormData] = useState({
     word: '',

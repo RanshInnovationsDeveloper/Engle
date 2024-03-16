@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { auth, db } from "../services/firebase";
 import CategoryHeader from "../components/CategoryHeader";
-//import Words from "../resources/words.json";
+import Words from "../resources/words.json";
 import { generateRandomNumber, saveIndexToFirestore } from "../services/operations/dataServices";
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -121,8 +121,6 @@ function FlashCardpage() {
         <>
             <Header val={1} />
             <CategoryHeader />
-
-            
             <div className='h-[90vh] flex flex-col mt-10 gap-4 items-center '>
                 <h1 className='text-center text-4xl text-black'>FlashCards</h1>
                 <div className='lg:w-[43%] w-[80%] h-[56%] rounded-2xl'>
