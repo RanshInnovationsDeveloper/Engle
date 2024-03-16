@@ -1,14 +1,9 @@
 // Notecard.jsx
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import { notesEndpoints } from '../services/apis';
-import "../styles/Notecard.css";
-
+import {notesEndpoints} from '../services/apis'
+import "../styles/Notecard.css"
 const Notecard = () => {
-   // Fetching userid
-   const { authUserId } = useSelector((state) => state.auth);
-   console.log(authUserId);
   // State object to store input values
   const [formData, setFormData] = useState({
     word: '',
@@ -17,6 +12,8 @@ const Notecard = () => {
     example: '',
     breakdown: '',
   });
+
+  
   // Function to handle changes in the input fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -30,18 +27,13 @@ const Notecard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Add authUserId to formData
-      const formDataWithUserId = {
-        ...formData,
-        UserId: authUserId,
-      };
       // Prepare the request options
       const options = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formDataWithUserId),
+        body: JSON.stringify(formData),
       };
       // Send the POST request to create a new note
       const response = await fetch(notesEndpoints.CREATENOTES_API, options);
@@ -49,6 +41,7 @@ const Notecard = () => {
       // Check the response status
       if (response.ok) {
         toast.success("Notes Created Successfully");
+    
       } else {
         // Handle errors in the response
         const responseData = await response.json();

@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const { createNote, getNotesByUserId} = require('../controllers/notesControllers');
+const { createNote, getNotes, getNoteById } = require('../controllers/notesControllers');
+
 // Route for creating a new note
 router.post('/createnote', [
   body('word', 'Value must be a string').isString().notEmpty().withMessage('Word must be a non-empty string'),
@@ -12,5 +13,9 @@ router.post('/createnote', [
 ], createNote);
 
 // Route for getting all notes
-router.get('/getnotes/:UserId',getNotesByUserId);
+router.get('/getnotes', getNotes);
+
+// Route for getting a specific note by ID
+router.get('/getnote/:id', getNoteById);
+
 module.exports = router;
