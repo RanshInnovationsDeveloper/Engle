@@ -24,6 +24,7 @@ app.use(
   })
 );
 app.use(express.urlencoded({ extended: true }));
+
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/word", wordRoute);
 app.use("/api/v1/story", storyRoute);
