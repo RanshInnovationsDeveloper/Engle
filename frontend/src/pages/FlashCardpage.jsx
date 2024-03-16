@@ -214,14 +214,14 @@ function FlashCardpage() {
                                             <h6 className=' text-gray-600'>Tap on Card to Flip it</h6>
 
                                             <div className='flex md:flex-row flex-col justify-center gap-2'>
-                                                <button onClick={addToRemember} className="bg-green-200 border-2 border-green-400 items-center flex flex-row justify-center rounded-md px-20 py-2" >
+                                                <button  className="bg-green-200 border-2 border-green-400 items-center flex flex-row justify-center rounded-md px-20 py-2" >
                                                     <div className='flex flex-row'>
                                                         <TiTick className='h-6 w-6 text-green-600' />
                                                         <span className="text-green-600">I know this word</span>
                                                     </div>
 
                                                 </button>
-                                                <button onClick={addToUnremember} className="bg-red-200 border-2 border-red-400 items-center gap-1 flex flex-row rounded-md justify-center px-14 py-2">
+                                                <button  className="bg-red-200 border-2 border-red-400 items-center gap-1 flex flex-row rounded-md justify-center px-14 py-2">
                                                     <div className="flex flex-row items-center gap-1">
                                                         <ImCross className='h-4 w-4 text-red-600' />
                                                         <span className="text-red-600"> I don't know this word</span>
@@ -263,14 +263,14 @@ function FlashCardpage() {
                                     <button onClick={addToRemember} className='items-center  bg-green-200 gap-2 border-2 border-green-400 border-green flex flex-row justify-center rounded-md px-20'>
                                         <div className='flex flex-row'>
                                             <TiTick className='h-6 w-6 text-green-600' />
-                                            <span className="text-green-600">I know this word</span>
+                                            <span className="text-green-600">Remembered</span>
                                         </div>
 
                                     </button>
                                     <button onClick ={addToUnremember}className='items-center bg-red-200 border-2 border-red-400 flex  flex-row border-red rounded-md justify-center px-14 py-2'>
                                         <div className="flex flex-row items-center gap-1">
                                             <ImCross className='h-4 w-4 text-red-600' />
-                                            <span className="text-red-600"> I don't know this word</span>
+                                            <span className="text-red-600">Not Remembered</span>
                                         </div>
                                     </button>
                                 </div>
