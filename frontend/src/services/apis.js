@@ -5,8 +5,7 @@ const BASE_URL = "http://localhost:4000/api/v1";
 export const authEndpoints = {
   SIGNUP_API: BASE_URL + "/auth/signup",
   LOGIN_API: BASE_URL + "/auth/login",
-  RESETPASSWORD_API: BASE_URL + "/auth/reset-password"
-
+  RESETPASSWORD_API: BASE_URL + "/auth/reset-password",
 };
 
 export const favouriteEndpoints = {
@@ -16,21 +15,10 @@ export const favouriteEndpoints = {
   GET_FAVOURITE_API: BASE_URL + "/favourite/fetchItems",
   GET_FAVOURITE_STATUS_API: BASE_URL + "/favourite/fetchStatus",
 };
-export const notesEndpoints={
+export const notesEndpoints = {
   //mynotesRoute Endpoints
   CREATENOTES_API: BASE_URL + "/notes/createnote",
-  GETNOTES_API: BASE_URL + "/notes/getnotes"
-}
-export const storyEndpoints = {
-  //storyRoute Endpoints
-  GETSTORY_API: BASE_URL + "/story/getStories",
-  ADDSTORY_API: BASE_URL + "/story/addStory",
-};
-
-export const unseenEndpoints = {
-  //unseenRoute Endpoints
-  GETUNSEEN_API: BASE_URL + "/unseen/getUnseen",
-  ADDUNSEEN_API: BASE_URL + "/unseen/addUnseen",
+  GETNOTES_API: BASE_URL + "/notes/getnotes",
 };
 
 export const contactEndpoints = {
@@ -38,11 +26,7 @@ export const contactEndpoints = {
   CONTACT_API: BASE_URL + "/contact/",
 };
 
-
 export const flashCardEndpoints = {
-
-  FETCHWORD_API : BASE_URL+ "/word/fetchword",
-  ADDWORD_API : BASE_URL+ "/word/addword",
-
-
-}
+  FETCHWORD_API: BASE_URL + "/word/fetchword",
+  ADDWORD_API: BASE_URL + "/word/addword",
+};
