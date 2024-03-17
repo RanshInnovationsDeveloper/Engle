@@ -119,9 +119,9 @@ function App() {
         <Route
           path="/notecard"
           element={
-            <OpenRoute>
+            <PrivateRoute>
               <Notecard />
-            </OpenRoute>
+            </PrivateRoute>
           }
         />
         {/**/}
