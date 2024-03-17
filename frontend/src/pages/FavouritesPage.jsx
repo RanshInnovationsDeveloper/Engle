@@ -10,9 +10,7 @@ import { apiConnector } from "../services/apiConnector";
 import { favouriteEndpoints } from "../services/apis";
 import FavouriteButton from "../components/FavouriteButton";
 
-const { GET_FAVOURITE_API, REMOVE_FAVOURITE_API } = favouriteEndpoints;
-//*TODO:important comment at all place in code have used a test userId to be removed in production
-//*TODO:also uncomment the authUserId coming from production to be used in production
+const { GET_FAVOURITE_API } = favouriteEndpoints;
 function FavouritesPage() {
   //Auth authUserId to be sent to backend for API purpose from Redux Store
   const { authUserId } = useSelector((state) => state.auth);
@@ -28,8 +26,8 @@ function FavouritesPage() {
           null,
           null,
           {
-            // userId: String(authUserId), //this is the user Id of the logged in user use it in production
-            userId: "qEMYBI4erFNruO1L0iHQknbxXdD2", //this is just a test userId to be removed in production
+            userId: String(authUserId), //this is the user Id of the logged in user use it in production
+            // userId: "qEMYBI4erFNruO1L0iHQknbxXdD2", //TODO:this is just a test userId to be removed in production it is here so you can better test out code
           }
         );
         setData(response);
@@ -104,7 +102,6 @@ function FavouritesPage() {
   //         </div>
   //       </div>
 
-
   //       {/* Rendering section divs */}
   //       <div className="border border-[#5B7ADE] rounded-xl py-4 px-6 overflow-auto bg-[#F3F5FF] max-h-[80vh]">
   //         {sections.map((section, index) => (
@@ -157,7 +154,7 @@ function FavouritesPage() {
     //Arranging the data into key value pair with key being the data so all items with same data will be grouped together
     //We can even use state for group data and in that case when we will click remove button than it will be removed from
     //page immediately but
-    //if we don;t want that to happen we can leve it like that and can call remove from favourite api
+    //if we don;t want that to happen we can leave it like that and can call remove from favourite api
     //on first time click and add to favourite api on second time click we also can use fetch favourite button status
     //to dynamically display state of favourite button
     //FavouriteButton does this job only
@@ -205,6 +202,17 @@ function FavouritesPage() {
                     <>
                       <li>Title: {value.val.title}</li>
                       <li>Content: {value.val.content}</li>
+                      <FavouriteButton
+                        type={value?.type}
+                        itemId={value?.itemId}
+                        name={value?.name}
+                      />
+                    </>
+                  )}
+
+                  {value.type === "notes" && (
+                    <>
+                      <li>Title: {value?.val?.data?.word}</li>
                       <FavouriteButton
                         type={value?.type}
                         itemId={value?.itemId}

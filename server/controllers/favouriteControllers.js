@@ -8,10 +8,12 @@ const {
   setDoc,
   Timestamp,
 } = require("firebase/firestore/lite");
+const axios = require("axios");
 
 //Every time you add new json file add that over here as of now
 const words = require("../resources/words.json");
 const sampleStory = require("../resources/sampleStory.json");
+const { SINGLE_NOTE_FETCHING_API_URL } = require("../constants/constants");
 const keyArr = { words, sampleStory };
 
 const fetchFavouriteButtonStatus = async (req, res) => {
@@ -26,8 +28,7 @@ const fetchFavouriteButtonStatus = async (req, res) => {
 
       if (docSnap.exists()) {
         const data = docSnap.data();
-        console.log(data[type]);
-        const itemExists = data[type].some((item) => item.itemId == itemId);
+        const itemExists = data[type]?.some((item) => item.itemId == itemId);
         if (itemExists) {
           res.status(200).json({ isFavourite: true });
         } else {
@@ -116,26 +117,63 @@ const fetchFavouriteItems = async (req, res) => {
 
     const data = docSnap.data();
     const result = [];
+    const promises = [];
 
     for (const key in data) {
+      // * Add your type name in and part if it isn't coming from firebase
       if (Array.isArray(data[key])) {
         data[key].forEach((item) => {
           // Convert Firestore Timestamp to JavaScript Date
           const createdAt = new Date(item.createdAt.seconds * 1000);
           // Format date as needed
           const createdAtFormatted = createdAt.toISOString();
-          result.push({
-            ...item,
-            type: key,
-            val: keyArr[key][Number(item.itemId)],
-            createdAt: createdAtFormatted,
-          });
+          //Checking as per the values of keys as different key have different data type some coming from firebase some from storage
+          if (key == "sampleStory" || key == "words") {
+            promises.push({
+              ...item,
+              type: key,
+              val: keyArr[key][Number(item.itemId)],
+              createdAt: createdAtFormatted,
+            });
+          }
+          if (key == "notes") {
+            const noteId = item?.itemId;
+            promises.push(
+              axios
+                .get(SINGLE_NOTE_FETCHING_API_URL + noteId)
+                .then((response) => {
+                  const data = response.data;
+                  return {
+                    ...item,
+                    type: key,
+                    val: data,
+                    createdAt: createdAtFormatted,
+                  };
+                })
+                .catch((error) => {
+                  console.error(error);
+                  return null; // Return null to handle the error case
+                })
+            );
+          }
         });
       }
     }
-    result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-    res.status(200).json(result);
+    // Wait for all promises to resolve
+    Promise.all(promises)
+      .then((results) => {
+        // Filter out null results (for error handling)
+        const filteredResults = results.filter((result) => result !== null);
+        // Push filtered results into the final result array
+        result.push(...filteredResults);
+        // Now you can proceed with the rest of your code that depends on 'result'
+        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        res.status(200).json(result);
+      })
+      .catch((error) => {
+        console.error(error); // Handle errors from Promise.all()
+      });
   } catch (error) {
     res.status(500).json({ status: "Error", message: error.message });
   }

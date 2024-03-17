@@ -2,15 +2,20 @@ import React, { useEffect, useState } from "react";
 import { apiConnector } from "../services/apiConnector";
 import { favouriteEndpoints } from "../services/apis";
 import { useSelector } from "react-redux";
+import { CiHeart } from "react-icons/ci";
+import { FaHeart } from "react-icons/fa";
 //This component fetches the stautus of favourite button and does the necessary job to update it
+
 function FavouriteButton({ itemId, type, name = "" }) {
-  const userId = "qEMYBI4erFNruO1L0iHQknbxXdD2"; //TODO: replace with "useSelector" from redux store
-  //   const { authUserId } = useSelector((state) => state.auth);
-  //   const userId = authUserId;
+  //TODO:This Commented to do is here to aid the developmet of favourite page uncomment it and use it while development and later remove it
+  // const userId = "qEMYBI4erFNruO1L0iHQknbxXdD2"; //TODO: replace with "useSelector" from redux store Remove this user id from production code
+  const { authUserId } = useSelector((state) => state.auth);
+  const userId = authUserId;
   const [isFavourite, setIsFavourite] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { GET_FAVOURITE_STATUS_API, REMOVE_FAVOURITE_API, ADD_FAVOURITE_API } =
     favouriteEndpoints;
+
   useEffect(() => {
     const fetchStatus = async () => {
       const response = await apiConnector(
@@ -26,20 +31,27 @@ function FavouriteButton({ itemId, type, name = "" }) {
     fetchStatus();
   });
 
-  const removeFromFavourite = async (itemId, type, userId) => {
+  // Function to handle add item to favourite call
+  const removeFromFavourite = async (itemId, type, userId, event) => {
+    event.stopPropagation();
+    setIsLoading(true);
     try {
       const response = await apiConnector("POST", REMOVE_FAVOURITE_API, {
         itemId,
         type,
         userId,
       });
+      setIsLoading(false);
       setIsFavourite(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const addToFavourite = async (itemId, type, userId, name) => {
+  const addToFavourite = async (itemId, type, userId, name, event) => {
+    event.stopPropagation();
+    setIsLoading(true);
+
     try {
       const response = await apiConnector("POST", ADD_FAVOURITE_API, {
         itemId,
@@ -47,6 +59,7 @@ function FavouriteButton({ itemId, type, name = "" }) {
         userId,
         name,
       });
+      setIsLoading(false);
       setIsFavourite(true);
     } catch (error) {
       console.log(error);
@@ -55,21 +68,17 @@ function FavouriteButton({ itemId, type, name = "" }) {
   return (
     <div>
       {isLoading ? (
-        <button className="bg-red-500">Loading...</button>
+        <p>Loading...</p>
       ) : isFavourite ? (
-        <button
-          className="bg-red-500"
-          onClick={() => removeFromFavourite(itemId, type, userId)}
-        >
-          Remove from Favourite
-        </button>
+        <FaHeart
+          className="text-red-600 w-[1.5rem] h-[1.5rem]"
+          onClick={(event) => removeFromFavourite(itemId, type, userId, event)}
+        />
       ) : (
-        <button
-          className="bg-red-500"
-          onClick={() => addToFavourite(itemId, type, userId, name)}
-        >
-          Add to Favourite
-        </button>
+        <CiHeart
+          className="text-red-600 w-[1.5rem] h-[1.5rem]"
+          onClick={(event) => addToFavourite(itemId, type, userId, name, event)}
+        />
       )}
     </div>
   );
