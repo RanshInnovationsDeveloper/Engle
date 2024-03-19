@@ -174,8 +174,34 @@ function FavouritesPage() {
     //if data exists logging it as per group
     console.log(groupedData); //console logged grouped data helpful for further development
     return (
+     
       // traversing the grouped data and displaying it
-      <div>
+     <>
+      <Header val={1}/>
+      <CategoryHeader/>
+      <div className="container mx-auto p-4">
+      <div className="flex justify-between items-center mb-4 flex-wrap">
+        <h2 className="text-3xl font-medium mb-4 w-full sm:w-auto text-center">FAVOURITES</h2>
+        <div className="flex items-center mb-4 w-full sm:w-auto justify-center">
+          <div className='border border-gray-500 rounded-lg mr-2 mb-2 sm:mb-0 sm:mx-2 flex'>
+            <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
+            />
+          </div>
+
+          <div className='border border-gray-500 rounded-lg mr-2 mb-2 sm:mb-0 sm:mx-2 flex items-center'>
+            <button>
+              <MdOutlineFilterAlt className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem]' />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Rendering section divs */}
+      <div className="border border-[#5B7ADE] rounded-xl py-4 px-6 overflow-auto bg-[#F3F5FF] max-h-[80vh]">
         {Object.keys(groupedData).map((dateKey) => (
           <React.Fragment key={dateKey}>
             <p>Date: {dateKey}</p>
@@ -226,6 +252,10 @@ function FavouritesPage() {
           </React.Fragment>
         ))}
       </div>
+    </div>
+    
+     </>
+     
     );
   }
 
