@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
 import {Link} from 'react-router-dom';
 import { RiFilter2Line, RiSearch2Line } from "react-icons/ri";
+import { FaSquarePlus } from "react-icons/fa6";
 import Header from "../components/Header";
 import CategoryHeader from "../components/CategoryHeader";
 import { notesEndpoints } from '../services/apis';
@@ -86,49 +87,42 @@ export default function MynotesPage() {
       <Header />
       <CategoryHeader />
       <Link to ="/notecard">
-                <button>Go to notecard</button>
+                <button><FaSquarePlus className="text-blue-800 w-8 h-8"/></button>
             </Link>
       <div className='mt-4'>
         {/* Search and filter bar */}
-        <div className='flex justify-between mx-28 mb-6'>
-          <h1 className='font-bold text-3xl'>My Notes</h1>
-          <div className='flex max-w-sm mx-auto'>
-            {/* Search input */}
-            <label htmlFor='simple-search' className='sr-only'>
-              Search
-            </label>
-            <div className='relative w-full'>
-              <div className='absolute text-gray-600 inset-y-0 start-0 flex items-center ps-5 pointer-events-none'>
-                <RiSearch2Line className='w-7 h-7' />
-              </div>
-              <input
-                type='text'
-                id='simple-search'
-                className='bg-white border border-gray-700 text-black text-sm rounded-lg block w-full ps-14 p-3'
-                placeholder='Search'
-                required
-              />
+        <div className='flex flex-col gap-8 justify-between mx-3 lg:mx-28 mb-10 gap-{10rem} lg:flex lg:justify-between lg:flex-row'>
+                <h1 className='lg:font-bold lg:text-3xl flex justify-center font-bold text-3xl'>
+                    My Notes
+                </h1>
+                <div>
+                  {/* Search Input */}
+                    <div className="flex max-w-sm mx-auto">
+                        <label htmlFor="simple-search" className="sr-only">Search</label>
+                        <div className="relative w-full">
+                            <div className="absolute text-gray-600 inset-y-0 start-0 flex items-center ps-5 pointer-events-none">
+                                <RiSearch2Line className='w-7 h-7' />
+                            </div>
+                            <input type="text" id="simple-search" className="bg-white border border-gray-700 text-black text-sm rounded-lg block w-full ps-14 p-3  " placeholder="Search" required />
+                        </div>
+                        {/* Filter */}
+                        <button type="submit" className="p-2 ms-2 text-lg font-medium text-gray-600 bg-white rounded-lg border border-gray-700">
+                            <RiFilter2Line className='w-7 h-7' />
+                        </button>
+                    </div>
+                </div>
             </div>
-            {/* Filter button */}
-            <button
-              type='submit'
-              className='p-2 ms-2 text-lg font-medium text-gray-600 bg-white rounded-lg border border-gray-700'
-            >
-              <RiFilter2Line className='w-7 h-7' />
-            </button>
-          </div>
-        </div>
 
         {/* Displaying grouped notes */}
-        <div className='flex flex-col bg-indigo-50 shadow-lg rounded-2xl border-2 mb-10 border-indigo-300 justify-center mx-28'>
+        <div className='lg:flex lg:flex-col bg-indigo-50 shadow-lg rounded-2xl border-2  border-indigo-300 overflow-y-auto lg:mx-28 mx-4 flex flex-col'>
           {Object.entries(groupedNotes).map(([date, notes]) => (
             <div key={date}>
               {/* Date header */}
-              <h1 className='font-bold py-3 px-10'>{date}</h1>
+              <h1 className='font-semibold text-xl py-3 mt-3 px-10 font-mukta'>{date}</h1>
               <hr className='border-t-2 border-indigo-300' />
               {/* List of notes for the date */}
               {notes.map((note) => (
-                <div className='note-items' key={note.id} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div className='note-items mr-8 items-center' key={note.id} style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <div className='list-none py-5 px-10'>
                     {/* Displaying note details */}
                     {`${note.word}, ${note.definitions}`}
