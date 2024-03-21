@@ -204,51 +204,61 @@ function FavouritesPage() {
       <div className="border border-[#5B7ADE] rounded-xl py-4 px-6 overflow-auto bg-[#F3F5FF] max-h-[80vh]">
         {Object.keys(groupedData).map((dateKey) => (
           <React.Fragment key={dateKey}>
-            <p>Date: {dateKey}</p>
-            <ul>
-              {groupedData[dateKey].map((value, index) => (
-                <div key={index}>
-                  <li>Type: {value.type}</li>
-                  {/* //if type is words // * Type is the type of file from which
-                  item value is coming */}
-                  {value.type === "words" && (
-                    <>
-                      <li>Word: {value.val.word}</li>
-                      <li>Definition: {value.val.definitions[0]}</li>
-                      <FavouriteButton
-                        type={value?.type}
-                        itemId={value?.itemId}
-                        name={value?.name}
-                      />
-                    </>
-                  )}
-                  {/* //if type is sampleStory // * Type is the type of file from
-                  which item value is coming */}
-                  {value.type === "sampleStory" && (
-                    <>
-                      <li>Title: {value.val.title}</li>
-                      <li>Content: {value.val.content}</li>
-                      <FavouriteButton
-                        type={value?.type}
-                        itemId={value?.itemId}
-                        name={value?.name}
-                      />
-                    </>
-                  )}
 
-                  {value.type === "notes" && (
-                    <>
-                      <li>Title: {value?.val?.data?.word}</li>
-                      <FavouriteButton
-                        type={value?.type}
-                        itemId={value?.itemId}
-                        name={value?.name}
-                      />
-                    </>
-                  )}
-                </div>
-              ))}
-            </ul>
+             <h6 className='font-semibold pl-4 mb-2' style={{ textAlign: 'left' }}>Date: {dateKey}</h6>
+             
+            <hr className=' mb-2 border border-[#5B7ADE] w-full ' />
+            
+            <ul>
+  {groupedData[dateKey].map((value, index) => (
+    <div key={index} className="flex flex-col sm:flex-row items-center mb-3"> {/* Add flex container and adjust for small screens */}
+      <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Type: {value.type}</li> {/* Add margin and width to separate elements */}
+      {/* //if type is words // * Type is the type of file from which
+      item value is coming */ }
+      {value.type === "words" && (
+        <>
+          <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Word: {value.val.word}</li> {/* Add margin and width to separate elements */}
+          <li className="mr-10 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Definition: {value.val.definitions[0]}</li> {/* Add margin and width to separate elements */}
+          <FavouriteButton
+            type={value?.type}
+            itemId={value?.itemId}
+            name={value?.name}
+            style={{ textAlign: 'right' }}
+          />
+        </>
+      )}
+      {/* //if type is sampleStory // * Type is the type of file from
+      which item value is coming */}
+      {value.type === "sampleStory" && (
+        <>
+          <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Title: {value.val.title}</li> {/* Add margin and width to separate elements */}
+          <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Content: {value.val.content}</li> {/* Add margin and width to separate elements */}
+          <FavouriteButton
+            type={value?.type}
+            itemId={value?.itemId}
+            name={value?.name}
+          />
+        </>
+      )}
+
+      {value.type === "notes" && (
+        <>
+          <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Title: {value?.val?.data?.word}</li> {/* Add margin and width to separate elements */}
+          <FavouriteButton
+            type={value?.type}
+            itemId={value?.itemId}
+            name={value?.name}
+          />
+        </>
+      )}
+    </div>
+    
+  ))}
+  
+</ul>
+
+
+
           </React.Fragment>
         ))}
       </div>
