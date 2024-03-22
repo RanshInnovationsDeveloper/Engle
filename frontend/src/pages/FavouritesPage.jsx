@@ -9,9 +9,11 @@ import { useSelector } from "react-redux";
 import { apiConnector } from "../services/apiConnector";
 import { favouriteEndpoints } from "../services/apis";
 import FavouriteButton from "../components/FavouriteButton";
-
 const { GET_FAVOURITE_API } = favouriteEndpoints;
 function FavouritesPage() {
+
+  const [query,setQuery]=useState('') //query to be searched
+  const [filteredData,setFilteredData]=useState([]) //filtered data to be displayed
   //Auth authUserId to be sent to backend for API purpose from Redux Store
   const { authUserId } = useSelector((state) => state.auth);
   const [data, setData] = useState([]);
@@ -39,6 +41,52 @@ function FavouritesPage() {
     fetchData();
   }, [authUserId]);
 
+  //Filtering the data
+  useEffect(() => {
+      if (query === "") {
+        setFilteredData(data?.data);
+      } else {
+        const dataArr=data?.data;
+        let newData = [];
+        // console.log("DataArr")
+        // console.log(dataArr[0])
+        for (let i = 0; i < dataArr?.length; i++) {
+          if (
+            dataArr[i]?.type == "words" && 
+            (
+              typeof dataArr[i]?.val?.word === 'string' && dataArr[i]?.val?.word.toLowerCase().includes(query.toLowerCase()) ||
+              Array.isArray(dataArr[i]?.val?.definitions) && dataArr[i]?.val?.definitions.some(def => typeof def === 'string' && def.toLowerCase().includes(query.toLowerCase()))
+              )
+          ) {
+            newData.push(dataArr[i]);
+          }
+          if (
+            dataArr[i]?.type == "sampleStory" && 
+            (
+              typeof dataArr[i]?.val?.title === 'string' && dataArr[i]?.val?.title.toLowerCase().includes(query.toLowerCase()) ||
+              typeof dataArr[i]?.val?.content === 'string' && dataArr[i]?.val?.content.toLowerCase().includes(query.toLowerCase())
+            )
+          )
+           {
+            newData.push(dataArr[i]);
+          }
+          if (
+            dataArr[i]?.type == "notes" && 
+            (
+              typeof dataArr[i]?.val?.data?.word=== 'string' && dataArr[i]?.val?.data?.word.toLowerCase().includes(query.toLowerCase()) ||
+              typeof dataArr[i]?.val?.data?.definitions === 'string' && dataArr[i]?.val?.data?.definitions.toLowerCase().includes(query.toLowerCase())
+            )
+          )
+           {
+            newData.push(dataArr[i]);
+          }
+          
+        }
+        setFilteredData(newData);
+      }
+  }, [query, data]); 
+
+ 
   // Array of objects representing sections with headings and contents
   // const sections = [
   //   {
@@ -144,13 +192,15 @@ function FavouritesPage() {
   //   </>
   // );
 
+  // console.log(data)
+  // console.log(filteredData)
   //If the length of returned data is 0, then display "No Item Favourite Items Added For this user"
-  if (isLoading == false && data?.data.length == 0) {
+  if (isLoading == false && filteredData?.length == 0 && query == "") {
     return <>No Item Favourite Items Added For this user </>;
   }
 
   //If the length of returned data is greater than 0, then display the data
-  if (isLoading == false && data?.data.length > 0) {
+  if (isLoading == false && filteredData?.length > 0 || query!="") {
     //Arranging the data into key value pair with key being the data so all items with same data will be grouped together
     //We can even use state for group data and in that case when we will click remove button than it will be removed from
     //page immediately but
@@ -158,7 +208,7 @@ function FavouritesPage() {
     //on first time click and add to favourite api on second time click we also can use fetch favourite button status
     //to dynamically display state of favourite button
     //FavouriteButton does this job only
-    const groupedData = data.data.reduce((acc, item) => {
+    const groupedData = filteredData.reduce((acc, item) => {
       const date = item.createdAt.split("T")[0]; // Extract the date part from the createdAt string
       if (!acc[date]) {
         acc[date] = []; // Initialize the array for this date if it doesn't exist
@@ -172,7 +222,7 @@ function FavouritesPage() {
       return acc;
     }, {});
     //if data exists logging it as per group
-    console.log(groupedData); //console logged grouped data helpful for further development
+    // console.log(groupedData); //console logged grouped data helpful for further development
     return (
      
       // traversing the grouped data and displaying it
@@ -189,6 +239,8 @@ function FavouritesPage() {
               type="text"
               placeholder="Search..."
               className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
             />
           </div>
 
@@ -212,7 +264,7 @@ function FavouritesPage() {
             <ul>
   {groupedData[dateKey].map((value, index) => (
     <div key={index} className="flex flex-col sm:flex-row items-center mb-3"> {/* Add flex container and adjust for small screens */}
-      <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Type: {value.type}</li> {/* Add margin and width to separate elements */}
+      <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Type: {value.name}</li> {/* Add margin and width to separate elements */}
       {/* //if type is words // * Type is the type of file from which
       item value is coming */ }
       {value.type === "words" && (
@@ -243,7 +295,8 @@ function FavouritesPage() {
 
       {value.type === "notes" && (
         <>
-          <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Title: {value?.val?.data?.word}</li> {/* Add margin and width to separate elements */}
+          <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Word: {value?.val?.data?.word}</li> {/* Add margin and width to separate elements */}
+          <li className="mr-10 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Definition: {value?.val?.data?.definitions}</li> {/* Add margin and width to separate elements */}
           <FavouriteButton
             type={value?.type}
             itemId={value?.itemId}
@@ -256,8 +309,6 @@ function FavouritesPage() {
   ))}
   
 </ul>
-
-
 
           </React.Fragment>
         ))}

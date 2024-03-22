@@ -9,6 +9,7 @@ const wordRoute = require("./routes/wordRoute");
 const favouriteRoute = require("./routes/favouriteRoute");
 const notesRoute = require("./routes/notesRoute");
 const contact = require("./routes/contactRoute");
+const story=require("./routes/storyRoutes")
 
 // Loading environment variables from .env file
 dotenv.config();
@@ -28,7 +29,7 @@ app.use("/api/v1/word", wordRoute);
 app.use("/api/v1/favourite", favouriteRoute);
 app.use("/api/v1/notes", notesRoute);
 app.use("/api/v1/contact", contact);
-
+app.use("/api/v1/story", story);
 // Testing the server
 app.get("/", (req, res) => {
   return res.json({

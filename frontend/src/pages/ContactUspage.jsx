@@ -66,6 +66,7 @@ function ContactUspage() {
             Name:
           </label>
           <input
+          required
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -75,6 +76,7 @@ function ContactUspage() {
             Email:
           </label>
           <input
+          required
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -84,6 +86,7 @@ function ContactUspage() {
             Subject:
           </label>
           <input
+          required
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
@@ -94,6 +97,7 @@ function ContactUspage() {
             Message:
           </label>
           <textarea
+          required
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4 h-32"

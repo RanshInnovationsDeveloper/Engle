@@ -18,6 +18,8 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import OpenRoute from "./components/auth/OpenRoute";
 import MynotesPage from "./pages/MynotesPage";
 import Notecard from "./components/Notecard";
+import Stories from "./pages/Stories";
+import IndividualStory from "./pages/IndividualStory";
 
 function App() {
 
@@ -34,7 +36,9 @@ function App() {
         <Route path="/contact" element={<ContactUspage />} />
         <Route path="/about" element={<AboutUspage />} />
       
-        {/* <Route path="/story" element={} /> */}
+        <Route path="/story" element={<Stories/>} />
+        {/*Individual story page */}
+        <Route path="/story/:id" element={<IndividualStory/>} />
         {/* <Route path="/context" element={} /> */}
         {/* <Route path="/ambiguouswords" element={} /> */}
 
