@@ -8,8 +8,13 @@ import Header from "../components/Header";
 import CategoryHeader from "../components/CategoryHeader";
 import { notesEndpoints } from '../services/apis';
 import { toast } from 'react-toastify';
+import FavouriteButton from "../components/FavouriteButton";
+import { NOTES_FILE_NAME,NOTES_FILE_TYPE } from "../constants/constants";
+import { GoSearch } from "react-icons/go";
+
 // Function to group notes by date
 const groupNotesByDate = (notes) => {
+
   // Initialized an empty object to store grouped notes
   const grouped = {};
   
@@ -48,10 +53,13 @@ const groupNotesByDate = (notes) => {
 
 // MynotesPage component
 export default function MynotesPage() {
+  //States for search   
+  const [query, setQuery] = useState('');
+  const [notes,setNotes] = useState([]);
   // State to store grouped notes
   const [groupedNotes, setGroupedNotes] = useState([]);
   const { authUserId } = useSelector((state) => state.auth);
-  console.log(authUserId)
+  // console.log(authUserId)
   // Fetching notes from the server
   useEffect(() => {
     const fetchNotes = async () => {
@@ -68,10 +76,12 @@ export default function MynotesPage() {
 
         // Parse the response as JSON
         const response = await resp.json();
+        // console.log(response)
         // Sort the notes by timestamp in descending order
         const sortedNotes = response.data.sort(
           (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
         );
+        setNotes(sortedNotes)
         setGroupedNotes(groupNotesByDate(sortedNotes));
       } catch (error) {
         // Log an error message if there is an issue with the fetch operation
@@ -81,6 +91,22 @@ export default function MynotesPage() {
     };
     fetchNotes();
   }, []);
+
+  //Filtering
+  useEffect(() => {
+    if (query === "") {
+      setGroupedNotes(groupNotesByDate(notes));
+    }else{
+    for (let i = 0; i < notes.length; i++) {
+      let newData = [];
+      if (notes[i].word.toLowerCase().includes(query.toLowerCase())|| notes[i].definitions.toLowerCase().includes(query.toLowerCase())) {
+        newData.push(notes[i]);
+      }
+      setGroupedNotes(groupNotesByDate(newData));
+    }
+  }}, [query, notes]);
+
+  console.log(notes)
   // Rendering the component
   return (
     <>
@@ -98,13 +124,16 @@ export default function MynotesPage() {
                 <div>
                   {/* Search Input */}
                     <div className="flex max-w-sm mx-auto">
-                        <label htmlFor="simple-search" className="sr-only">Search</label>
-                        <div className="relative w-full">
-                            <div className="absolute text-gray-600 inset-y-0 start-0 flex items-center ps-5 pointer-events-none">
-                                <RiSearch2Line className='w-7 h-7' />
-                            </div>
-                            <input type="text" id="simple-search" className="bg-white border border-gray-700 text-black text-sm rounded-lg block w-full ps-14 p-3  " placeholder="Search" required />
-                        </div>
+                    <div className='border border-gray-500 rounded-lg mr-2 mb-2 sm:mb-0 sm:mx-2 flex'>
+                    <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
                         {/* Filter */}
                         <button type="submit" className="p-2 ms-2 text-lg font-medium text-gray-600 bg-white rounded-lg border border-gray-700">
                             <RiFilter2Line className='w-7 h-7' />
@@ -125,8 +154,13 @@ export default function MynotesPage() {
                 <div className='note-items mr-8 items-center' key={note.id} style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <div className='list-none py-5 px-10'>
                     {/* Displaying note details */}
-                    {`${note.word}, ${note.definitions}`}
+                    {`Word:${note.word},Definitions:${note.definitions}`}
                   </div>
+                  <FavouriteButton
+                                        itemId={note.id}
+                                        type={NOTES_FILE_TYPE}
+                                        name={NOTES_FILE_NAME}
+                                    />
                   {/* Displaying note status */}
                   {note.read ? (
                     <p style={{ color: 'green' }}>Read</p>

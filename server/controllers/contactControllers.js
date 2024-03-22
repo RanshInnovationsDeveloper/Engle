@@ -1,9 +1,26 @@
 const nodemailer = require("nodemailer");
 require("dotenv").config();
+const { body, validationResult } = require('express-validator');
 
-const contact = async (req, res) => {
+
+const contact = [
+// Validate request body
+body('name').notEmpty().withMessage('Name is required'),
+body('subject').notEmpty().withMessage('Subject is required'),
+body('message').notEmpty().withMessage('Message is required'),
+body('email').isEmail().withMessage('Email is not valid'),
+
+async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+
+
   try {
     const { name, subject, message, email } = req.body;
+    
 
     //Setting Up nodemailer
     let transporter = nodemailer.createTransport({
@@ -33,6 +50,7 @@ const contact = async (req, res) => {
     console.error("Error submitting form:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
-};
+}
+]
 
 module.exports = contact;

@@ -30,3 +30,8 @@ export const flashCardEndpoints = {
   FETCHWORD_API: BASE_URL + "/word/fetchword",
   ADDWORD_API: BASE_URL + "/word/addword",
 };
+
+export const storyEndpoints = {
+  FETCHALLSTORIES_API: BASE_URL + "/story/getAll",
+  FETCHSTORYBYID_API: BASE_URL + "/story/getById",
+}

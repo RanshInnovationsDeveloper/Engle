@@ -151,7 +151,7 @@ const fetchFavouriteItems = async (req, res) => {
                   };
                 })
                 .catch((error) => {
-                  console.error(error);
+                  console.error(error.message);
                   return null; // Return null to handle the error case
                 })
             );
