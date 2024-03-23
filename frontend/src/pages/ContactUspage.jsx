@@ -6,19 +6,15 @@ import { contactEndpoints } from "../services/apis";
 const { CONTACT_API } = contactEndpoints;
 
 function ContactUspage() {
-
-
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [email, setEmail] = useState("");
-  const [button, setButton] = useState("Contact Us");
+  const [button, setButton] = useState("Submit");
 
   const handleSubmit = async (e) => {
-
-
     e.preventDefault();
     if (name && message && subject && email) {
       try {
@@ -29,7 +25,7 @@ function ContactUspage() {
           subject,
           email,
         });
-        setButton("Contact Us");
+        setButton("Submit");
         setSuccessMessage(response?.data?.message);
         setTimeout(() => {
           setSuccessMessage(null);
@@ -38,7 +34,6 @@ function ContactUspage() {
         setMessage("");
         setSubject("");
         setEmail("");
-
       } catch (error) {
         console.log("server error:", error);
         setErrorMessage("Something went wrong!");
@@ -47,8 +42,7 @@ function ContactUspage() {
         }, 2000);
         setButton("Contact Us");
       }
-    }
-    else {
+    } else {
       setErrorMessage("Please fill out all fields.");
       setTimeout(() => {
         setErrorMessage(null);
@@ -59,58 +53,58 @@ function ContactUspage() {
 
   return (
     <>
-      <Header></Header>
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
-        <form className="w-full sm:w-1/2 lg:w-1/3 bg-white rounded-lg shadow-md p-6 mx-4 sm:mx-0">
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Name:
-          </label>
-          <input
-          required
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
-          />
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Email:
-          </label>
-          <input
-          required
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
-          />
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Subject:
-          </label>
-          <input
-          required
-            type="text"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
-          />
-
-          <label className="block text-gray-700 text-sm font-bold mb-2">
-            Message:
-          </label>
-          <textarea
-          required
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4 h-32"
-          />
-
-          <button
-            className="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mx-auto block"
-            type="submit"
-            onClick={handleSubmit}
-          >
-            {button}
-          </button>
-        </form>
+      <Header />
+      <div className="flex flex-row items-center justify-center h-screen bg-{#FFFFFF} mx-auto">
+        <div className=" w-0 md:w-1/2 flex  items-center invisible justify-center md:visible ml-10">
+        <img
+           src="ContactUs.png"
+            alt="contactUs"
+            
+        />
+        </div>
+        <div className="w-full p-3 px-4 md:w-1/2 flex items-center justify-center">
+          <form className="border border-[#5B7ADE] rounded-2xl  bg-[#34468A] w-full sm:w-3/4 lg:w-2/3 shadow-md p-6 mx-4 sm:mx-0">
+            <h1 className="text-white text-3xl mb-5">Contact Us!</h1>
+            <input
+              required
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="bg-[#F4F6FC]  rounded-xl w-full  py-4 px-3 text-gray-700 leading-tight  mb-4"
+            />
+            <input
+              required
+              type="text"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-[#F4F6FC] shadow appearance-none border rounded-xl w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
+            />
+            <input
+              required
+              type="text"
+              placeholder="Subject"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              className="bg-[#F4F6FC] shadow appearance-none border rounded-xl w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
+            />
+            <textarea
+              required
+              value={message}
+              placeholder="How can we help?"
+              onChange={(e) => setMessage(e.target.value)}
+              className="bg-[#F4F6FC] shadow appearance-none border rounded-xl w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4 h-32"
+            />
+            <button
+              className="btn rounded-xl w-full p-2"
+              type="submit"
+              onClick={handleSubmit}
+            >
+              {button}
+            </button>
+          </form>
+        </div>
         <div className="absolute top-20 right-0 m-6">
           {errorMessage && (
             <div className="text-white bg-red-500 mb-4 p-2 border border-red-500 rounded">
@@ -124,6 +118,7 @@ function ContactUspage() {
           )}
         </div>
       </div>
+      
     </>
   );
 }
