@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { apiConnector } from "../services/apiConnector";
 import { favouriteEndpoints } from "../services/apis";
 import FavouriteButton from "../components/FavouriteButton";
+import Spinner from "../components/Spinner";
 const { GET_FAVOURITE_API } = favouriteEndpoints;
 function FavouritesPage() {
 
@@ -320,7 +321,7 @@ function FavouritesPage() {
     );
   }
 
-  return isLoading ? <div>Loading.....</div> : <></>;
+  return isLoading ? <Spinner/> : <></>;
 }
 
 export default FavouritesPage;

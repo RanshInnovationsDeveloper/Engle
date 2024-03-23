@@ -28,7 +28,7 @@ function FlashCardpage() {
 
     // store word recieve from backend
     const [worddata, setWorddata] = useState({});
-    const [flashCardCategory, setFlashCardCategory] = useState("seen");
+    const [flashCardCategory, setFlashCardCategory] = useState("unseen");
 
 
     // These state hook are used to control the flip functionality
