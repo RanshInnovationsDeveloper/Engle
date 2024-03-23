@@ -4,9 +4,10 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 
 //Different Routes
-const authRoute = require("./routes/authRoute");
 const wordRoute = require("./routes/wordRoute");
 const favouriteRoute = require("./routes/favouriteRoute");
+const rememberRoute = require("./routes/rememberRoute");
+const unrememberRoute = require("./routes/unrememberRoute");
 const notesRoute = require("./routes/notesRoute");
 const contact = require("./routes/contactRoute");
 const story=require("./routes/storyRoutes")
@@ -24,9 +25,10 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/word", wordRoute);
 app.use("/api/v1/favourite", favouriteRoute);
+app.use("/api/v1/remember", rememberRoute);
+app.use("/api/v1/unremember", unrememberRoute);
 app.use("/api/v1/notes", notesRoute);
 app.use("/api/v1/contact", contact);
 app.use("/api/v1/story", story);

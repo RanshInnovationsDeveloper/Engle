@@ -1,12 +1,6 @@
 // const BASE_URL = process.env.BASE_URL
 const BASE_URL = "http://localhost:4000/api/v1";
 
-// AUTH ENDPOINTS
-export const authEndpoints = {
-  SIGNUP_API: BASE_URL + "/auth/signup",
-  LOGIN_API: BASE_URL + "/auth/login",
-  RESETPASSWORD_API: BASE_URL + "/auth/reset-password",
-};
 
 export const favouriteEndpoints = {
   //favouriteRoute Endpoints
@@ -15,6 +9,23 @@ export const favouriteEndpoints = {
   GET_FAVOURITE_API: BASE_URL + "/favourite/fetchItems",
   GET_FAVOURITE_STATUS_API: BASE_URL + "/favourite/fetchStatus",
 };
+
+export const rememberEndpoints = {
+  //rememberRoute Endpoints
+  REMOVE_REMEMBER_API: BASE_URL + "/remember/remove",
+  ADD_REMEMBER_API: BASE_URL + "/remember/add",
+  GET_REMEMBER_API: BASE_URL + "/remember/fetchAllItems",
+  GET_REMEMBER_STATUS_API: BASE_URL + "/remember/fetchStatus",
+};
+
+export const unrememberEndpoints = {
+  //rememberRoute Endpoints
+  REMOVE_UNREMEMBER_API: BASE_URL + "/unremember/remove",
+  ADD_UNREMEMBER_API: BASE_URL + "/unremember/add",
+  GET_UNREMEMBER_API: BASE_URL + "/unremember/fetchAllItems",
+  GET_UNREMEMBER_STATUS_API: BASE_URL + "/unremember/fetchStatus",
+};
+
 export const notesEndpoints = {
   //mynotesRoute Endpoints
   CREATENOTES_API: BASE_URL + "/notes/createnote",
@@ -28,7 +39,6 @@ export const contactEndpoints = {
 
 export const flashCardEndpoints = {
   FETCHWORD_API: BASE_URL + "/word/fetchword",
-  ADDWORD_API: BASE_URL + "/word/addword",
 };
 
 export const storyEndpoints = {

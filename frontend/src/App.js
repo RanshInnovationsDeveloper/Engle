@@ -1,9 +1,7 @@
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux"
+import { Routes, Route} from "react-router-dom";
 
 import Homepage from './pages/Homepage'
 import './App.css'
-import Header from './components/Header'
 import Loginpage from './pages/Loginpage'
 import Registerpage from './pages/Registerpage'
 import { ToastContainer } from 'react-toastify'
@@ -13,19 +11,16 @@ import ContactUspage from './pages/ContactUspage'
 import AboutUspage from './pages/AboutUspage'
 import FlashCardpage from './pages/FlashCardpage'
 import FavouritesPage from './pages/FavouritesPage'
-
-import PrivateRoute from "./components/auth/PrivateRoute";
-import OpenRoute from "./components/auth/OpenRoute";
 import MynotesPage from "./pages/MynotesPage";
 import Notecard from "./components/Notecard";
 import Stories from "./pages/Stories";
 import IndividualStory from "./pages/IndividualStory";
 
-function App() {
+import PrivateRoute from "./components/auth/PrivateRoute";
+import OpenRoute from "./components/auth/OpenRoute";
 
-  const dispatch = useDispatch();
-  const navgiate = useNavigate();
-  const { authUserId } = useSelector((state) => state.auth);
+
+function App() {
 
 
   return (
@@ -35,6 +30,7 @@ function App() {
         <Route path="/category" element={<Categorypage />} />
         <Route path="/contact" element={<ContactUspage />} />
         <Route path="/about" element={<AboutUspage />} />
+        <Route path="/flashcards" element={<FlashCardpage />} />
       
         <Route path="/story" element={<Stories/>} />
         {/*Individual story page */}
@@ -87,7 +83,7 @@ function App() {
           }
         />
 
-        <Route
+        {/* <Route
           path="/flashcards"
           element={
 
@@ -96,7 +92,7 @@ function App() {
             </PrivateRoute>
 
           }
-        />
+        /> */}
 
         <Route
           path="/favourites"
@@ -128,7 +124,7 @@ function App() {
             </PrivateRoute>
           }
         />
-        {/**/}
+      
         <Route
           path="/learnwithfriends"
           element={

@@ -14,23 +14,25 @@ import { flashCardEndpoints } from '../services/apis';
 
 import FavouriteButton from "../components/FavouriteButton";
 import { WORD_FILE_NAME, WORD_FILE_TYPE } from "../constants/constants";
+import RememberButton from '../components/RememberButton';
+import UnrememberButton from '../components/UnrememberButton';
 
 
 
 function FlashCardpage() {
 
 
-    const { authUserId } = useSelector((state) => state.auth);
-    const { FETCHWORD_API, ADDWORD_API } = flashCardEndpoints;
+    // const { authUserId } =useSelector((state) => state.auth);
+    const authUserId = sessionStorage.getItem('authUserId');
+    const { FETCHWORD_API } = flashCardEndpoints;
 
     // store word recieve from backend
     const [worddata, setWorddata] = useState({});
-    const [flashCardCategory, setFlashCardCategory] = useState("unseen");
+    const [flashCardCategory, setFlashCardCategory] = useState("seen");
 
 
     // These state hook are used to control the flip functionality
     const [isFlipped, setIsFlipped] = useState(false);
-    // const [isReactIcon, setIsReactIcon] = useState(true);
 
 
     // This array is used to store the index of previous words .
@@ -38,49 +40,42 @@ function FlashCardpage() {
     const [previousarrayindex, setpreviousarrayindex] = useState(unseenPreviousIndex.length);   // 1 based indexing
 
 
+
     // this function is used to fetch the data from the backend
     const fetchWord = async (wordIndex) => {
         try {
-            const response = await apiConnector("POST", FETCHWORD_API,
-                {
-                    wordCategory: flashCardCategory,
-                    authUserId: `${authUserId}`,
-                    wordIndex: wordIndex
-                })
+             
+            if (flashCardCategory !== "unseen" && authUserId==="null") {             // here it is a bug  ifauthUserId is null but it fetch as string "null" from session storage .
+                toast.error("please login!");
+                return;
+            }
+            else {
+                const response = await apiConnector("POST", FETCHWORD_API,
+                    {
+                        wordCategory: flashCardCategory,
+                        authUserId: `${authUserId}`,
+                        wordIndex: wordIndex
+                    })
 
-            return response;
+                return response;
+            }
 
         } catch (err) {
             console.log("there is error to fetchWord => ", err);
         }
     }
 
-    // add word for remember or unremember category
-    const addWord = async ({ categoryype, wordIndex }) => {
-        try {
-            const response = await apiConnector("POST", ADDWORD_API,
-                {
-                    wordCategory: categoryype,            // remember or unrememeber 
-                    authUserId: `${authUserId}`,
-                    wordIndex: wordIndex
-                })
-            return;
-
-
-        } catch (err) {
-            console.log("there is error to addWord in its Category => ", err);
-            return;
-        }
-    }
-
     useEffect(() => {
         async function callOnlyWhenPageReload() {
-            const response = await fetchWord("-1");
+            let response;
+            if (flashCardCategory === "unseen")
+                response = await fetchWord("-1");
+            else
+                response = await fetchWord(JSON.stringify(previousarrayindex));
+
             if (response?.data?.data !== null) {
 
                 setWorddata(response?.data?.data);
-
-                // update the previous word's index
                 updatesessionstoragearray(response?.data?.wordIndex);
                 setpreviousarrayindex(previousarrayindex + 1);
             }
@@ -90,7 +85,7 @@ function FlashCardpage() {
             return;
         }
         callOnlyWhenPageReload();
-    }, [flashCardCategory])
+    }, [flashCardCategory, authUserId])
 
 
     // update session storage array to store the previous word indexies 
@@ -101,76 +96,104 @@ function FlashCardpage() {
         return;
     }
 
-    //     useEffect(()=>{
-    // console.log("previousarrayindex is => ",previousarrayindex);
-    //     },[previousarrayindex])
-
 
     // handler function to fetch next word 
     const handleClickRight = async () => {
+       
+        if (flashCardCategory === "unseen") {
+            // if currentwordindex isequal to "-1" means we fetch any random word from backend .
+            if (previousarrayindex === unseenPreviousIndex.length) {
+                const response = await fetchWord("-1");
+                if (response?.data?.data !== null) {
 
+                    setWorddata(response?.data?.data);                
+                    updatesessionstoragearray(response?.data?.wordIndex);
+                    setpreviousarrayindex(previousarrayindex + 1);
 
-        // if currentwordindex isequal to "-1" means we fetch any random word from backend .
-        if (previousarrayindex === unseenPreviousIndex.length) {
-            const response = await fetchWord("-1");
-            if (response?.data?.data !== null) {
-
-                setWorddata(response?.data?.data);
-
-                // update the previous word index
-                updatesessionstoragearray(response?.data?.wordIndex);
-                setpreviousarrayindex(previousarrayindex + 1);
+                }
+                else
+                    toast.error("no words found");
             }
-            else
-                toast.error("no words found");
+            else {
+                const response = await fetchWord(JSON.stringify(unseenPreviousIndex[previousarrayindex]));
+                if (response?.data !== null) {
+
+                    setWorddata(response?.data?.data);
+                    setpreviousarrayindex(previousarrayindex + 1);
+                }
+            }
         }
+        // flashCardCategory is seen or favourite
         else {
-            const response = await fetchWord(JSON.stringify(unseenPreviousIndex[previousarrayindex]));
-            if (response?.data !== null) {
+            if (previousarrayindex === unseenPreviousIndex.length) {
+                const response = await fetchWord(JSON.stringify(previousarrayindex));
+                if (response?.data?.data !== null) {
 
-                setWorddata(response?.data?.data);
+                    setWorddata(response?.data?.data);
+                    updatesessionstoragearray(response?.data?.wordIndex);
+                    setpreviousarrayindex(previousarrayindex + 1);
 
-                // update the previous word index
-                setpreviousarrayindex(previousarrayindex + 1);
+                }
+                else{
+                    toast.error("no words found");
+                }
+            }
+            else {
+                const response = await fetchWord(JSON.stringify(previousarrayindex));
+                if (response?.data?.data !== null) {
+
+                    setWorddata(response?.data?.data);
+                    setpreviousarrayindex(previousarrayindex + 1);
+
+                }
+                else{
+                    toast.error("no words found");
+                }
             }
         }
-
         return;
     };
+
+
 
 
     // handler function to fetch previous word
     const handleClickLeft = async () => {
 
-        // get index from the session storage 
-        if (previousarrayindex === 1) {
-            toast.error("no more words");
+        if (flashCardCategory === "unseen") {
+            // get index from the session storage 
+            if (previousarrayindex === 1) {
+                toast.error("no more words");
+            }
+            else {
+                const response = await fetchWord(JSON.stringify(unseenPreviousIndex[previousarrayindex - 2]));
+                if (response?.data?.data !== null) {
+
+                    setWorddata(response?.data?.data);
+                    setpreviousarrayindex(previousarrayindex - 1);
+
+                }
+                else{
+                    toast.error("no more words");
+                }
+            }
         }
+        // wordCategory is favourite or seen
         else {
-            const response = await fetchWord(JSON.stringify(unseenPreviousIndex[previousarrayindex - 2]));
+            const response = await fetchWord(JSON.stringify(previousarrayindex - 2));
             if (response?.data?.data !== null) {
 
                 setWorddata(response?.data?.data);
                 setpreviousarrayindex(previousarrayindex - 1);
 
             }
-            else
+            else{
                 toast.error("no words found");
+            }
         }
 
         return;
     };
-
-    const addToRemember = async () => {
-        addWord({ categoryype: "remember", wordIndex: unseenPreviousIndex[previousarrayindex - 1] });
-        toast.success("Word added to remember list");
-        return;
-    }
-    const addToUnremember = async () => {
-        addWord({ categoryype: "unremember", wordIndex: unseenPreviousIndex[previousarrayindex - 1] });
-        toast.success("Word added to unremember list");
-        return;
-    }
 
 
     const handleFlip = async () => {
@@ -178,16 +201,6 @@ function FlashCardpage() {
 
     };
 
-
-
-    //---------------functionality of favourite work do by harsh --------------------
-
-    // handler funtion for favourite
-    // const handleHeart = () => {
-    //     setIsReactIcon(!isReactIcon);
-    // };
-
-    // ------------------------------------------------------------
 
     return (
         <>
@@ -219,14 +232,14 @@ function FlashCardpage() {
                                             <h6 className=' text-gray-600'>Tap on Card to Flip it</h6>
 
                                             <div className='flex md:flex-row flex-col justify-center gap-2'>
-                                                <button className="bg-green-200 border-2 border-green-400 items-center flex flex-row justify-center rounded-md px-20 py-2" >
+                                                <button onClick={handleClickRight} className="bg-green-200 border-2 border-green-400 items-center flex flex-row justify-center rounded-md px-20 py-2" >
                                                     <div className='flex flex-row'>
                                                         <TiTick className='h-6 w-6 text-green-600' />
                                                         <span className="text-green-600">I know this word</span>
                                                     </div>
 
                                                 </button>
-                                                <button className="bg-red-200 border-2 border-red-400 items-center gap-1 flex flex-row rounded-md justify-center px-14 py-2">
+                                                <button onClick={handleFlip} className="bg-red-200 border-2 border-red-400 items-center gap-1 flex flex-row rounded-md justify-center px-14 py-2">
                                                     <div className="flex flex-row items-center gap-1">
                                                         <ImCross className='h-4 w-4 text-red-600' />
                                                         <span className="text-red-600"> I don't know this word</span>
@@ -269,19 +282,17 @@ function FlashCardpage() {
                                     </div>
                                 </div>
                                 <div className='flex md:flex-row flex-col gap-2 justify-center mt-6 relative mx-2'>
-                                    <button onClick={addToRemember} className='items-center  bg-green-200 gap-2 border-2 border-green-400 border-green flex flex-row justify-center rounded-md px-20'>
-                                        <div className='flex flex-row'>
-                                            <TiTick className='h-6 w-6 text-green-600' />
-                                            <span className="text-green-600">Remembered</span>
-                                        </div>
+                                    <RememberButton
+                                        itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                        type={WORD_FILE_TYPE}
+                                        name={WORD_FILE_NAME}
+                                    />
+                                    <UnrememberButton
+                                        itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                        type={WORD_FILE_TYPE}
+                                        name={WORD_FILE_NAME}
+                                    />
 
-                                    </button>
-                                    <button onClick={addToUnremember} className='items-center bg-red-200 border-2 border-red-400 flex  flex-row border-red rounded-md justify-center px-14 py-2'>
-                                        <div className="flex flex-row items-center gap-1">
-                                            <ImCross className='h-4 w-4 text-red-600' />
-                                            <span className="text-red-600">Not Remembered</span>
-                                        </div>
-                                    </button>
                                 </div>
                             </div>
                         </div>

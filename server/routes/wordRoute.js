@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const {fetchWord, addWord}=require("../controllers/wordControllers");
+const {fetchWord}=require("../controllers/wordGeneratorControllers");
 
 
 router.post("/fetchword",fetchWord);
-router.post("/addword",addWord);
 
 module.exports = router;

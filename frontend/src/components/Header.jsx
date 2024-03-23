@@ -22,20 +22,24 @@ const Header = ({val}) => {
 
   useEffect(() => {
 
-    auth.onAuthStateChanged((userCrendential) => {      
-        if(userCrendential!==null&&userCrendential?.emailVerified===true){
-          dispatch(setauthUserId(userCrendential.uid));
-          dispatch(setuserEmail(userCrendential.email));
-          dispatch(setuserName(userCrendential.displayName));         
-        }
-        else{
-          dispatch(setauthUserId(null));
-          dispatch(setuserEmail(null));
-          dispatch(setuserName(null));
-        }       
-      });
-      
-  }, [dispatch])
+    auth.onAuthStateChanged((userCrendential) => {
+      if(userCrendential!==null&&userCrendential?.emailVerified===true){
+        dispatch(setauthUserId(userCrendential.uid));
+        dispatch(setuserEmail(userCrendential.email));
+        dispatch(setuserName(userCrendential.displayName));
+      }
+      else{
+        dispatch(setauthUserId(null));
+        dispatch(setuserEmail(null));
+        dispatch(setuserName(null));
+      }
+    });
+
+    if (sessionStorage.getItem('authUserId') === null || !sessionStorage.getItem('authUserId')) {
+      sessionStorage.setItem('authUserId', authUserId);
+    }
+  }, [dispatch, authUserId]);
+
 
 
   const handlesignout = () => {
@@ -44,7 +48,7 @@ const Header = ({val}) => {
     navigate('/');
     toast.success("logout successfully");
     dispatch(setLoading(false));
-    
+
   }
 
   const toggleMenu = () => {
@@ -62,46 +66,46 @@ const Header = ({val}) => {
     const linkClassName = "nav__link";
 
     return (
-        <>
-      <ul className={listClassName}>
-        <li>
-          <NavLink to="/"      
-          className={`${linkClassName} ${val === 0 ? "text-[#2E3D79] font-[600]" : "text-black "}`}
-           onClick={closeMobileMenu} >
-            Home
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/flashcards"
-            className={`${linkClassName} ${val === 1 ? "text-[#2E3D79] font-semibold" : "text-black font-normal"}`}
-            onClick={closeMobileMenu}
-          >
-            Category
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/contact"
-            className={`${linkClassName} ${val === 2 ? "text-[#2E3D79] font-semibold" : "text-black"}`}
-            onClick={closeMobileMenu}
-          >
-            Contact Us
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/about"
-            className={`${linkClassName} ${val === 3 ? "text-[#2E3D79] font-semibold" : "text-black"}`}
-            onClick={closeMobileMenu}
-          >
-            About Us
-          </NavLink>
-        </li>
+      <>
+        <ul className={listClassName}>
+          <li>
+            <NavLink to="/"
+              className={`${linkClassName} ${val === 0 ? "text-[#2E3D79] font-[600]" : "text-black "}`}
+              onClick={closeMobileMenu} >
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/flashcards"
+              className={`${linkClassName} ${val === 1 ? "text-[#2E3D79] font-semibold" : "text-black font-normal"}`}
+              onClick={closeMobileMenu}
+            >
+              Category
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/contact"
+              className={`${linkClassName} ${val === 2 ? "text-[#2E3D79] font-semibold" : "text-black"}`}
+              onClick={closeMobileMenu}
+            >
+              Contact Us
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/about"
+              className={`${linkClassName} ${val === 3 ? "text-[#2E3D79] font-semibold" : "text-black"}`}
+              onClick={closeMobileMenu}
+            >
+              About Us
+            </NavLink>
+          </li>
         </ul>
         {authUserId ? (
-        <>
-          {/* <li>
+          <>
+            {/* <li>
           <button className='btn2 pr-1 pl-3 py-3' >
            <FaBell className="w-[1.75rem] h-[1.75rem]"/>
           </button>
@@ -111,26 +115,26 @@ const Header = ({val}) => {
            <IoPerson className="w-[1.75rem] h-[1.75rem]"/>
           </button>
       </li> */}
-      </>
+          </>
         ):(<ul className={`${listClassName}  lg:mt-0 mt-3` }>
           <li>
-          <NavLink
-            to="/login"
-            className={`${linkClassName} `}
-            onClick={closeMobileMenu}
-          >
-            <button className="btn px-5 py-2">Log In</button>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/register"
-            className={`${linkClassName} `}
-            onClick={closeMobileMenu}
-          >
-            <button className="btn px-5 py-2 ">Sign Up</button>
-          </NavLink>
-        </li>
+            <NavLink
+              to="/login"
+              className={`${linkClassName} `}
+              onClick={closeMobileMenu}
+            >
+              <button className="btn px-5 py-2">Log In</button>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/register"
+              className={`${linkClassName} `}
+              onClick={closeMobileMenu}
+            >
+              <button className="btn px-5 py-2 ">Sign Up</button>
+            </NavLink>
+          </li>
         </ul>
         )}
       </>
@@ -144,15 +148,15 @@ const Header = ({val}) => {
         <NavLink to="/" className="nav__logo">
           ENGLE
         </NavLink>
-        
+
 
         {isMobile && (<>
-             
+
           <div className="nav__toggle" id="nav-toggle" onClick={toggleMenu}>
             <IoMenu />
           </div>
         </>
-        
+
         )}
 
         {isMobile ? (
@@ -168,19 +172,19 @@ const Header = ({val}) => {
         ) : (
           renderNavLinks()
         )}
-{authUserId ? (  <div className="flex flex-row gap-4 justify-center">
-              <div>
-          <button className='btn2 pr-1 pl-3 py-3' >
-           <FaBell className="w-[1.75rem] h-[1.75rem]"/>
-          </button>
-      </div>
+        {authUserId ? (  <div className="flex flex-row gap-4 justify-center">
           <div>
-          <button className='btn pr-1 pl-3 py-3' onClick={handlesignout}>
-           <IoPerson className="w-[1.75rem] h-[1.75rem]"/>
-          </button>
-      </div>
+            <button className='btn2 pr-1 pl-3 py-3' >
+              <FaBell className="w-[1.75rem] h-[1.75rem]"/>
+            </button>
+          </div>
+          <div>
+            <button className='btn pr-1 pl-3 py-3' onClick={handlesignout}>
+              <IoPerson className="w-[1.75rem] h-[1.75rem]"/>
+            </button>
+          </div>
         </div>):(<></>)}
-      
+
       </nav>
     </header>
   );

@@ -4,6 +4,7 @@ import { favouriteEndpoints } from "../services/apis";
 import { useSelector } from "react-redux";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
+import { toast } from "react-toastify";
 //This component fetches the stautus of favourite button and does the necessary job to update it
 
 function FavouriteButton({ itemId, type, name = "" }) {
@@ -18,6 +19,12 @@ function FavouriteButton({ itemId, type, name = "" }) {
 
   useEffect(() => {
     const fetchStatus = async () => {
+      if(userId===null)
+      {
+        setIsFavourite(false);
+        setIsLoading(false);
+        return ;
+      }
       const response = await apiConnector(
         "GET",
         GET_FAVOURITE_STATUS_API,
@@ -27,12 +34,18 @@ function FavouriteButton({ itemId, type, name = "" }) {
       );
       setIsFavourite(response.data.isFavourite);
       setIsLoading(false);
+      return ;
     };
     fetchStatus();
   });
 
   // Function to handle add item to favourite call
   const removeFromFavourite = async (itemId, type, userId, event) => {
+    if(userId===null)
+    {
+      toast.error("Please Login !");
+      return ;
+    }
     event.stopPropagation();
     setIsLoading(true);
     try {
@@ -43,12 +56,18 @@ function FavouriteButton({ itemId, type, name = "" }) {
       });
       setIsLoading(false);
       setIsFavourite(false);
+      return ;
     } catch (error) {
       console.log(error);
     }
   };
 
   const addToFavourite = async (itemId, type, userId, name, event) => {
+    if(userId===null)
+    {
+      toast.error("Please Login !");
+      return ;
+    }
     event.stopPropagation();
     setIsLoading(true);
 
@@ -61,6 +80,7 @@ function FavouriteButton({ itemId, type, name = "" }) {
       });
       setIsLoading(false);
       setIsFavourite(true);
+      return ;
     } catch (error) {
       console.log(error);
     }

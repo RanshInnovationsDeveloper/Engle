@@ -55,6 +55,8 @@ export const signin = async (email, password) => {
       .then(async (userCrendential) => {
         if (userCrendential?.user?.emailVerified !== true)
           error = "user not exist!";
+        else
+        sessionStorage.setItem('authUserId',userCrendential?.user?.uid);
       })
       .catch((err) => {
         // Handle sign-up errors
@@ -76,6 +78,8 @@ export const signin = async (email, password) => {
 };
 
 export const logout = () => {
+  sessionStorage.clear();
+  sessionStorage.setItem('authUserId',null);
   auth.signOut();
 };
 
