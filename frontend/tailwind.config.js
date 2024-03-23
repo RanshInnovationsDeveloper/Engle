@@ -5,7 +5,10 @@ module.exports = {
     extend: {
       fontFamily: {
         'mukta': ['Mukta', 'sans-serif'],
-      }
+      },
+      colors: {
+        customBlue: '#4A5995',
+      },
     },
   },
   plugins: [],

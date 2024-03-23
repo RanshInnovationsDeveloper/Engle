@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { notesEndpoints } from '../services/apis';
+import { IoClose } from "react-icons/io5";
+import { FaPlus } from 'react-icons/fa';
 import "../styles/Notecard.css";
+import { Link } from 'react-router-dom';
 
 const Notecard = () => {
    // Fetching userid
@@ -66,10 +69,20 @@ const Notecard = () => {
   };
 
   return (
-    <div className="form-box">
-      <h2>Notecard</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="form-box max-w-sm rounded-lg flex justify-center items-center flex-col border border-black">
+      <div className='bg-customBlue flex px-4 justify-between items-center w-full'>
+      <h2 className='text-white font-mukta pt-3'>Add Words</h2>
+      <div>
+      <Link to = "/mynotes">
+      <IoClose className='bg-white rounded-md text-customBlue h-8 w-8' />
+      </Link>
+      </div>
+      </div>
+      <div className='p-3'>
+      <form onSubmit={handleSubmit} className=' p-4 bg-violet-100 border-2 border-customBlue rounded-md'>
         {/* Input fields with placeholders only */}
+
+        <div className='flex justify-center gap-4'>
         <div>
           <input
             type="text"
@@ -77,6 +90,7 @@ const Notecard = () => {
             value={formData.word}
             onChange={handleInputChange}
             placeholder="Word"
+            className='border border-customBlue p-2 mb-3 rounded-lg'
           />
         </div>
 
@@ -87,9 +101,11 @@ const Notecard = () => {
             value={formData.type}
             onChange={handleInputChange}
             placeholder="Type"
+            className='border border-customBlue p-2 mb-3 w-full rounded-lg'
           />
         </div>
-
+        </div>
+        <div>
         <div>
           <input
             type="text"
@@ -97,6 +113,7 @@ const Notecard = () => {
             value={formData.definitions}
             onChange={handleInputChange}
             placeholder="Definition"
+            className='pb-8 border border-customBlue p-2 w-full mb-3 rounded-lg'
           />
         </div>
 
@@ -107,6 +124,7 @@ const Notecard = () => {
             value={formData.example}
             onChange={handleInputChange}
             placeholder="Example"
+            className='pb-8 border border-customBlue p-2 w-full mb-3 rounded-lg'
           />
         </div>
 
@@ -117,12 +135,18 @@ const Notecard = () => {
             value={formData.breakdown}
             onChange={handleInputChange}
             placeholder="Word breakdown"
+            className='pb-8 border border-customBlue p-2 w-full mb-3 rounded-lg'
           />
+        </div>
         </div>
 
         {/* Submit button */}
-        <button type="submit">Save</button>
+        <div className='flex justify-between items-center'>
+        <FaPlus className='text-customBlue'/>
+        <button type="submit" className='bg-customBlue px-20 text-white rounded-md py-2'>Save</button>
+        </div>
       </form>
+      </div>
     </div>
   );
 };
