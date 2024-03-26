@@ -18,6 +18,7 @@ import IndividualStory from "./pages/IndividualStory";
 
 import PrivateRoute from "./components/auth/PrivateRoute";
 import OpenRoute from "./components/auth/OpenRoute";
+import Upcomingpage from "./pages/Upcomingpage";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/contact" element={<ContactUspage />} />
         <Route path="/about" element={<AboutUspage />} />
         <Route path="/flashcards" element={<FlashCardpage />} />
+        <Route path="/upcoming" element={<Upcomingpage />} />
       
         <Route path="/story" element={<Stories/>} />
         {/*Individual story page */}
