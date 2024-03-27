@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
+import "../styles/FlashCard.css"
 //This component fetches the stautus of favourite button and does the necessary job to update it
 
 function FavouriteButton({ itemId, type, name = "" }) {
@@ -86,19 +87,24 @@ function FavouriteButton({ itemId, type, name = "" }) {
     }
   };
   return (
-    <div>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : isFavourite ? (
-        <FaHeart
-          className="text-red-600 w-[1.5rem] h-[1.5rem]"
+    <div className="relative inline-block w-">
+     
+      { isFavourite ? (
+        <div className="p-3">
+                 <FaHeart
+          className={`text-red-600 w-[1.5rem] h-[1.5rem] heart-icon   ${isLoading ? 'heart-scale-effect' : ''}`}
           onClick={(event) => removeFromFavourite(itemId, type, userId, event)}
         />
+        </div>
+ 
       ) : (
-        <CiHeart
-          className="text-red-600 w-[1.5rem] h-[1.5rem]"
+        <div className="p-[0.6rem]">
+          <CiHeart
+          className={`text-red-600 w-[1.7rem] h-[1.7rem] heart-icon ${isLoading ? 'heart-scale-effect' : ''}`}
           onClick={(event) => addToFavourite(itemId, type, userId, name, event)}
         />
+        </div>
+        
       )}
     </div>
   );

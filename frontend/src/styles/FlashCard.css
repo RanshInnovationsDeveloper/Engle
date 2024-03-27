@@ -47,3 +47,21 @@
     background-color: #FFF;
     object-fit: cover;
 }
+
+/* heart smooth transition */
+.heart-icon {
+    transition: transform 0.3s ease-in-out; /* Example transition */
+  }
+  
+  /* .heart-icon:hover {
+    transform: scale(1.2); /* Example transformation */
+
+    .heart-scale-effect {
+        transform: scale(1.25);
+        transition: transform 0.35s ease-in-out infinite;
+        
+    }
+    
+
+
+  
