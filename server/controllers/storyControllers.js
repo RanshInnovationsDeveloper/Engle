@@ -1,3 +1,6 @@
+//Various conrollers to handle story functionality
+
+//Imports
 const story=require("../resources/sampleStory.json")
 
 //Fetch all the stories
@@ -6,6 +9,7 @@ const getAllStrories = async (req, res) => {
         res.status(200).send(story);
     } catch (error) {
         console.log("Error in getAllStrories", error)
+        res.status(500).json({status:"error",error:error.message})
     }
 }
 
@@ -17,12 +21,13 @@ try {
     res.status(200).send(story[id]);
 }
 else {
-    res.status(404).send("Story not found");
+    res.status(404).json({status:"error",error:"Story not found"});
 }
 
 } catch (error) {
     console.log("Error in getStoryById", error)
+    res.status(500).json({status:"error",error:error.message})
 }
 }
-
+//Exporting the controllers
 module.exports = {getAllStrories, getStoryById}

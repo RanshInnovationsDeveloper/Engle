@@ -12,7 +12,7 @@ function ContactUspage() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [email, setEmail] = useState("");
-  const [button, setButton] = useState("Submit");
+  const [button, setButton] = useState("Contact Us");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +25,7 @@ function ContactUspage() {
           subject,
           email,
         });
-        setButton("Submit");
+        setButton("Contact Us");
         setSuccessMessage(response?.data?.message);
         setTimeout(() => {
           setSuccessMessage(null);
@@ -35,7 +35,7 @@ function ContactUspage() {
         setSubject("");
         setEmail("");
       } catch (error) {
-        console.log("server error:", error);
+        console.log("server error:", error.error);
         setErrorMessage("Something went wrong!");
         setTimeout(() => {
           setErrorMessage(null);
@@ -100,6 +100,7 @@ function ContactUspage() {
               className="btn rounded-xl w-full p-2"
               type="submit"
               onClick={handleSubmit}
+              disabled={(button=="Sending...")?true:false}
             >
               {button}
             </button>

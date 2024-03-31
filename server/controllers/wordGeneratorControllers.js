@@ -109,9 +109,10 @@ exports.fetchWord = async (req, res) => {
         
         else{
             return res.status(404).json({
+                status:"error",
                 data:null,
                 // wordIndex: newWordIndex,
-                message: "This category is not found!"
+                error: "This category is not found!"
             });
             
         }
@@ -136,7 +137,8 @@ exports.fetchWord = async (req, res) => {
 
         console.log("error to fetch word => ", err);
         return res.status(404).json({
-            message: "server error"
+            status:"error",
+            error: "server error"
         });
     }
 
