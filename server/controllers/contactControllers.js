@@ -1,23 +1,25 @@
+//Various Imports
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 const { body, validationResult } = require('express-validator');
 
 
+//This controller is for the contact us page and will handle the mail sending feature of contact us page
 const contact = [
-// Validate request body
-body('name').notEmpty().withMessage('Name is required'),
-body('subject').notEmpty().withMessage('Subject is required'),
-body('message').notEmpty().withMessage('Message is required'),
-body('email').isEmail().withMessage('Email is not valid'),
+// Validate and sanitize request body
+//trim removes whitespaces
+//escape replaces HTML special characters
+//normalizeEmail to normalize email 
+body('name').notEmpty().withMessage('Name is required').trim().escape(),
+body('subject').notEmpty().withMessage('Subject is required').trim().escape(),
+body('message').notEmpty().withMessage('Message is required').trim().escape(),
+body('email').isEmail().withMessage('Email is not valid').normalizeEmail(),
 
 async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+    return res.status(400).json({ status:"error",error: errors.array() });
   }
-
-
-
   try {
     const { name, subject, message, email } = req.body;
     
@@ -35,6 +37,7 @@ async (req, res) => {
       },
     });
 
+    //Setting up mail options for node mailer
     const mailOptions = {
       from: email,
       to: process.env.EMAIL,
@@ -43,14 +46,16 @@ async (req, res) => {
     };
 
     await transporter.sendMail(mailOptions);
-    // Successful Submision
-    res.status(200).json({ message: "Form submitted successfully" });
-  } catch (error) {
+
+    // Successful Submission
+    res.status(200).json({status:"success", message: "We will get back to you soon " });
+  } 
+  catch (error) {
     //Unscuccessfull Submission
-    console.error("Error submitting form:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({status:"error", error: "Internal Server Error While Submiting" });
   }
+
 }
 ]
-
+//Exporting the contact controller 
 module.exports = contact;
