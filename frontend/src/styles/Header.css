@@ -6,14 +6,13 @@
     z-index: 20;
     margin-bottom: 0.5rem;
     margin: 0 auto;
-    padding: 0 3rem;
+    padding: 0 0.6rem;
     text-align: center;
 }
   
   .nav {
-    display: flex;
+   
     align-items: center;
-    justify-content: space-between;
     position: relative;
     height: 3rem;
     margin: 0.75rem 1rem;
@@ -23,16 +22,16 @@
   .nav__logo {
     color: black;
     transition: color 0.4s;
-    letter-spacing: 0.2cm;
+    /* letter-spacing: 0.2cm; */
     font-weight: 600;
-    font-size: 2.813rem;
+    font-size: 2.5rem;
   }
   
   .nav__toggle,
   .nav__close {
     font-size: 1.5rem;
     color: black;
-    cursor: pointer;
+
   }
   
 
@@ -41,28 +40,40 @@
     .nav__menu {
       position: fixed;
       top: 0;
-      right: -100%;
-      background-color: hsla(0, 0%, 6%, 0.2);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      left: -100%;
+      background-color: white ;
       width: 80%;
       height: 100%;
-      padding: 6rem 3rem 0;
-      transition: right 0.4s;
+      padding: 0.5rem 1.5rem 1rem 2rem ;
+      transition: left 0.4s;
     }
+    .nav__link{
+      font-size: 1.25rem;
+    }
+
   }
-  @media screen and (max-width: 300px) {
+  @media screen and (max-width: 490px) {
     .nav__menu {
-      padding: 4rem 1rem 2rem;
+      position: fixed;
+      top: 0;
+      left: -100%;
+      background-color: white ;
+      width: 100%;
+      height: 100%;
+      padding: 0.5rem 1rem 1rem 1rem;
+      transition: left 0.4s;
+
     }
   
     .nav__list {
       row-gap: 1rem;
+      padding: 1rem 1rem;
     }
   
     .nav__link {
-      font-size: 0.813rem;
+      font-size: 1.18rem;
     }
+
 
   }
   
@@ -70,10 +81,11 @@
     display: flex;
     flex-direction: column;
     row-gap: 1.5rem;
-    align-items: center;
+    align-items: start;
   }
   
   .nav__link {
+
     font-weight: 500;
     transition: color 0.4s;
   }
@@ -90,7 +102,7 @@
   }
   
   .show-menu {
-    right: 0;
+    left: 0;
   }
   .nav__listt {
     display: flex;
@@ -101,14 +113,13 @@
   .nav__menu_mobile {
     position: fixed;
     top: 0;
-    right: -100%;
-    background-color: hsla(0, 0%, 6%, 0.2);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    width: 80%;
+    left: -100%;
+    background-color: white;
+
+    width: 100%;
     height: 100%;
     padding: 6rem 3rem 0;
-    transition: right 0.4s;
+    transition: left 0.4s;
   }
   @media screen and (min-width: 1150px) {
     .nav {
@@ -123,6 +134,9 @@
     .nav__list {
       flex-direction: row;
       column-gap: 1.5rem;
+    }
+    .nav__link{
+      font-size: 1.15rem;
     }
   }
   
