@@ -39,7 +39,7 @@ const fetchFavouriteButtonStatus = async (req, res) => {
       }
     }
   } catch (error) {
-    res.status(500).json({ status: "Error", message: error.message });
+    res.status(500).json({ status: "error", message: error.message });
   }
 };
 //This is used to add new item to favourite list it takes 4 input from body
@@ -71,7 +71,7 @@ const addToFavourite = async (req, res) => {
     res.status(200).json({ status: "Item added to favourites" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ status: "Error", message: error.message });
+    res.status(500).json({ status: "error", error: error.message });
   }
 };
 
@@ -96,6 +96,7 @@ const removeFromFavourite = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.status(500).json({status:"error",error:error.message})
   }
 };
 //This is used to fetch all the contents of favourite
@@ -152,6 +153,7 @@ const fetchFavouriteItems = async (req, res) => {
                 })
                 .catch((error) => {
                   console.error(error.message);
+                  res.status(500).json({status:"error",error:error.message})
                   return null; // Return null to handle the error case
                 })
             );
@@ -173,9 +175,10 @@ const fetchFavouriteItems = async (req, res) => {
       })
       .catch((error) => {
         console.error(error); // Handle errors from Promise.all()
+        res.status(500).json({status:"error",error:error.message})
       });
   } catch (error) {
-    res.status(500).json({ status: "Error", message: error.message });
+    res.status(500).json({ status: "error", error: error.message });
   }
 };
 module.exports = {

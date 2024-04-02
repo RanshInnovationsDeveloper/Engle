@@ -13,14 +13,14 @@ exports.createNote = async (req, res) => {
     // Check for validation errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
+      return res.status(400).json({ status:"error",success: false, errors: errors.array() });
     }
     // No validation errors, proceed to add data
     const docRef = await addDoc(notesCollection, jsonData);
     // Respond with a success message or other appropriate response
     res.status(200).json({ success: true, message: 'Note created successfully', noteId: docRef.id });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Internal server error', error: error.message });
+    res.status(500).json({status:"error", success: false, message: 'Internal server error', error: error.message });
   }
 };
 // Function to get notes based on UserId
@@ -49,7 +49,7 @@ exports.getNotesByUserId = async (req, res) => {
     // Respond with the retrieved notes
     res.status(200).json({ data });
   } catch (err) {
-    res.status(500).json({ success: false, message: 'Internal server error', error: err.message });
+    res.status(500).json({ status:"error",success: false, message: 'Internal server error', error: err.message });
   }
 };
 
@@ -63,7 +63,7 @@ exports.getNoteById = async (req, res) => {
 
     // Check if the provided ID is valid
     if (!noteRef) {
-      res.status(401).json({ success: false, message: "Id is invalid" });
+      res.status(401).json({status:"error", success: false, message: "Id is invalid" });
       return;
     }
 
@@ -72,7 +72,7 @@ exports.getNoteById = async (req, res) => {
 
     // Check if the document exists
     if (!noteDoc.exists()) {
-      res.status(404).json({ success: false, message: 'Note not found' });
+      res.status(404).json({status:"error", success: false, message: 'Note not found',error:"Note not found" });
       return;
     }
 
@@ -83,6 +83,6 @@ exports.getNoteById = async (req, res) => {
     };
     res.status(200).json({ success: true, data: noteData });
   } catch (err) {
-    res.status(500).json({ success: false, message: 'Internal server error', error: err.message });
+    res.status(500).json({status:"error", success: false, message: 'Internal server error', error: err.message });
   }
 };

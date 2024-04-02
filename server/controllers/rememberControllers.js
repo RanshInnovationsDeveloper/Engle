@@ -41,7 +41,7 @@ const fetchRememberButtonStatus = async (req, res) => {
             }
         }
     } catch (error) {
-        res.status(500).json({ status: "Error", message: error.message });
+        res.status(500).json({ status: "error", error: error.message });
     }
 };
 
@@ -77,7 +77,7 @@ const addToRemember = async (req, res) => {
         res.status(200).json({ status: "Item added to Remembers" });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ status: "Error", message: error.message });
+        res.status(500).json({ status: "error", error: error.message });
     }
 };
 
@@ -105,6 +105,7 @@ const removeFromRemember = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.status(500).json({status:"error",error:error?.message})
     }
 };
 
@@ -115,7 +116,7 @@ const fetchAllRememberItems = async (req, res) => {
     try {
         const { userId } = req.query;
         if (!userId) {
-            return res.status(400).json({ status: "No user ID provided" });
+            return res.status(400).json({status:"error", error: "No user ID provided" });
         }
         const docRef = doc(db, "remember", userId);
         const docSnap = await getDoc(docRef);
@@ -164,6 +165,7 @@ const fetchAllRememberItems = async (req, res) => {
                                 })
                                 .catch((error) => {
                                     console.error(error);
+                                    res.status(500).json({error:error?.message,status:"error"})
                                     return null; // Return null to handle the error case
                                 })
                         );
@@ -184,10 +186,11 @@ const fetchAllRememberItems = async (req, res) => {
                 res.status(200).json(result);
             })
             .catch((error) => {
+                res.status(400).json({status:"error",error:error.message})
                 console.error(error); // Handle errors from Promise.all()
             });
     } catch (error) {
-        res.status(500).json({ status: "Error", message: error.message });
+        res.status(500).json({ status: "error", error: error.message });
     }
 };
 
