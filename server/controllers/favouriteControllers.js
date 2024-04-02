@@ -102,7 +102,7 @@ const removeFromFavourite = async (req, res) => {
 };
 //Check seen status
 async function checkSeenStatus(userId, key, item) {
-  let isSeen = false;
+  try{let isSeen = false;
   const docRef = doc(db, "seen", userId);
   const docSnap = await getDoc(docRef);
   if (!docSnap.exists) {
@@ -117,7 +117,10 @@ async function checkSeenStatus(userId, key, item) {
       });
     }
   }
-  return isSeen;
+  return isSeen;}
+  catch(error){
+    res.status(400).json({error:error.message})
+  }
 }
 
 //This is used to fetch all the contents of favourite
@@ -209,42 +212,6 @@ const fetchFavouriteItems = async (req, res) => {
     res.status(500).json({ status: "error", error: error.message });
   }
 };
-
-// const fetchFavouriteItemsById=async(req,res)=>{
-//   const {type}=req.query;
-//   const {itemId}=req.params.id;
-//   const result
-
-//   if (type == "sampleStory" || type == "words") {
-//     {
-//       ...item,
-//       type: type,
-//       val: typeArr[type][Number(item.itemId)],
-//       createdAt: createdAtFormatted,
-//     };
-//   }
-//   if (type == "notes") {
-//     const noteId = item?.itemId;
-//     promises.push(
-//       axios
-//         .get(SINGLE_NOTE_FETCHING_API_URL + noteId)
-//         .then((response) => {
-//           const data = response.data;
-//           return {
-//             ...item,
-//             type: type,
-//             val: data,
-//             createdAt: createdAtFormatted,
-//           };
-//         })
-//         .catch((error) => {
-//           console.error(error.message);
-//           res.status(500).json({status:"error",error:error.message})
-//           return null; // Return null to handle the error case
-//         })
-//     );
-//   }
-// };
 
 module.exports = {
   fetchFavouriteButtonStatus,
