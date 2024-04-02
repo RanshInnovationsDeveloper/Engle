@@ -8,6 +8,7 @@ const {
   setDoc,
   Timestamp,
 } = require("firebase/firestore/lite");
+
 const axios = require("axios");
 
 //Every time you add new json file add that over here as of now
@@ -99,6 +100,29 @@ const removeFromFavourite = async (req, res) => {
     res.status(500).json({status:"error",error:error.message})
   }
 };
+//Check seen status
+async function checkSeenStatus(userId, key, item) {
+  try{let isSeen = false;
+  const docRef = doc(db, "seen", userId);
+  const docSnap = await getDoc(docRef);
+  if (!docSnap.exists) {
+    console.log('No such document!');
+  } else {
+    let data = docSnap.data();
+    if (key == "words") {
+      data.word.forEach((wordItem, index) => {
+        if (wordItem === item.itemId) {
+          isSeen = true;
+        }
+      });
+    }
+  }
+  return isSeen;}
+  catch(error){
+    res.status(400).json({error:error.message})
+  }
+}
+
 //This is used to fetch all the contents of favourite
 const fetchFavouriteItems = async (req, res) => {
   try {
@@ -123,11 +147,15 @@ const fetchFavouriteItems = async (req, res) => {
     for (const key in data) {
       // * Add your type name in and part if it isn't coming from firebase
       if (Array.isArray(data[key])) {
-        data[key].forEach((item) => {
+         for (const item of data[key]){
+      //get seen or  unseen
+    const isSeen = await checkSeenStatus(userId,key,item)
           // Convert Firestore Timestamp to JavaScript Date
           const createdAt = new Date(item.createdAt.seconds * 1000);
           // Format date as needed
           const createdAtFormatted = createdAt.toISOString();
+
+
           //Checking as per the values of keys as different key have different data type some coming from firebase some from storage
           if (key == "sampleStory" || key == "words") {
             promises.push({
@@ -135,6 +163,7 @@ const fetchFavouriteItems = async (req, res) => {
               type: key,
               val: keyArr[key][Number(item.itemId)],
               createdAt: createdAtFormatted,
+              isSeen
             });
           }
           if (key == "notes") {
@@ -149,6 +178,8 @@ const fetchFavouriteItems = async (req, res) => {
                     type: key,
                     val: data,
                     createdAt: createdAtFormatted,
+                    isSeen
+
                   };
                 })
                 .catch((error) => {
@@ -158,7 +189,7 @@ const fetchFavouriteItems = async (req, res) => {
                 })
             );
           }
-        });
+        };
       }
     }
 
@@ -181,6 +212,7 @@ const fetchFavouriteItems = async (req, res) => {
     res.status(500).json({ status: "error", error: error.message });
   }
 };
+
 module.exports = {
   fetchFavouriteButtonStatus,
   addToFavourite,
