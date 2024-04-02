@@ -23,7 +23,7 @@ function FlashCardpage() {
 
 
     // const { authUserId } =useSelector((state) => state.auth);
-    const authUserId = sessionStorage.getItem('authUserId');
+    const authUserId = localStorage.getItem('authUserId');
     const { FETCHWORD_API } = flashCardEndpoints;
 
     // store word recieve from backend
