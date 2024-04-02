@@ -1,41 +1,29 @@
-import { auth, db } from "../firebase";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signOut, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, collection } from "firebase/firestore"; 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { auth, db } from '../firebase';
 
 export const signup = async (email, password, username) => {
   let error = "";
 
   try {
-    // Create user with email and password
-    const userCredential = await auth.createUserWithEmailAndPassword(
-      email,
-      password
-    );
+    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
 
-    await auth.currentUser
-      .sendEmailVerification()
-      .then(async () => {
-        // Set user display name
-        await userCredential.user.updateProfile({
-          displayName: username,
-        });
-
-        // Add user data to Firestore
-        await db
-          .collection("users")
-          .doc(userCredential.user.uid)
-          .collection("user_info")
-          .doc()
-          .set({
-            userId: userCredential.user.uid,
-            userName: username,
-          });
-      })
-      .catch((err) => {
-        console.log(err);
+    await sendEmailVerification(user).then(async () => {
+      await updateProfile(user, {
+        displayName: username,
       });
+
+      await setDoc(doc(collection(db, "users", user.uid, "user_info")), {
+        userId: user.uid,
+        userName: username,
+      });
+    }).catch((err) => {
+      console.log("There is some error to send the verification link -",err);
+    });
   } catch (err) {
-    // Handle sign-up errors
     let errorCode = err.code;
     if (errorCode === "auth/email-already-in-use") {
       error = "This email is already in use!";
@@ -49,27 +37,24 @@ export const signup = async (email, password, username) => {
 
 export const signin = async (email, password) => {
   let error = "";
+
   try {
-    await auth
-      .signInWithEmailAndPassword(email, password)
-      .then(async (userCrendential) => {
-        if (userCrendential?.user?.emailVerified !== true)
-          error = "user not exist!";
-        else
-        sessionStorage.setItem('authUserId',userCrendential?.user?.uid);
-      })
-      .catch((err) => {
-        // Handle sign-up errors
-        let errorCode = err.code;
-        if (errorCode === "auth/internal-error") {
-          // The email address is already in use by another account
-          error = "Email or Password do not match!";
-        } else {
-          // Handle other sign-up errors
-          error = err.message;
-          // console.error(error);
-        }
-      });
+    await signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
+      const user = userCredential.user;
+
+      if (!user.emailVerified) {
+        error = "User not exist!";
+      } else {
+        sessionStorage.setItem('authUserId', user.uid);
+      }
+    }).catch((err) => {
+      let errorCode = err.code;
+      if (errorCode === "auth/invalid-credential") {
+        error = "Email or Password do not match!";
+      } else {
+        error = err.message;
+      }
+    });
   } catch (err) {
     error = err.message;
   }
@@ -79,23 +64,18 @@ export const signin = async (email, password) => {
 
 export const logout = () => {
   sessionStorage.clear();
-  sessionStorage.setItem('authUserId',null);
-  auth.signOut();
+  sessionStorage.setItem('authUserId', null);
+  signOut(auth);
 };
 
 export const forgotPassword = async ({ useremail, navigate }) => {
   try {
-    await auth
-      .sendPasswordResetEmail(useremail)
-      .then(() => {
-        navigate("/");
-        toast.success(
-          "email verification link sent successfully to your email"
-        );
-      })
-      .catch((err) => {
-        toast.error(err);
-      });
+    await sendPasswordResetEmail(auth, useremail).then(() => {
+      navigate("/");
+      toast.success("Email verification link sent successfully to your email");
+    }).catch((err) => {
+      toast.error(err);
+    });
   } catch (error) {
     console.log(error);
   }

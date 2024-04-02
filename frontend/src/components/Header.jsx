@@ -9,6 +9,7 @@ import { logout } from '../services/operations/authServices';
 import { useSelector, useDispatch } from "react-redux";
 import { setauthUserId, setuserEmail, setuserName, setLoading } from '../slices/authSlice'
 import { auth } from '../services/firebase'
+import { onAuthStateChanged } from "firebase/auth";
 import { FaBell } from "react-icons/fa";
 import { FaAngleDown } from "react-icons/fa6";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -20,17 +21,14 @@ const Header = ({ val }) => {
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
   const navigate = useNavigate()
   const { authUserId, userName } = useSelector((state) => state.auth)
-  
-
   const dispatch = useDispatch();
 
   useEffect(() => {
-
-    auth.onAuthStateChanged((userCrendential) => {
-      if (userCrendential !== null && userCrendential?.emailVerified === true) {
-        dispatch(setauthUserId(userCrendential.uid));
-        dispatch(setuserEmail(userCrendential.email));
-        dispatch(setuserName(userCrendential.displayName));
+    onAuthStateChanged(auth, (user) => {
+      if (user !== null && user.emailVerified === true) {
+        dispatch(setauthUserId(user.uid));
+        dispatch(setuserEmail(user.email));
+        dispatch(setuserName(user.displayName));
       }
       else {
         dispatch(setauthUserId(null));
@@ -76,7 +74,7 @@ const Header = ({ val }) => {
   };
   const listClassName = isMobile ? "nav__list" : "nav__list__web";
   const linkClassName = "nav__link";
-  
+
   const renderNavLinks = () => {
     const listClassName = isMobile ? "nav__list" : "nav__list__web";
     const linkClassName = "nav__link";
@@ -147,20 +145,20 @@ const Header = ({ val }) => {
             ) : (<>
               <li className="mt-10 flex flex-row justify-between items-center  w-[100%]">
                 <div className=" flex flex-row gap-4 items-center ">
-                <button className='btn pr-1 pl-3 py-3'>
-                      <IoPerson className="w-[1.75rem] h-[1.75rem]" />
+                  <button className='btn pr-1 pl-3 py-3'>
+                    <IoPerson className="w-[1.75rem] h-[1.75rem]" />
                   </button>
                   <h2 className={`${linkClassName}`}>{userName}</h2>
                 </div>
-                <MdKeyboardArrowRight/>
+                <MdKeyboardArrowRight />
               </li>
               <li className="w-full">
-              <hr className="border-t-2 border-gray-400 " />
+                <hr className="border-t-2 border-gray-400 " />
               </li>
-            
-            
+
+
             </>
-            
+
             )
           ) : (
             <></>
