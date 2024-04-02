@@ -1,9 +1,8 @@
-import React from 'react';
 import Header from '../components/Header';
 
 function Upcomingpage() {
   return (
-    <div className=''>
+    <>
     <Header/>
     <div className=" h-[83vh] flex flex-col justify-center items-center">
       <img
@@ -22,7 +21,7 @@ function Upcomingpage() {
       
     </div>
     
-    </div>
+    </>
     
   );
 }

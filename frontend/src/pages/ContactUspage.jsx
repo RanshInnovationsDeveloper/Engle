@@ -53,17 +53,18 @@ function ContactUspage() {
 
   return (
     <>
-      <Header />
-      <div className="flex flex-row items-center justify-center h-screen bg-{#FFFFFF} mx-auto">
-        <div className=" w-0 md:w-1/2 flex  items-center invisible justify-center md:visible ml-10">
+      <Header val={2} />
+      <div className="  lg:mx-2 mx-8 flex flex-col justify-center items-center lg:mt-10 mt-24 ">
+      <div className="flex lg:flex-row flex-col justify-evenly lg:gap-0 md:gap-14 items-center ">
+        <div className=" hidden md:block  ">
         <img
            src="ContactUs.png"
             alt="contactUs"
             
         />
         </div>
-        <div className="w-full p-3 px-4 md:w-1/2 flex items-center justify-center">
-          <form className="border border-[#5B7ADE] rounded-2xl  bg-[#34468A] w-full sm:w-3/4 lg:w-2/3 shadow-md p-6 mx-4 sm:mx-0">
+        <div className=" flex  items-center justify-center lg:w-[35%] md:w-2/3 w-full">
+          <form className="border border-[#5B7ADE] rounded-2xl  bg-[#34468A]  shadow-md p-6">
             <h1 className="text-white text-3xl mb-5">Contact Us!</h1>
             <input
               required
@@ -119,6 +120,8 @@ function ContactUspage() {
           )}
         </div>
       </div>
+      </div>
+      
       
     </>
   );

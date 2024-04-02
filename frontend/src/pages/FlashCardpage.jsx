@@ -206,16 +206,16 @@ function FlashCardpage() {
         <>
             <Header val={1} />
             <CategoryHeader />
-            <div className='h-[90vh] flex flex-col mt-10 gap-4 items-center '>
-                <h1 className='text-center text-4xl text-black'>FlashCards</h1>
-
+            <div className='h-[90vh] flex flex-col mt-10  items-center '>
+                <h1 className='text-center text-4xl text-black '>FlashCards</h1>
+                <h3 className='text-center text-xl text-black mb-3'>{flashCardCategory}</h3>
                 <div className='lg:w-[43%] w-[80%] h-[56%] rounded-2xl'>
 
                     <div className={`card__inner ${isFlipped ? 'is-flipped' : ''} border border-blue-400 rounded-2xl`} onClick={handleFlip}>
 
                         <div className="card__face p rounded-2xl ">
                             <div className="">
-                                <div className='flex justify-start p-3 ' >
+                                <div className='flex justify-start ' >
                                     <FavouriteButton
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
@@ -256,7 +256,7 @@ function FlashCardpage() {
                         </div>
                         <div className="card__face card__face--back p rounded-2xl">
                             <div className="">
-                                <div className='flex justify-start p-3'>
+                                <div className='flex justify-start'>
                                     <FavouriteButton
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}

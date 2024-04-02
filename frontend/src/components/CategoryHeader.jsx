@@ -1,127 +1,56 @@
-import  { useState} from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { IoClose, IoMenu } from "react-icons/io5";
-import { useMediaQuery } from "react-responsive";
-import "../styles/CategoryHeader.css"
-import { logout } from '../services/operations/authServices';
-import {  useSelector } from "react-redux";
-
-const CategoryHeader = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isMobile = useMediaQuery({ maxWidth: "1150px" });
-  const navigate = useNavigate()
-  const {authUserId} = useSelector((state)=> state.auth)
+import { NavLink } from 'react-router-dom';
+import "../styles/CategoryHeader.css";
+import { FaAngleDown } from "react-icons/fa6";
 
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+const CategoryHeader = ({ isOpen, isMobile }) => {
 
-  const closeMobileMenu = () => {
-    if (isMobile) {
-      setIsMenuOpen(false);
-    }
-  };
+  const options = [
+    { text: "Flashcards", link: "/flashcards", isButton: true },
+    { text: "Ambiguous Words", link: "/upcoming" },
+    { text: "Learn with Context", link: "/upcoming" },
+    { text: "Learn with story", link: "/upcoming" },
+    { text: "Learn with Friends", link: "/upcoming" },
+    { text: "Favourites", link: "/favourites" },
+    { text: "My Notes", link: "/mynotes" },
+  ];
+  
+  
 
-  const renderNavLinks = () => {
-    const listClassName = isMobile ? "cat__list" : "cat__list__web";
-    const linkClassName = "cat__link";
+  return (<>
+    <div className={`menu-transition ${isOpen ? "menu-open" : ''}`}>
+      {(
+        <div className={`flex flex-row justify-center ${isMobile ? "bg-transparent rounded-lg shadow-xl" : "bg-[#2E3D79]"} z-10`}>
+          <ul className={`flex ${isMobile ? "flex-col mt-2 gap-1 justify-start items-start" : "py-2 flex-row gap-16 justify-center items-center"} `}>
 
-    return (
-        <>
-      <ul className={listClassName}>
-        <li>
-          <NavLink to="/flashcards"      
-          className={`${linkClassName}`}
-           onClick={closeMobileMenu} >
-            FlashCards
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/ambiguouswords"
-            className={`${linkClassName} `}
-            onClick={closeMobileMenu}
-          >
-            Ambigous Words
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/context"
-            className={`${linkClassName} `}
-            onClick={closeMobileMenu}
-          >
-            Learn with Context
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/story"
-            className={`${linkClassName} `}
-            onClick={closeMobileMenu}
-          >
-            Learn with Story
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/friends"
-            className={`${linkClassName} `}
-            onClick={closeMobileMenu}
-          >
-            Learn with Friends
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/favourites"
-            className={`${linkClassName} `}
-            onClick={closeMobileMenu}
-          >
-           Favourites
-          </NavLink>
-        </li>
-        <li>
-          <NavLink
-            to="/mynotes"
-            className={`${linkClassName} `}
-            onClick={closeMobileMenu}
-          >
-           My Notes
-          </NavLink>
-        </li>
-        </ul>
-
-      </>
-    );
-  };
-
-  return (
-    <header className="cat_header">
-      <nav className="cat">
-        {isMobile && (
-          <div className="cat__toggle" id="cat-toggle" onClick={toggleMenu}>
-            <IoMenu />
-          </div>
-        )}
-
-        {isMobile ? (
-          <div
-            className={`cat__menu  ${isMenuOpen ? "show-menu" : ""} z-20`}
-            id="cat-menu"
-          >
-            {renderNavLinks()}
-            <div className="cat__close" id="cat-close" onClick={toggleMenu}>
-              <IoClose />
-            </div>
-          </div>
-        ) : (
-          renderNavLinks()
-        )}
-      </nav>
-    </header>
+            {options.map((option, index) => (
+              <li key={index} className="py-1">
+                {option.isButton ? (<>
+                  <div className='flex items-center gap-2'>
+                <NavLink to={option.link} className={`${isMobile ? "text-black" : "text-white"} text-[1rem] `}>
+                    {option.text}
+                  </NavLink>
+                  <button className={` ${!isMobile ? 'text-white':'text-black'}`} id="flashcard-menu-button" >
+                    <FaAngleDown/>
+                  </button>
+                  
+                </div>
+                </>
+                
+                ) : (
+                  <NavLink to={option.link} className={`${isMobile ? "text-black" : "text-white"} text-[1rem] `}>
+                    {option.text}
+                  </NavLink>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+    </>
   );
 };
 
 export default CategoryHeader;
+

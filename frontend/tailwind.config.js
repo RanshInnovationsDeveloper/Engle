@@ -8,6 +8,7 @@ module.exports = {
       },
       colors: {
         customBlue: '#4A5995',
+        customBg: '#F3F5FF',
       },
     },
   },
