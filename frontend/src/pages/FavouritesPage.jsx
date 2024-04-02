@@ -1,6 +1,5 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { FaHeart } from "react-icons/fa";
 import { GoSearch } from "react-icons/go";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import Header from "../components/Header";
