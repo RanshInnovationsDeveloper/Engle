@@ -35,7 +35,7 @@ function FavouriteButton({ itemId, type, name = "" }) {
       return;
     };
     fetchStatus();
-  },[itemId,userId]);
+  },[itemId,userId,type,GET_FAVOURITE_STATUS_API]);
 
   // Function to handle add item to favourite call
   const removeFromFavourite = async (itemId, type, userId, event) => {

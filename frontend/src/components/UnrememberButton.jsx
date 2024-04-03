@@ -36,7 +36,7 @@ function UnrememberButton({ itemId, type, name = "" }) {
             return;
         };
         fetchStatus();
-    }, [itemId]);
+    }, [itemId, type, userId, dispatch, GET_UNREMEMBER_STATUS_API]);
 
     // Function to remove the word from unremember list
     const removeFromunremember = async (itemId, type, userId, event) => {

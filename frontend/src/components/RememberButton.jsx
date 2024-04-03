@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { apiConnector } from "../services/apiConnector";
 import { rememberEndpoints,unrememberEndpoints } from "../services/apis";
 import { useDispatch, useSelector } from "react-redux"
@@ -36,7 +36,7 @@ function RememberButton({ itemId, type, name = "" }) {
             return;
         };
         fetchStatus();
-    },[itemId]);
+    },[itemId, type, userId, dispatch, GET_REMEMBER_STATUS_API]);
 
     // Function to remove the word from remember list
     const removeFromremember = async (itemId, type, userId, event) => {
