@@ -10,11 +10,12 @@ import { TiTick } from "react-icons/ti";
 //This component fetches the stautus of remember button and does the necessary job to update it
 function RememberButton({ itemId, type, name = "" }) {
 
-    const dispatch = useDispatch();
-
     const { authUserId } = useSelector((state) => state.auth);
-    const {isremember,isunremember}=useSelector((state)=>state.remember_unremember);
+    const {isremember}=useSelector((state)=>state.remember_unremember);
+
     const userId = authUserId;
+    const dispatch = useDispatch();
+    
     const { GET_REMEMBER_STATUS_API, REMOVE_REMEMBER_API, ADD_REMEMBER_API } =  rememberEndpoints;
     const {REMOVE_UNREMEMBER_API}=unrememberEndpoints ;
 
@@ -31,11 +32,11 @@ function RememberButton({ itemId, type, name = "" }) {
                 null,
                 { itemId: String(itemId), type, userId }
             );
-            dispatch(setIsremember(response.data.isRemember));
+            dispatch(setIsremember(response?.data?.isRemember));
             return;
         };
         fetchStatus();
-    });
+    },[itemId]);
 
     // Function to remove the word from remember list
     const removeFromremember = async (itemId, type, userId, event) => {
@@ -44,16 +45,17 @@ function RememberButton({ itemId, type, name = "" }) {
             return;
         }
         event.stopPropagation();
+        dispatch(setIsremember(false));
         try {
-            const response = await apiConnector("POST", REMOVE_REMEMBER_API, {
+            await apiConnector("POST", REMOVE_REMEMBER_API, {
                 itemId,
                 type,
                 userId,
             });
-            dispatch(setIsremember(false));
+          
             return;
         } catch (error) {
-            console.log(error);
+            console.log("There is some error to remove the word from remember list -",error);
         }
     };
 
@@ -63,6 +65,9 @@ function RememberButton({ itemId, type, name = "" }) {
             return;
         }
         event.stopPropagation();
+        dispatch(setIsremember(true));
+        dispatch(setIsunremember(false));
+
         try {
             await apiConnector("POST", ADD_REMEMBER_API, {
                 itemId,
@@ -77,11 +82,10 @@ function RememberButton({ itemId, type, name = "" }) {
                 userId,
             });
 
-            dispatch(setIsremember(true));
-            dispatch(setIsunremember(false));
+
             return;
         } catch (error) {
-            console.log(error);
+            console.log("There is some error to add the word from remember list -",error);
         }
     };
     return (

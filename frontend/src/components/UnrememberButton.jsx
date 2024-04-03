@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { apiConnector } from "../services/apiConnector";
-import { unrememberEndpoints,rememberEndpoints } from "../services/apis";
-import { useSelector ,useDispatch} from "react-redux";
-import { setIsremember,setIsunremember } from "../slices/remember_unrememberSlice";
+import { unrememberEndpoints, rememberEndpoints } from "../services/apis";
+import { useSelector, useDispatch } from "react-redux";
+import { setIsremember, setIsunremember } from "../slices/remember_unrememberSlice";
 import { toast } from "react-toastify";
 import { ImCross } from "react-icons/im";
 
@@ -11,18 +11,18 @@ import { ImCross } from "react-icons/im";
 function UnrememberButton({ itemId, type, name = "" }) {
 
     const { authUserId } = useSelector((state) => state.auth);
-    const {isunremember}=useSelector((state)=>state.remember_unremember);
+    const { isunremember } = useSelector((state) => state.remember_unremember);
 
     const userId = authUserId;
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
 
     const { GET_UNREMEMBER_STATUS_API, REMOVE_UNREMEMBER_API, ADD_UNREMEMBER_API } = unrememberEndpoints;
-    const {REMOVE_REMEMBER_API}=rememberEndpoints ;
+    const { REMOVE_REMEMBER_API } = rememberEndpoints;
 
     useEffect(() => {
         const fetchStatus = async () => {
             if (userId === null) {
-                dispatch(setIsunremember(false));      
+                dispatch(setIsunremember(false));
                 return;
             }
             const response = await apiConnector(
@@ -33,11 +33,10 @@ function UnrememberButton({ itemId, type, name = "" }) {
                 { itemId: String(itemId), type, userId }
             );
             dispatch(setIsunremember(response.data.isUnremember));
-            
             return;
         };
         fetchStatus();
-    });
+    }, [itemId]);
 
     // Function to remove the word from unremember list
     const removeFromunremember = async (itemId, type, userId, event) => {
@@ -46,18 +45,19 @@ function UnrememberButton({ itemId, type, name = "" }) {
             return;
         }
         event.stopPropagation();
-       
+
+        dispatch(setIsunremember(false));
+
         try {
             await apiConnector("POST", REMOVE_UNREMEMBER_API, {
                 itemId,
                 type,
                 userId,
             });
-           
-            dispatch(setIsunremember(false));
+
             return;
         } catch (error) {
-            console.log(error);
+            console.log("There is some error to remove the word from unremember list -", error);
         }
     };
 
@@ -67,10 +67,10 @@ function UnrememberButton({ itemId, type, name = "" }) {
             return;
         }
         event.stopPropagation();
-       
-
+        dispatch(setIsremember(false));
+        dispatch(setIsunremember(true));
         try {
-            const res= await apiConnector("POST", ADD_UNREMEMBER_API, {
+            await apiConnector("POST", ADD_UNREMEMBER_API, {
                 itemId,
                 type,
                 userId,
@@ -81,12 +81,10 @@ function UnrememberButton({ itemId, type, name = "" }) {
                 type,
                 userId,
             });
-            dispatch(setIsremember(false));
 
-            dispatch(setIsunremember(true));
             return;
         } catch (error) {
-            console.log(error);
+            console.log("There is some error to add the word from remember list -", error);
         }
     };
 
