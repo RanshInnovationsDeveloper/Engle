@@ -23,7 +23,7 @@ function Homepage() {
             <p className="text-xl mt-2 lg:text-right hidden lg:block">Learn, Connect, and Excel with Our Interactive Language </p>
             <p className="text-xl mt-2 lg:text-right hidden lg:block">Learning Platform!</p>
             <div className="flex lg:flex-row-reverse flex-row justify-center lg:justify-start">
-              <button className="text-xl mt-10 btn lg:w-[35%] w-[100%] py-3 px-2 " onClick={() => {navigate("/category")}}>Explore Categories Now</button>
+              <button className="text-xl mt-10 btn lg:w-[35%] w-[100%] py-3 px-2 " onClick={() => {navigate("/flashcards")}}>Explore Categories Now</button>
             </div>
 
           </div>
@@ -72,10 +72,9 @@ function Homepage() {
           </div>
         </div>
         <div className="flex flex-row justify-center my-[5rem] ">
-              <button className="text-xl  btn lg:w-[28%] w-[100%] py-2 px-3 " onClick={() => {navigate("/login")}}>Start Learning Now -&gt;</button>
+              <button className="text-xl  btn lg:w-[28%] w-[100%] py-2 px-3 " onClick={() => {navigate("/flashcards")}}>Start Learning Now -&gt;</button>
             </div>
       </div>
-
     </div>
     <Footer/>
     </>

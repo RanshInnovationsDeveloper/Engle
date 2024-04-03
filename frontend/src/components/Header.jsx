@@ -37,8 +37,8 @@ const Header = ({ val }) => {
       }
     });
 
-    if (sessionStorage.getItem('authUserId') === null || !sessionStorage.getItem('authUserId')) {
-      sessionStorage.setItem('authUserId', authUserId);
+    if (localStorage.getItem('authUserId') === null || !localStorage.getItem('authUserId')) {
+      localStorage.setItem('authUserId', authUserId);
     }
   }, [dispatch, authUserId]);
 

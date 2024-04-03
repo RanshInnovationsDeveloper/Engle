@@ -1,5 +1,5 @@
-import { Routes, Route} from "react-router-dom";
-
+import { Routes, Route, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Homepage from './pages/Homepage'
 import './App.css'
 import Loginpage from './pages/Loginpage'
@@ -17,13 +17,31 @@ import IndividualStory from "./pages/IndividualStory";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import OpenRoute from "./components/auth/OpenRoute";
 import Upcomingpage from "./pages/Upcomingpage";
+import Spinner from "./components/Spinner";
+import { setLoading } from './slices/authSlice';
+import { useDispatch, useSelector } from "react-redux"
 import FavouritesCategoryPage from "./pages/FavouritesCategoryPage.jsx"
 
 function App() {
+    const { loading, authUserId } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const location = useLocation();
+    useEffect(() => {
+      dispatch(setLoading(true));
+        const loadingTimer = setTimeout(() => {
+          dispatch(setLoading(false));
+        }, 1000); 
+
+        return () => clearTimeout(loadingTimer); 
+    }, [location.pathname]);
 
 
   return (
     <>
+    {loading ? (
+      <Spinner/>
+    ): (
+      <>
       <Routes>
         <Route path="/" element={<Homepage />} />
         <Route path="/contact" element={<ContactUspage />} />
@@ -153,7 +171,11 @@ function App() {
       </Routes>
       <ToastContainer />
     </>
+    )}
+    </>
+    
+    
   );
-}
+};
 
 export default App;

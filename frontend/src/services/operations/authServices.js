@@ -45,7 +45,7 @@ export const signin = async (email, password) => {
       if (!user.emailVerified) {
         error = "User not exist!";
       } else {
-        sessionStorage.setItem('authUserId', user.uid);
+        localStorage.setItem('authUserId', user.uid);
       }
     }).catch((err) => {
       let errorCode = err.code;
@@ -64,7 +64,8 @@ export const signin = async (email, password) => {
 
 export const logout = () => {
   sessionStorage.clear();
-  sessionStorage.setItem('authUserId', null);
+  localStorage.clear();
+  localStorage.setItem('authUserId', null);
   signOut(auth);
 };
 
