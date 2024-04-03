@@ -20,9 +20,6 @@ function FavouritesPage() {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  let heading=""
-  let comment=""
-
   const {type}=useParams()
   const paramValue=type
   useEffect(() => {

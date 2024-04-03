@@ -18,9 +18,9 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import OpenRoute from "./components/auth/OpenRoute";
 import Upcomingpage from "./pages/Upcomingpage";
 import Spinner from "./components/Spinner";
+import FavouritesCategoryPage from "./pages/FavouritesCategoryPage.jsx"
 import { setLoading } from './slices/authSlice';
 import { useDispatch, useSelector } from "react-redux"
-import FavouritesCategoryPage from "./pages/FavouritesCategoryPage.jsx"
 
 function App() {
     const { loading, authUserId } = useSelector((state) => state.auth);
