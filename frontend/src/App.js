@@ -17,7 +17,7 @@ import IndividualStory from "./pages/IndividualStory";
 import PrivateRoute from "./components/auth/PrivateRoute";
 import OpenRoute from "./components/auth/OpenRoute";
 import Upcomingpage from "./pages/Upcomingpage";
-
+import FavouritesCategoryPage from "./pages/FavouritesCategoryPage.jsx"
 
 function App() {
 
@@ -92,8 +92,11 @@ function App() {
           }
         /> */}
 
+      
+
+
         <Route
-          path="/favourites"
+          path="/favourites/:type"
           element={
 
             <PrivateRoute>
@@ -102,6 +105,17 @@ function App() {
 
           }
         />
+        <Route
+          path="/favourites/"
+          element={
+
+            <PrivateRoute>
+              <FavouritesCategoryPage />
+            </PrivateRoute>
+
+          }
+        />
+
 
         <Route
           path="/mynotes"

@@ -102,24 +102,26 @@ const removeFromFavourite = async (req, res) => {
 };
 //Check seen status
 async function checkSeenStatus(userId, key, item) {
-  try{let isSeen = false;
-  const docRef = doc(db, "seen", userId);
-  const docSnap = await getDoc(docRef);
-  if (!docSnap.exists) {
-    console.log('No such document!');
-  } else {
-    let data = docSnap.data();
-    if (key == "words") {
-      data.word.forEach((wordItem, index) => {
-        if (wordItem === item.itemId) {
-          isSeen = true;
-        }
-      });
+  try {
+    let isSeen = false;
+    const docRef = doc(db, "seen", userId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists) {
+      console.log('No such document!');
+    } else {
+      let data = docSnap.data();
+      if (key == "words" && data.word) {
+        data.word.forEach((wordItem, index) => {
+          if (wordItem === item.itemId) {
+            isSeen = true;
+          }
+        });
+      }
     }
-  }
-  return isSeen;}
-  catch(error){
-    res.status(400).json({error:error.message})
+    return isSeen;
+  } catch(error) {
+    console.error(error.message);
+    return false;
   }
 }
 
