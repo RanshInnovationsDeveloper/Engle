@@ -9,6 +9,7 @@ import { apiConnector } from "../services/apiConnector";
 import { favouriteEndpoints } from "../services/apis";
 import FavouriteButton from "../components/FavouriteButton";
 import Spinner from "../components/Spinner";
+import { useParams } from "react-router-dom";
 const { GET_FAVOURITE_API } = favouriteEndpoints;
 function FavouritesPage() {
 
@@ -18,6 +19,9 @@ function FavouritesPage() {
   const { authUserId } = useSelector((state) => state.auth);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const {type}=useParams()
+  const paramValue=type
   useEffect(() => {
     //fetching the data using axios
     const fetchData = async () => {
@@ -32,7 +36,27 @@ function FavouritesPage() {
             // userId: "qEMYBI4erFNruO1L0iHQknbxXdD2", //TODO:this is just a test userId to be removed in production it is here so you can better test out code
           }
         );
-        setData(response);
+        if (paramValue=="all") setData(response);
+        else if (paramValue=="unseen-words"){
+          let unseenWords=response?.data.filter((item)=>item?.type=="words" && item?.isSeen==false)
+          setData({data:unseenWords})
+        }
+        else if (paramValue=="seen-words"){
+          let seenWords=response?.data.filter((item)=>item?.type=="words" && item?.isSeen==true)
+          setData({data:seenWords})
+        }
+        else if (paramValue=="unseen-words"){
+          let unseenWords=response?.data.filter((item)=>item?.type=="words" && item?.isSeen==false)
+          setData({data:unseenWords})
+        }
+
+        else if (paramValue=="learn-with-story"){
+          let learnWithStory=response?.data.filter((item)=>item?.type=="sampleStory")
+          setData({data:learnWithStory})
+        }
+
+        else setData(response);
+
         setIsLoading(false);
       } catch (error) {
         console.log(error);
@@ -43,7 +67,7 @@ function FavouritesPage() {
 
   //Filtering the data
   useEffect(() => {
-      if (query === "") {
+      if (query == "") {
         setFilteredData(data?.data);
       } else {
         const dataArr=data?.data;
@@ -54,8 +78,8 @@ function FavouritesPage() {
           if (
             dataArr[i]?.type == "words" && 
             (
-              typeof dataArr[i]?.val?.word === 'string' && dataArr[i]?.val?.word.toLowerCase().includes(query.toLowerCase()) ||
-              Array.isArray(dataArr[i]?.val?.definitions) && dataArr[i]?.val?.definitions.some(def => typeof def === 'string' && def.toLowerCase().includes(query.toLowerCase()))
+              typeof dataArr[i]?.val?.word === 'string' && dataArr[i]?.val?.word.toLowerCase().includes(query.toLowerCase()) 
+              //|| Array.isArray(dataArr[i]?.val?.definitions) && dataArr[i]?.val?.definitions.some(def => typeof def === 'string' && def.toLowerCase().includes(query.toLowerCase()))
               )
           ) {
             newData.push(dataArr[i]);
@@ -63,8 +87,8 @@ function FavouritesPage() {
           if (
             dataArr[i]?.type == "sampleStory" && 
             (
-              typeof dataArr[i]?.val?.title === 'string' && dataArr[i]?.val?.title.toLowerCase().includes(query.toLowerCase()) ||
-              typeof dataArr[i]?.val?.content === 'string' && dataArr[i]?.val?.content.toLowerCase().includes(query.toLowerCase())
+              typeof dataArr[i]?.val?.title === 'string' && dataArr[i]?.val?.title.toLowerCase().includes(query.toLowerCase()) 
+              // || typeof dataArr[i]?.val?.content === 'string' && dataArr[i]?.val?.content.toLowerCase().includes(query.toLowerCase())
             )
           )
            {
@@ -73,8 +97,8 @@ function FavouritesPage() {
           if (
             dataArr[i]?.type == "notes" && 
             (
-              typeof dataArr[i]?.val?.data?.word=== 'string' && dataArr[i]?.val?.data?.word.toLowerCase().includes(query.toLowerCase()) ||
-              typeof dataArr[i]?.val?.data?.definitions === 'string' && dataArr[i]?.val?.data?.definitions.toLowerCase().includes(query.toLowerCase())
+              typeof dataArr[i]?.val?.data?.word=== 'string' && dataArr[i]?.val?.data?.word.toLowerCase().includes(query.toLowerCase()) 
+              // || typeof dataArr[i]?.val?.data?.definitions === 'string' && dataArr[i]?.val?.data?.definitions.toLowerCase().includes(query.toLowerCase())
             )
           )
            {
@@ -201,126 +225,96 @@ function FavouritesPage() {
 
   //If the length of returned data is greater than 0, then display the data
   if (isLoading == false && filteredData?.length > 0 || query!="") {
-    //Arranging the data into key value pair with key being the data so all items with same data will be grouped together
-    //We can even use state for group data and in that case when we will click remove button than it will be removed from
-    //page immediately but
-    //if we don;t want that to happen we can leave it like that and can call remove from favourite api
-    //on first time click and add to favourite api on second time click we also can use fetch favourite button status
-    //to dynamically display state of favourite button
-    //FavouriteButton does this job only
-    const groupedData = filteredData.reduce((acc, item) => {
-      const date = item.createdAt.split("T")[0]; // Extract the date part from the createdAt string
-      if (!acc[date]) {
-        acc[date] = []; // Initialize the array for this date if it doesn't exist
-      }
-      acc[date].push({
-        val: item?.val,
-        name: item?.name,
-        type: item?.type,
-        itemId: item?.itemId,
-      }); // Push the val into the array for this date
-      return acc;
-    }, {});
-    //if data exists logging it as per group
-    // console.log(groupedData); //console logged grouped data helpful for further development
-    return (
-     
-      // traversing the grouped data and displaying it
-     <>
-      <Header val={1}/>
-      <CategoryHeader/>
-      <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-4 flex-wrap">
-        <h2 className="text-3xl font-medium mb-4 w-full sm:w-auto text-center">FAVOURITES</h2>
-        <div className="flex items-center mb-4 w-full sm:w-auto justify-center">
-          <div className='border border-gray-500 rounded-lg mr-2 mb-2 sm:mb-0 sm:mx-2 flex'>
-            <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
 
-          <div className='border border-gray-500 rounded-lg mr-2 mb-2 sm:mb-0 sm:mx-2 flex items-center'>
-            <button>
-              <MdOutlineFilterAlt className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem]' />
-            </button>
+  const heading = paramValue
+  .replace(/-/g, ' ')
+  .split(' ')
+  .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(' ');
+
+  const comment=(paramValue=="all" || paramValue=="ambiguous-words"|| paramValue=="learn-with-story")?""
+  :(paramValue=="unseen-words"|| paramValue=="seen-words" || paramValue=="test-vocabulary"|| paramValue=="idioms"|| paramValue=="easy-words")?"(Flashcards)":"(Play with friends)"
+
+   
+    return (
+      <div>
+      
+        <Header val={1} />
+        <CategoryHeader />
+        <div className="container mx-auto p-4">
+          <div className="flex justify-between items-center mb-4 flex-wrap">
+            <h2 className="text-3xl font-medium mb-4 w-full sm:w-auto text-center">FAVOURITES</h2>
+            <div className="flex items-center mb-4 w-full sm:w-auto justify-center">
+              <div className='border border-gray-500 rounded-lg mr-2 mb-2 sm:mb-0 sm:mx-2 flex'>
+                <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+              </div>
+    
+              <div className='border border-gray-500 rounded-lg mr-2 mb-2 sm:mb-0 sm:mx-2 flex items-center'>
+                <button>
+                  <MdOutlineFilterAlt className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem]' />
+                </button>
+              </div>
+            </div>
           </div>
+    <h3>{heading}</h3>
+    <h3>{comment}</h3>
+          {/* Rendering section divs */}
+          {filteredData.map((item, index) => (
+            <React.Fragment key={index}>
+              {(() => {
+                if (item?.type === "words") {
+                  return (
+                    <>
+                      <h1>{index + 1}</h1>
+                      <h1>{item?.val?.word}</h1>
+                      <h1>{item?.isSeen ? "Seen Words" : "Unseen Words"}</h1>
+                      <h1>{item?.name}</h1>
+                      <button>View</button>
+                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                    </>
+                  );
+                }
+    
+                if (item?.type === "sampleStory") {
+                  return (
+                    <>
+                    <h1>{index + 1}</h1>
+                    <h1> {item?.val?.title}</h1>
+                    <h1> {item?.name}</h1>
+                      <button>View</button>
+                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+
+                    </>
+                  );
+                }
+    
+                if (item?.type === "notes") {
+                  return (
+                    <>
+                    <h1>{index + 1}</h1>
+                    <h1> {item?.val?.data?.word}</h1>
+                    <h1> {item?.name}</h1>
+                      <button>View</button>
+                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                      </>
+                  );
+                }
+              })()}
+            </React.Fragment>
+          ))}
         </div>
       </div>
-
-      {/* Rendering section divs */}
-      <div className="border border-[#5B7ADE] rounded-xl py-4 px-6 overflow-auto bg-[#F3F5FF] max-h-[80vh]">
-        {Object.keys(groupedData).map((dateKey) => (
-          <React.Fragment key={dateKey}>
-
-             <h6 className='font-semibold pl-4 mb-2' style={{ textAlign: 'left' }}>Date: {dateKey}</h6>
-             
-            <hr className=' mb-2 border border-[#5B7ADE] w-full ' />
-            
-            <ul>
-  {groupedData[dateKey].map((value, index) => (
-    <div key={index} className="flex flex-col sm:flex-row items-center mb-3"> {/* Add flex container and adjust for small screens */}
-      <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Type: {value.name}</li> {/* Add margin and width to separate elements */}
-      {/* //if type is words // * Type is the type of file from which
-      item value is coming */ }
-      {value.type === "words" && (
-        <>
-          <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Word: {value.val.word}</li> {/* Add margin and width to separate elements */}
-          <li className="mr-10 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Definition: {value.val.definitions[0]}</li> {/* Add margin and width to separate elements */}
-          <FavouriteButton
-            type={value?.type}
-            itemId={value?.itemId}
-            name={value?.name}
-            style={{ textAlign: 'right' }}
-          />
-        </>
-      )}
-      {/* //if type is sampleStory // * Type is the type of file from
-      which item value is coming */}
-      {value.type === "sampleStory" && (
-        <>
-          <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Title: {value.val.title}</li> {/* Add margin and width to separate elements */}
-          <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Content: {value.val.content}</li> {/* Add margin and width to separate elements */}
-          <FavouriteButton
-            type={value?.type}
-            itemId={value?.itemId}
-            name={value?.name}
-          />
-        </>
-      )}
-
-      {value.type === "notes" && (
-        <>
-          <li className="mr-4 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Word: {value?.val?.data?.word}</li> {/* Add margin and width to separate elements */}
-          <li className="mr-10 mb-2 sm:mb-0 sm:mr-10 w-full sm:w-80" style={{ textAlign: 'left' }}>Definition: {value?.val?.data?.definitions}</li> {/* Add margin and width to separate elements */}
-          <FavouriteButton
-            type={value?.type}
-            itemId={value?.itemId}
-            name={value?.name}
-          />
-        </>
-      )}
-    </div>
-    
-  ))}
-  
-</ul>
-
-          </React.Fragment>
-        ))}
-      </div>
-    </div>
-    
-     </>
-     
     );
-  }
+}
+  return isLoading ? <Spinner/> : <></>
 
-  return isLoading ? <Spinner/> : <></>;
 }
 
 export default FavouritesPage;
