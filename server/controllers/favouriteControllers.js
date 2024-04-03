@@ -147,11 +147,12 @@ const fetchFavouriteItems = async (req, res) => {
     const promises = [];
 
     for (const key in data) {
-      // * Add your type name in and part if it isn't coming from firebase
-      if (Array.isArray(data[key])) {
-         for (const item of data[key]){
-      //get seen or  unseen
-    const isSeen = await checkSeenStatus(userId,key,item)
+  if (Array.isArray(data[key])) {
+    const checkSeenPromises = data[key].map(item => checkSeenStatus(userId, key, item));
+    const isSeenResults = await Promise.all(checkSeenPromises);
+    for (let i = 0; i < data[key].length; i++) {
+      const item = data[key][i];
+      const isSeen = isSeenResults[i];
           // Convert Firestore Timestamp to JavaScript Date
           const createdAt = new Date(item.createdAt.seconds * 1000);
           // Format date as needed
