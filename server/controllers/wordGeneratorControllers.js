@@ -1,5 +1,5 @@
 const { db } = require("../config/firebase");
-const { doc, getDoc, updateDoc, arrayUnion, setDoc } = require("firebase/firestore/lite");
+const { doc, getDoc, updateDoc, arrayUnion, setDoc } = require("firebase/firestore");
 
 
 const wordsData = require("../resources/words.json");

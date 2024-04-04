@@ -5,7 +5,7 @@ const {
     updateDoc,
     arrayUnion,
     setDoc,
-} = require("firebase/firestore/lite");
+} = require("firebase/firestore");
 const axios = require("axios");
 
 //Every time you add new json file add that over here as of now
