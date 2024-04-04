@@ -1,5 +1,5 @@
 const { initializeApp } = require('firebase/app');
-const { getFirestore, collection, doc, getDocs } = require('firebase/firestore');
+const { getFirestore, collection } = require('firebase/firestore');
 const { getAuth } = require('firebase/auth');
 
 // Loading environment variables from .env file
