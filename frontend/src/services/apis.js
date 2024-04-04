@@ -26,6 +26,11 @@ export const unrememberEndpoints = {
   GET_UNREMEMBER_STATUS_API: BASE_URL + "/unremember/fetchStatus",
 };
 
+export const seenEndpoints = {
+  //seenRoute Endpoints
+  ADD_SEEN_API: BASE_URL + "/seen/add",
+};
+
 export const notesEndpoints = {
   //mynotesRoute Endpoints
   CREATENOTES_API: BASE_URL + "/notes/createnote",

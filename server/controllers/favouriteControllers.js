@@ -4,10 +4,8 @@ const {
   getDoc,
   updateDoc,
   arrayUnion,
-  collection,
   setDoc,
-  Timestamp,
-} = require("firebase/firestore/lite");
+} = require("firebase/firestore");
 
 const axios = require("axios");
 

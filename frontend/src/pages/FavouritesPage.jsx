@@ -10,6 +10,10 @@ import { favouriteEndpoints } from "../services/apis";
 import FavouriteButton from "../components/FavouriteButton";
 import Spinner from "../components/Spinner";
 import { useParams } from "react-router-dom";
+import { FaArrowAltCircleRight } from "react-icons/fa";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
+
+
 const { GET_FAVOURITE_API } = favouriteEndpoints;
 function FavouritesPage() {
 
@@ -19,6 +23,11 @@ function FavouritesPage() {
   const { authUserId } = useSelector((state) => state.auth);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const itemsPerPage = 6; // Number of items to display per page
+  const [currentPage, setCurrentPage] = useState(1); // Current page number
+
+
 
   const {type}=useParams()
   const paramValue=type
@@ -111,110 +120,6 @@ function FavouritesPage() {
   }, [query, data]); 
 
  
-  // Array of objects representing sections with headings and contents
-  // const sections = [
-  //   {
-  //     heading: "Today-31st January,2024 (Wednesday)",
-  //     items: [
-  //       {
-  //         content:
-  //           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab a vel sequi in perferendis sed, temporibus mollitia nemo ea deserunt quo ipsa repudiandae provident recusandae minima praesentium ipsum consequatur. ...(Learn with story)",
-  //         status: "Read",
-  //       },
-  //       { content: "Lorem (Flash cards-Unseen words) ", status: "Unread" },
-  //       {
-  //         content:
-  //           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab a vel sequi in perferendis sed, temporibus mollitia nemo ea deserunt quo ipsa repudiandae provident recusandae minima praesentium ipsum consequatur. ...(Learn with story)",
-  //         status: "Read",
-  //       },
-  //       { content: "Lorem (Flash cards-Unseen words) ", status: "Unread" },
-  //       {
-  //         content:
-  //           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab a vel sequi in perferendis sed, temporibus mollitia nemo ea deserunt quo ipsa repudiandae provident recusandae minima praesentium ipsum consequatur. ...(Learn with story)",
-  //         status: "Read",
-  //       },
-  //       { content: "Lorem (Flash cards-Unseen words) ", status: "Unread" },
-  //     ],
-  //   },
-  //   {
-  //     heading: "Yesterday-30th January,2024 (Tuesday)",
-  //     items: [
-  //       {
-  //         content:
-  //           "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab a vel sequi in perferendis sed, temporibus mollitia nemo ea deserunt quo ipsa repudiandae provident recusandae minima praesentium ipsum consequatur. ...(Learn with story)",
-  //         status: "Read",
-  //       },
-  //       { content: "Lorem (Flash cards-Unseen words) ", status: "Unread" },
-  //     ],
-  //   },
-  // ];
-
-  // return (
-  //   <>
-  //     <Header />
-  //     <CategoryHeader />
-  //     <div className=" mx-12 p-4">
-  //       <div className="flex md:justify-between justify-center flex-col md:flex-row items-center mb-8 md:mx-0 mx-4">
-  //         <h2 className="text-3xl font-medium">FAVOURITES</h2>
-  //         <div className="flex items-center">
-  //           <div className="border border-gray-500 rounded-lg mr-2 flex">
-  //             <GoSearch className="fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] " />
-  //             <input
-  //               type="text"
-  //               placeholder="Search..."
-  //               className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
-  //             />
-  //           </div>
-
-  //           <div className="border border-gray-500 rounded-lg mr-2">
-  //             <button>
-  //               <MdOutlineFilterAlt className="fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem]" />
-  //             </button>
-  //           </div>
-  //         </div>
-  //       </div>
-
-  //       {/* Rendering section divs */}
-  //       <div className="border border-[#5B7ADE] rounded-xl py-4 px-6 overflow-auto bg-[#F3F5FF] max-h-[80vh]">
-  //         {sections.map((section, index) => (
-  //           <div key={index}>
-  //             <h6 className="font-semibold pl-4">{section.heading}</h6>
-  //             <br />
-  //             <hr className="border border-[#5B7ADE] w-full" />
-  //             <br />
-  //             {/* Rendering section items */}
-  //             {section.items.map((item, idx) => (
-  //               <div key={idx} className="flex items-center px-4 py-1">
-  //                 <div className="flex-1 mr-2 overflow-hidden whitespace-nowrap relative w-60">
-  //                   <p className="truncate font-light text-sm">
-  //                     {item.content}
-  //                   </p>
-  //                 </div>
-  //                 <div className="w-20"></div>
-  //                 <div className="flex-shrink-0 text-xs w-10">
-  //                   <FaHeart className="text-red-500 " />
-  //                 </div>
-  //                 <div className=" w-10  flex justify-center">
-  //                   <span
-  //                     className={`${
-  //                       item.status === "Read"
-  //                         ? "text-green-500"
-  //                         : "text-red-500"
-  //                     }  text-sm`}
-  //                   >
-  //                     {item.status}
-  //                   </span>
-  //                 </div>
-  //               </div>
-  //             ))}
-
-  //             <hr className="border border-[#5B7ADE] w-full mt-3 mb-3" />
-  //           </div>
-  //         ))}
-  //       </div>
-  //     </div>
-  //   </>
-  // );
 
   // console.log(data)
   // console.log(filteredData)
@@ -236,6 +141,20 @@ function FavouritesPage() {
   // setting the comment to be displayed on favourite page this is done on the basis of the type of favourite page
   const comment=(paramValue=="all" || paramValue=="ambiguous-words"|| paramValue=="learn-with-story")?""
   :(paramValue=="unseen-words"|| paramValue=="seen-words" || paramValue=="test-vocabulary"|| paramValue=="idioms"|| paramValue=="easy-words")?"(Flashcards)":"(Play with friends)"
+
+
+   // Calculate the total number of pages based on the number of rows in groupedData
+   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+   // Calculate the starting index of the current page
+   const startIndex = (currentPage - 1) * itemsPerPage;
+
+   // Calculate the ending index of the current page
+   const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
+
+   console.log("indices::", startIndex, endIndex);
+
+   const currentPageItems = filteredData.slice(startIndex, endIndex);
 
    
     return (
@@ -265,21 +184,44 @@ function FavouritesPage() {
               </div>
             </div>
           </div>
-    <h3>{heading}</h3>
+    
     <h3>{comment}</h3>
+    <div className="mx-28 ">
+    <table className="table-auto w-full border border-[#5B7ADE] rounded-xl mx-auto justify-center items-center r bg-[#F3F5FF]">
+    <thead className='rounded-2xl'>
+
+      <tr>
+
+        <th className=" px-4 py-4" colSpan={5}>{heading}</th>
+
+
+      </tr>
+
+    </thead>
+    <tbody className=' border border-[#5B7ADE]'>
+
+    
+
           {/* Rendering section divs */}
-          {filteredData.map((item, index) => (
-            <React.Fragment key={index}>
+          {currentPageItems.map((item, index) => (
+            <tr>
+            <React.Fragment key={item.itemId}>
               {(() => {
                 if (item?.type === "words") {
                   return (
                     <>
-                      <h1>{index + 1}</h1>
-                      <h1>{item?.val?.word}</h1>
-                      <h1>{item?.isSeen ? "Seen Words" : "Unseen Words"}</h1>
-                      <h1>{item?.name}</h1>
-                      <button>View</button>
+                      <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                      <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
+                      <td className="text-center border w-44 px-4 py-4 border-[#5B7ADE]">{item?.isSeen ? "Seen Words" : "Unseen Words"}</td>
+                      <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
+                      <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
+                          <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
+
+                        </td>
+                        <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
+
                       <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                      </td>
                     </>
                   );
                 }
@@ -287,11 +229,17 @@ function FavouritesPage() {
                 if (item?.type === "sampleStory") {
                   return (
                     <>
-                    <h1>{index + 1}</h1>
-                    <h1> {item?.val?.title}</h1>
-                    <h1> {item?.name}</h1>
-                      <button>View</button>
+                    <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
+                    <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
+                    <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
+                          <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
+
+                        </td>
+                        <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
+
                       <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                      </td>
 
                     </>
                   );
@@ -300,17 +248,50 @@ function FavouritesPage() {
                 if (item?.type === "notes") {
                   return (
                     <>
-                    <h1>{index + 1}</h1>
-                    <h1> {item?.val?.data?.word}</h1>
-                    <h1> {item?.name}</h1>
-                      <button>View</button>
+                    <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
+                    <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
+                    <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
+                          <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
+
+                        </td>
+                        <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
+
                       <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                      </td>
                       </>
                   );
                 }
               })()}
             </React.Fragment>
+            </tr>
           ))}
+     </tbody>
+   </table>
+     </div>
+
+     <div className="flex justify-center mt-8 gap-4 ">
+            <FaArrowAltCircleLeft
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+              className='text-blue-900 h-6 w-6'
+            />
+            <div>
+              <h1 className="text-center">
+              Page {currentPage} of {totalPages} 
+              </h1>
+              
+            </div>
+            <FaArrowAltCircleRight
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className='text-blue-900 h-6 w-6'
+            />
+          </div>
+
+
+        
+
         </div>
       </div>
     );
@@ -320,3 +301,5 @@ function FavouritesPage() {
 }
 
 export default FavouritesPage;
+
+

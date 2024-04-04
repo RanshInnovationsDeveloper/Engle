@@ -1,7 +1,7 @@
 // ../controllers/notes.js
-const { db, addDoc, notesCollection } = require('../config/firebase');
+const { db, notesCollection } = require('../config/firebase');
 const { body, validationResult } = require('express-validator');
-const { collection, query, getDocs, where, serverTimestamp,getDoc,doc } = require('firebase/firestore/lite');
+const { collection, query, getDocs, where, serverTimestamp,getDoc,doc ,addDoc } = require('firebase/firestore');
 // Function to create a new note
 exports.createNote = async (req, res) => {
   try {

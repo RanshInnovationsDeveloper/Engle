@@ -23,13 +23,12 @@ const FavouritesCategoryPage = () => {
 // To navigate to desired page
   const navigate=useNavigate();
 
-
-  const handleTo = (heading) => {
-    //these headings aren't developed yet so whenc clicked on these toast is given 
-    if (heading=="Test Vocabulary" || heading=="Idioms" 
-    || heading=="Easy Words" || heading=="Word MCQ" 
-    || heading=="Ambiguous Words"|| heading=="Idioms MCQ"
-    || heading=="Match Words"|| heading=="Antonyms MCQ"|| heading=="Synonyms MCQ"|| heading=="Learn With Story"){
+const handleTo=(heading)=>{
+      //these headings aren't developed yet so whenc clicked on these toast is given 
+    if (heading==="Test Vocabulary" || heading==="Idioms" 
+    || heading==="Easy Words" || heading==="Word MCQ" 
+    || heading==="Ambiguous Words"|| heading==="Idioms MCQ"
+    || heading==="Match Words"|| heading==="Antonyms MCQ"|| heading==="Synonyms MCQ"|| heading==="Learn With Story"){
       toast.error("This feature is not available yet");
       return;
     }
