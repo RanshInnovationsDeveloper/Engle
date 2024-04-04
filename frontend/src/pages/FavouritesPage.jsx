@@ -227,11 +227,17 @@ function FavouritesPage() {
                 if (item?.type === "sampleStory") {
                   return (
                     <>
-                    <h1>{index + 1}</h1>
-                    <h1> {item?.val?.title}</h1>
-                    <h1> {item?.name}</h1>
-                      <button>View</button>
+                    <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
+                    <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
+                    <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
+                          <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
+
+                        </td>
+                        <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
+
                       <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                      </td>
 
                     </>
                   );
@@ -240,11 +246,17 @@ function FavouritesPage() {
                 if (item?.type === "notes") {
                   return (
                     <>
-                    <h1>{index + 1}</h1>
-                    <h1> {item?.val?.data?.word}</h1>
-                    <h1> {item?.name}</h1>
-                      <button>View</button>
+                    <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
+                    <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
+                    <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
+                          <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
+
+                        </td>
+                        <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
+
                       <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                      </td>
                       </>
                   );
                 }
