@@ -226,12 +226,14 @@ function FavouritesPage() {
   //If the length of returned data is greater than 0, then display the data
   if (isLoading == false && filteredData?.length > 0 || query!="") {
 
-  const heading = paramValue
+    // setting the heading to be displayed on favourite page this is done on the basis of the type of favourite page
+    const heading = paramValue
   .replace(/-/g, ' ')
   .split(' ')
   .map(word => word.charAt(0).toUpperCase() + word.slice(1))
   .join(' ');
 
+  // setting the comment to be displayed on favourite page this is done on the basis of the type of favourite page
   const comment=(paramValue=="all" || paramValue=="ambiguous-words"|| paramValue=="learn-with-story")?""
   :(paramValue=="unseen-words"|| paramValue=="seen-words" || paramValue=="test-vocabulary"|| paramValue=="idioms"|| paramValue=="easy-words")?"(Flashcards)":"(Play with friends)"
 

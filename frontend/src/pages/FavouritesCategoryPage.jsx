@@ -23,8 +23,9 @@ const FavouritesCategoryPage = () => {
 // To navigate to desired page
   const navigate=useNavigate();
 
-  const to = (heading) => {
 
+  const handleTo = (heading) => {
+    //these headings aren't developed yet so whenc clicked on these toast is given 
     if (heading=="Test Vocabulary" || heading=="Idioms" 
     || heading=="Easy Words" || heading=="Word MCQ" 
     || heading=="Ambiguous Words"|| heading=="Idioms MCQ"
@@ -32,6 +33,8 @@ const FavouritesCategoryPage = () => {
       toast.error("This feature is not available yet");
       return;
     }
+    //if the heading is not in the above then it will go to a page for that type of favourite 
+    //which is dealt here using navigate 
 else{
     const link = heading.split(' ').map(word => word.toLowerCase()).join('-');
     navigate(`/favourites/${link}`);
@@ -48,7 +51,7 @@ else{
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-16 ">
         {favouriteItems.map((item, index) => (
           <button
-  onClick={()=>to(item.heading)}
+  onClick={()=>handleTo(item.heading)}
   key={index}
   className="border border-[#5B7ADE] bg-[#EBEDFF] hover:bg-[#CDD3FF] hover:border font-bold py-4 px-4 w-50 h-24 md:w-56  lg:h-22 rounded-2xl"
  
