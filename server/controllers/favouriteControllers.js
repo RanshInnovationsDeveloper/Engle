@@ -4,10 +4,8 @@ const {
   getDoc,
   updateDoc,
   arrayUnion,
-  collection,
   setDoc,
-  Timestamp,
-} = require("firebase/firestore/lite");
+} = require("firebase/firestore");
 
 const axios = require("axios");
 
@@ -102,24 +100,26 @@ const removeFromFavourite = async (req, res) => {
 };
 //Check seen status
 async function checkSeenStatus(userId, key, item) {
-  try{let isSeen = false;
-  const docRef = doc(db, "seen", userId);
-  const docSnap = await getDoc(docRef);
-  if (!docSnap.exists) {
-    console.log('No such document!');
-  } else {
-    let data = docSnap.data();
-    if (key == "words") {
-      data.word.forEach((wordItem, index) => {
-        if (wordItem === item.itemId) {
-          isSeen = true;
-        }
-      });
+  try {
+    let isSeen = false;
+    const docRef = doc(db, "seen", userId);
+    const docSnap = await getDoc(docRef);
+    if (!docSnap.exists) {
+      console.log('No such document!');
+    } else {
+      let data = docSnap.data();
+      if (key == "words" && data.word) {
+        data.word.forEach((wordItem, index) => {
+          if (wordItem === item.itemId) {
+            isSeen = true;
+          }
+        });
+      }
     }
-  }
-  return isSeen;}
-  catch(error){
-    res.status(400).json({error:error.message})
+    return isSeen;
+  } catch(error) {
+    console.error(error.message);
+    return false;
   }
 }
 
@@ -145,11 +145,12 @@ const fetchFavouriteItems = async (req, res) => {
     const promises = [];
 
     for (const key in data) {
-      // * Add your type name in and part if it isn't coming from firebase
-      if (Array.isArray(data[key])) {
-         for (const item of data[key]){
-      //get seen or  unseen
-    const isSeen = await checkSeenStatus(userId,key,item)
+  if (Array.isArray(data[key])) {
+    const checkSeenPromises = data[key].map(item => checkSeenStatus(userId, key, item));
+    const isSeenResults = await Promise.all(checkSeenPromises);
+    for (let i = 0; i < data[key].length; i++) {
+      const item = data[key][i];
+      const isSeen = isSeenResults[i];
           // Convert Firestore Timestamp to JavaScript Date
           const createdAt = new Date(item.createdAt.seconds * 1000);
           // Format date as needed

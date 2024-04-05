@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Homepage from './pages/Homepage'
 import './App.css'
 import Loginpage from './pages/Loginpage'
@@ -18,23 +18,25 @@ import PrivateRoute from "./components/auth/PrivateRoute";
 import OpenRoute from "./components/auth/OpenRoute";
 import Upcomingpage from "./pages/Upcomingpage";
 import Spinner from "./components/Spinner";
+import FavouritesCategoryPage from "./pages/FavouritesCategoryPage.jsx"
 import { setLoading } from './slices/authSlice';
 import { useDispatch, useSelector } from "react-redux"
 
-
-
 function App() {
-    const { loading, authUserId } = useSelector((state) => state.auth);
+    const { loading } = useSelector((state) => state.auth);
     const dispatch = useDispatch();
     const location = useLocation();
+
+
     useEffect(() => {
       dispatch(setLoading(true));
+
         const loadingTimer = setTimeout(() => {
           dispatch(setLoading(false));
-        }, 1000); 
+        }, 100); 
 
         return () => clearTimeout(loadingTimer); 
-    }, [location.pathname]);
+    }, [location.pathname,dispatch]);
 
 
   return (
@@ -111,8 +113,11 @@ function App() {
           }
         /> */}
 
+      
+
+
         <Route
-          path="/favourites"
+          path="/favourites/:type"
           element={
 
             <PrivateRoute>
@@ -121,6 +126,17 @@ function App() {
 
           }
         />
+        <Route
+          path="/favourites/"
+          element={
+
+            <PrivateRoute>
+              <FavouritesCategoryPage />
+            </PrivateRoute>
+
+          }
+        />
+
 
         <Route
           path="/mynotes"
@@ -132,7 +148,6 @@ function App() {
 
           }
         />
-        {/*This route is for checking notecard it can be removed/modified afterwards */}
         <Route
           path="/notecard"
           element={

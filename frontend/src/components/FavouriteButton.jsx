@@ -6,25 +6,23 @@ import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "../styles/FlashCard.css"
-//This component fetches the stautus of favourite button and does the necessary job to update it
+
 
 function FavouriteButton({ itemId, type, name = "" }) {
-  //TODO:This Commented to do is here to aid the developmet of favourite page uncomment it and use it while development and later remove it
-  // const userId = "qEMYBI4erFNruO1L0iHQknbxXdD2"; //TODO: replace with "useSelector" from redux store Remove this user id from production code
+
   const { authUserId } = useSelector((state) => state.auth);
   const userId = authUserId;
+
   const [isFavourite, setIsFavourite] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+
   const { GET_FAVOURITE_STATUS_API, REMOVE_FAVOURITE_API, ADD_FAVOURITE_API } =
     favouriteEndpoints;
 
   useEffect(() => {
     const fetchStatus = async () => {
-      if(userId===null)
-      {
+      if (userId === null) {
         setIsFavourite(false);
-        setIsLoading(false);
-        return ;
+        return;
       }
       const response = await apiConnector(
         "GET",
@@ -34,77 +32,75 @@ function FavouriteButton({ itemId, type, name = "" }) {
         { itemId: String(itemId), type, userId }
       );
       setIsFavourite(response.data.isFavourite);
-      setIsLoading(false);
-      return ;
+      return;
     };
     fetchStatus();
-  });
+  },[itemId,userId,type,GET_FAVOURITE_STATUS_API]);
 
   // Function to handle add item to favourite call
   const removeFromFavourite = async (itemId, type, userId, event) => {
-    if(userId===null)
-    {
+    if (userId === null) {
       toast.error("Please Login !");
-      return ;
+      return;
     }
+
     event.stopPropagation();
-    setIsLoading(true);
+    setIsFavourite(false);
+
     try {
-      const response = await apiConnector("POST", REMOVE_FAVOURITE_API, {
+      await apiConnector("POST", REMOVE_FAVOURITE_API, {
         itemId,
         type,
         userId,
       });
-      setIsLoading(false);
-      setIsFavourite(false);
-      return ;
+
+      return;
     } catch (error) {
-      console.log(error);
+      console.log("error to remove word from the favourite list -",error);
     }
   };
 
   const addToFavourite = async (itemId, type, userId, name, event) => {
-    if(userId===null)
-    {
+    if (userId === null) {
       toast.error("Please Login !");
-      return ;
+      return;
     }
     event.stopPropagation();
-    setIsLoading(true);
+    setIsFavourite(true);
 
     try {
-      const response = await apiConnector("POST", ADD_FAVOURITE_API, {
+      await apiConnector("POST", ADD_FAVOURITE_API, {
         itemId,
         type,
         userId,
         name,
       });
-      setIsLoading(false);
-      setIsFavourite(true);
-      return ;
+
+      return;
     } catch (error) {
-      console.log(error);
+      console.log("error to add the word in favourite list -",error);
     }
   };
+
   return (
     <div className="relative inline-block w-">
-     
-      { isFavourite ? (
+
+      {isFavourite ? (
         <div className="p-3">
-                 <FaHeart
-          className={`text-red-600 w-[1.5rem] h-[1.5rem] heart-icon   ${isLoading ? 'heart-scale-effect' : ''}`}
-          onClick={(event) => removeFromFavourite(itemId, type, userId, event)}
-        />
+          <FaHeart
+            className={`text-red-600 w-[1.5rem] h-[1.5rem] heart-icon`}
+            onClick={(event) => removeFromFavourite(itemId, type, userId, event)}
+          />
         </div>
- 
+
       ) : (
         <div className="p-[0.6rem]">
           <CiHeart
-          className={`text-red-600 w-[1.7rem] h-[1.7rem] heart-icon ${isLoading ? 'heart-scale-effect' : ''}`}
-          onClick={(event) => addToFavourite(itemId, type, userId, name, event)}
-        />
+            className={`text-red-600 w-[1.7rem] h-[1.7rem] heart-icon `}
+            onClick={(event) => addToFavourite(itemId, type, userId, name, event)}
+          />
         </div>
-        
+
       )}
     </div>
   );

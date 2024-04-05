@@ -1,5 +1,5 @@
 const { initializeApp } = require('firebase/app');
-const { getFirestore, collection, addDoc, getDocs } = require('firebase/firestore/lite');
+const { getFirestore, collection } = require('firebase/firestore');
 const { getAuth } = require('firebase/auth');
 
 // Loading environment variables from .env file
@@ -33,4 +33,4 @@ const auth = getAuth(app);
 const notesCollection = collection(db, 'notes');
 
 // Exporting using CommonJS syntax
-module.exports = { db, auth, notesCollection, addDoc, getDocs };
+module.exports = { db, auth, notesCollection };

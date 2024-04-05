@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { apiConnector } from "../services/apiConnector";
-import { rememberEndpoints } from "../services/apis";
-import { useSelector } from "react-redux";
+import { rememberEndpoints,unrememberEndpoints } from "../services/apis";
+import { useDispatch, useSelector } from "react-redux"
+import { setIsremember,setIsunremember } from "../slices/remember_unrememberSlice";
 import { toast } from "react-toastify";
 import { TiTick } from "react-icons/ti";
 
@@ -10,17 +11,18 @@ import { TiTick } from "react-icons/ti";
 function RememberButton({ itemId, type, name = "" }) {
 
     const { authUserId } = useSelector((state) => state.auth);
+    const {isremember}=useSelector((state)=>state.remember_unremember);
+
     const userId = authUserId;
-    const [isremember, setIsremember] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const { GET_REMEMBER_STATUS_API, REMOVE_REMEMBER_API, ADD_REMEMBER_API } =
-        rememberEndpoints;
+    const dispatch = useDispatch();
+    
+    const { GET_REMEMBER_STATUS_API, REMOVE_REMEMBER_API, ADD_REMEMBER_API } =  rememberEndpoints;
+    const {REMOVE_UNREMEMBER_API}=unrememberEndpoints ;
 
     useEffect(() => {
         const fetchStatus = async () => {
             if (!userId) {
-                setIsremember(false);
-                setIsLoading(false);
+                dispatch(setIsremember(false));
                 return;
             }
             const response = await apiConnector(
@@ -30,12 +32,11 @@ function RememberButton({ itemId, type, name = "" }) {
                 null,
                 { itemId: String(itemId), type, userId }
             );
-            setIsremember(response.data.isRemember);
-            setIsLoading(false);
+            dispatch(setIsremember(response?.data?.isRemember));
             return;
         };
         fetchStatus();
-    });
+    },[itemId, type, userId, dispatch, GET_REMEMBER_STATUS_API]);
 
     // Function to remove the word from remember list
     const removeFromremember = async (itemId, type, userId, event) => {
@@ -44,18 +45,17 @@ function RememberButton({ itemId, type, name = "" }) {
             return;
         }
         event.stopPropagation();
-        setIsLoading(true);
+        dispatch(setIsremember(false));
         try {
-            const response = await apiConnector("POST", REMOVE_REMEMBER_API, {
+            await apiConnector("POST", REMOVE_REMEMBER_API, {
                 itemId,
                 type,
                 userId,
             });
-            setIsLoading(false);
-            setIsremember(false);
+          
             return;
         } catch (error) {
-            console.log(error);
+            console.log("There is some error to remove the word from remember list -",error);
         }
     };
 
@@ -65,28 +65,33 @@ function RememberButton({ itemId, type, name = "" }) {
             return;
         }
         event.stopPropagation();
-        setIsLoading(true);
+        dispatch(setIsremember(true));
+        dispatch(setIsunremember(false));
 
         try {
-            const response = await apiConnector("POST", ADD_REMEMBER_API, {
+            await apiConnector("POST", ADD_REMEMBER_API, {
                 itemId,
                 type,
                 userId,
                 name,
             });
-            setIsLoading(false);
-            setIsremember(true);
+
+            await apiConnector("POST", REMOVE_UNREMEMBER_API, {
+                itemId,
+                type,
+                userId,
+            });
+
+
             return;
         } catch (error) {
-            console.log(error);
+            console.log("There is some error to add the word from remember list -",error);
         }
     };
     return (
        
         <>
-            {isLoading ? (
-                <p>Loading...</p>
-            ) : isremember ? (
+            { isremember ? (
                 <button onClick={(event) => removeFromremember(itemId, type, userId, event)} className='items-center  bg-green-500 gap-2 border-2 border-green-600 border-green flex flex-row justify-center rounded-md px-20'>
                     <div className='flex flex-row'>
                         <TiTick className='h-6 w-6 text-green-900' />

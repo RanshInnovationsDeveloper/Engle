@@ -10,7 +10,7 @@ import { FaArrowAltCircleLeft } from "react-icons/fa";
 import "../styles/FlashCard.css";
 import Header from '../components/Header';
 import { apiConnector } from '../services/apiConnector';
-import { flashCardEndpoints } from '../services/apis';
+import { flashCardEndpoints,seenEndpoints } from '../services/apis';
 
 import FavouriteButton from "../components/FavouriteButton";
 import { WORD_FILE_NAME, WORD_FILE_TYPE } from "../constants/constants";
@@ -25,6 +25,7 @@ function FlashCardpage() {
     // const { authUserId } =useSelector((state) => state.auth);
     const authUserId = localStorage.getItem('authUserId');
     const { FETCHWORD_API } = flashCardEndpoints;
+    const { ADD_SEEN_API } = seenEndpoints;
 
     // store word recieve from backend
     const [worddata, setWorddata] = useState({});
@@ -81,11 +82,30 @@ function FlashCardpage() {
             }
             else
                 toast.error("no words found");
-
             return;
         }
         callOnlyWhenPageReload();
     }, [flashCardCategory, authUserId])
+
+
+    // function to add the word in seen category if user is logged in and flip the word .
+    useEffect(()=>{
+        async function addWordInSeen(){
+            if(authUserId!=="null"&&flashCardCategory==="unseen"){
+                await apiConnector("POST", ADD_SEEN_API,
+                    {
+                        itemId: unseenPreviousIndex[previousarrayindex-1],
+                        userId: `${authUserId}`,
+                        type: WORD_FILE_TYPE,
+                        name: WORD_FILE_NAME,
+                    })
+
+            }
+        }
+        if(isFlipped)
+            addWordInSeen();
+
+    },[isFlipped]);
 
 
     // update session storage array to store the previous word indexies 
@@ -219,7 +239,7 @@ function FlashCardpage() {
                                     <FavouriteButton
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
-                                        name={WORD_FILE_NAME}
+                                        name={WORD_FILE_NAME}      // "Flashcards-unseen"
                                     />
                                 </div>
                                 <div >
@@ -260,7 +280,7 @@ function FlashCardpage() {
                                     <FavouriteButton
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
-                                        name={WORD_FILE_NAME}
+                                        name={WORD_FILE_NAME}    // "Flashcards-seen"
                                     />
                                 </div>
                                 <div className="relative flex flex-col overflow-auto" onClick={handleFlip}>
