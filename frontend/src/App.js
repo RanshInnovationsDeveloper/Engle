@@ -156,7 +156,7 @@ function App() {
 
 
       </Routes>
-      <ToastContainer />
+      <ToastContainer position="bottom-center" reverseOrder={false} />
     </>
     )}
     </>
