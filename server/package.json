@@ -10,16 +10,19 @@
     "express-validator": "^7.0.1",
     "firebase": "^10.10.0",
     "node": "^21.6.2",
-    "nodemailer": "^6.9.12"
+    "nodemailer": "^6.9.12",
+    "supertest": "^6.3.4"
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test": "jest"
   },
   "keywords": [
     "engle-backend"
   ],
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "^3.1.0"
   }
 }
