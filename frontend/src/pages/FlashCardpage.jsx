@@ -13,7 +13,7 @@ import { apiConnector } from '../services/apiConnector';
 import { flashCardEndpoints,seenEndpoints } from '../services/apis';
 
 import FavouriteButton from "../components/FavouriteButton";
-import { WORD_FILE_NAME, WORD_FILE_TYPE } from "../constants/constants";
+import { WORD_FILE_NAME, WORD_FILE_TYPE,FLASH_CARD_SEEN,FLASH_CARD_UNSEEN } from "../constants/constants";
 import RememberButton from '../components/RememberButton';
 import UnrememberButton from '../components/UnrememberButton';
 
@@ -40,6 +40,8 @@ function FlashCardpage() {
     const [unseenPreviousIndex, setunseenPreviousIndex] = useState(JSON.parse(sessionStorage.getItem(flashCardCategory)) || []);
     const [previousarrayindex, setpreviousarrayindex] = useState(unseenPreviousIndex.length);   // 1 based indexing
 
+    //isSeen Checker will be set as seen once seen 
+    const [isSeen,setIsSeen]=useState(false);
 
 
     // this function is used to fetch the data from the backend
@@ -218,12 +220,15 @@ function FlashCardpage() {
 
     const handleFlip = async () => {
         setIsFlipped(!isFlipped);
+        setIsSeen(!isSeen)
 
     };
 
+    
 
     return (
         <>
+        {console.log(isSeen)}
             <Header val={1} />
             <CategoryHeader />
             <div className='h-[90vh] flex flex-col mt-10  items-center '>
@@ -236,11 +241,18 @@ function FlashCardpage() {
                         <div className="card__face p rounded-2xl ">
                             <div className="">
                                 <div className='flex justify-start ' >
-                                    <FavouriteButton
+                                {isSeen?                                    <FavouriteButton
+                                   // key={isFlipped}
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
-                                        name={WORD_FILE_NAME}      // "Flashcards-unseen"
-                                    />
+                                        name={FLASH_CARD_SEEN}    // "Flashcards-seen"
+                                    />:
+                                    <FavouriteButton
+                                    // key={isFlipped}
+                                        itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                        type={WORD_FILE_TYPE}
+                                        name={FLASH_CARD_UNSEEN}      // "Flashcards-unseen"
+                                    />}
                                 </div>
                                 <div >
                                     <div className='flex flex-col justify-center items-center'>
@@ -277,10 +289,12 @@ function FlashCardpage() {
                         <div className="card__face card__face--back p rounded-2xl">
                             <div className="">
                                 <div className='flex justify-start'>
+                                
                                     <FavouriteButton
+                                    // key={isFlipped}
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
-                                        name={WORD_FILE_NAME}    // "Flashcards-seen"
+                                        name={FLASH_CARD_SEEN}    // "Flashcards-seen"
                                     />
                                 </div>
                                 <div className="relative flex flex-col overflow-auto" onClick={handleFlip}>
