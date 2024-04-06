@@ -10,10 +10,10 @@ import { FaArrowAltCircleLeft } from "react-icons/fa";
 import "../styles/FlashCard.css";
 import Header from '../components/Header';
 import { apiConnector } from '../services/apiConnector';
-import { flashCardEndpoints,seenEndpoints } from '../services/apis';
+import { flashCardEndpoints, seenEndpoints } from '../services/apis';
 
 import FavouriteButton from "../components/FavouriteButton";
-import { WORD_FILE_NAME, WORD_FILE_TYPE,FLASH_CARD_SEEN,FLASH_CARD_UNSEEN } from "../constants/constants";
+import { WORD_FILE_NAME, WORD_FILE_TYPE, FLASH_CARD_SEEN, FLASH_CARD_UNSEEN } from "../constants/constants";
 import RememberButton from '../components/RememberButton';
 import UnrememberButton from '../components/UnrememberButton';
 
@@ -40,15 +40,13 @@ function FlashCardpage() {
     const [unseenPreviousIndex, setunseenPreviousIndex] = useState(JSON.parse(sessionStorage.getItem(flashCardCategory)) || []);
     const [previousarrayindex, setpreviousarrayindex] = useState(unseenPreviousIndex.length);   // 1 based indexing
 
-    //isSeen Checker will be set as seen once seen 
-    const [isSeen,setIsSeen]=useState(false);
 
 
     // this function is used to fetch the data from the backend
     const fetchWord = async (wordIndex) => {
         try {
-             
-            if (flashCardCategory !== "unseen" && authUserId==="null") {             // here it is a bug  ifauthUserId is null but it fetch as string "null" from session storage .
+
+            if (flashCardCategory !== "unseen" && authUserId === "null") {             // here it is a bug  ifauthUserId is null but it fetch as string "null" from session storage .
                 toast.error("please login!");
                 return;
             }
@@ -91,12 +89,12 @@ function FlashCardpage() {
 
 
     // function to add the word in seen category if user is logged in and flip the word .
-    useEffect(()=>{
-        async function addWordInSeen(){
-            if(authUserId!=="null"&&flashCardCategory==="unseen"){
+    useEffect(() => {
+        async function addWordInSeen() {
+            if (authUserId !== "null" && flashCardCategory === "unseen") {
                 await apiConnector("POST", ADD_SEEN_API,
                     {
-                        itemId: unseenPreviousIndex[previousarrayindex-1],
+                        itemId: unseenPreviousIndex[previousarrayindex - 1],
                         userId: `${authUserId}`,
                         type: WORD_FILE_TYPE,
                         name: WORD_FILE_NAME,
@@ -104,10 +102,10 @@ function FlashCardpage() {
 
             }
         }
-        if(isFlipped)
+        if (isFlipped)
             addWordInSeen();
 
-    },[isFlipped]);
+    }, [isFlipped]);
 
 
     // update session storage array to store the previous word indexies 
@@ -121,14 +119,14 @@ function FlashCardpage() {
 
     // handler function to fetch next word 
     const handleClickRight = async () => {
-       
+
         if (flashCardCategory === "unseen") {
             // if currentwordindex isequal to "-1" means we fetch any random word from backend .
             if (previousarrayindex === unseenPreviousIndex.length) {
                 const response = await fetchWord("-1");
                 if (response?.data?.data !== null) {
 
-                    setWorddata(response?.data?.data);                
+                    setWorddata(response?.data?.data);
                     updatesessionstoragearray(response?.data?.wordIndex);
                     setpreviousarrayindex(previousarrayindex + 1);
 
@@ -156,7 +154,7 @@ function FlashCardpage() {
                     setpreviousarrayindex(previousarrayindex + 1);
 
                 }
-                else{
+                else {
                     toast.error("no words found");
                 }
             }
@@ -168,7 +166,7 @@ function FlashCardpage() {
                     setpreviousarrayindex(previousarrayindex + 1);
 
                 }
-                else{
+                else {
                     toast.error("no words found");
                 }
             }
@@ -195,7 +193,7 @@ function FlashCardpage() {
                     setpreviousarrayindex(previousarrayindex - 1);
 
                 }
-                else{
+                else {
                     toast.error("no more words");
                 }
             }
@@ -209,7 +207,7 @@ function FlashCardpage() {
                 setpreviousarrayindex(previousarrayindex - 1);
 
             }
-            else{
+            else {
                 toast.error("no words found");
             }
         }
@@ -220,15 +218,13 @@ function FlashCardpage() {
 
     const handleFlip = async () => {
         setIsFlipped(!isFlipped);
-        setIsSeen(!isSeen)
 
     };
 
-    
+
 
     return (
         <>
-        {console.log(isSeen)}
             <Header val={1} />
             <CategoryHeader />
             <div className='h-[90vh] flex flex-col mt-10  items-center '>
@@ -241,18 +237,12 @@ function FlashCardpage() {
                         <div className="card__face p rounded-2xl ">
                             <div className="">
                                 <div className='flex justify-start ' >
-                                {isSeen?                                    <FavouriteButton
-                                   // key={isFlipped}
-                                        itemId={unseenPreviousIndex[previousarrayindex - 1]}
-                                        type={WORD_FILE_TYPE}
-                                        name={FLASH_CARD_SEEN}    // "Flashcards-seen"
-                                    />:
                                     <FavouriteButton
-                                    // key={isFlipped}
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
-                                        name={FLASH_CARD_UNSEEN}      // "Flashcards-unseen"
-                                    />}
+                                        name={FLASH_CARD_UNSEEN}
+                                        isFlipped={isFlipped}
+                                    />
                                 </div>
                                 <div >
                                     <div className='flex flex-col justify-center items-center'>
@@ -264,7 +254,7 @@ function FlashCardpage() {
                                             <h6 className=' text-gray-600'>Tap on Card to Flip it</h6>
 
                                             <div className='flex md:flex-row flex-col justify-center gap-2'>
-                                                <button onClick={handleClickRight} className="bg-green-200 border-2 border-green-400 items-center flex flex-row justify-center rounded-md px-20 py-2" >
+                                                {/* <button onClick={handleClickRight} className="bg-green-200 border-2 border-green-400 items-center flex flex-row justify-center rounded-md px-20 py-2" >
                                                     <div className='flex flex-row'>
                                                         <TiTick className='h-6 w-6 text-green-600' />
                                                         <span className="text-green-600">I know this word</span>
@@ -276,7 +266,19 @@ function FlashCardpage() {
                                                         <ImCross className='h-4 w-4 text-red-600' />
                                                         <span className="text-red-600"> I don't know this word</span>
                                                     </div>
-                                                </button>
+                                                </button> */}
+                                                <RememberButton
+                                                    itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                                    type={WORD_FILE_TYPE}
+                                                    name={WORD_FILE_NAME}
+                                                    isFlipped={isFlipped}
+                                                />
+                                                <UnrememberButton
+                                                    itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                                    type={WORD_FILE_TYPE}
+                                                    name={WORD_FILE_NAME}
+                                                    isFlipped={isFlipped}
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -289,12 +291,12 @@ function FlashCardpage() {
                         <div className="card__face card__face--back p rounded-2xl">
                             <div className="">
                                 <div className='flex justify-start'>
-                                
+
                                     <FavouriteButton
-                                    // key={isFlipped}
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
                                         name={FLASH_CARD_SEEN}    // "Flashcards-seen"
+                                        isFlipped={isFlipped}
                                     />
                                 </div>
                                 <div className="relative flex flex-col overflow-auto" onClick={handleFlip}>
@@ -320,11 +322,13 @@ function FlashCardpage() {
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
                                         name={WORD_FILE_NAME}
+                                        isFlipped={isFlipped}
                                     />
                                     <UnrememberButton
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
                                         name={WORD_FILE_NAME}
+                                        isFlipped={isFlipped}
                                     />
 
                                 </div>

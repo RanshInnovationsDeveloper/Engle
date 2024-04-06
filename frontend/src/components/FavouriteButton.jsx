@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import "../styles/FlashCard.css"
 
 
-function FavouriteButton({ itemId, type, name = "" }) {
+function FavouriteButton({ itemId, type, name = "",isFlipped }) {
 
   const { authUserId } = useSelector((state) => state.auth);
   const userId = authUserId;
@@ -35,7 +35,7 @@ function FavouriteButton({ itemId, type, name = "" }) {
       return;
     };
     fetchStatus();
-  },[itemId,userId,type,GET_FAVOURITE_STATUS_API]);
+  },[itemId,userId,type,GET_FAVOURITE_STATUS_API,isFlipped]);
 
   // Function to handle add item to favourite call
   const removeFromFavourite = async (itemId, type, userId, event) => {

@@ -8,7 +8,7 @@ import { TiTick } from "react-icons/ti";
 
 
 //This component fetches the stautus of remember button and does the necessary job to update it
-function RememberButton({ itemId, type, name = "" }) {
+function RememberButton({ itemId, type, name = "" ,isFlipped }) {
 
     const { authUserId } = useSelector((state) => state.auth);
     const {isremember}=useSelector((state)=>state.remember_unremember);
@@ -36,7 +36,7 @@ function RememberButton({ itemId, type, name = "" }) {
             return;
         };
         fetchStatus();
-    },[itemId, type, userId, dispatch, GET_REMEMBER_STATUS_API]);
+    },[itemId, type, userId, dispatch, GET_REMEMBER_STATUS_API,isFlipped]);
 
     // Function to remove the word from remember list
     const removeFromremember = async (itemId, type, userId, event) => {

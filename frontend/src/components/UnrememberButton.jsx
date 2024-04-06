@@ -8,7 +8,7 @@ import { ImCross } from "react-icons/im";
 
 
 //This component fetches the stautus of unremember button and does the necessary job to update it
-function UnrememberButton({ itemId, type, name = "" }) {
+function UnrememberButton({ itemId, type, name = "",isFlipped }) {
 
     const { authUserId } = useSelector((state) => state.auth);
     const { isunremember } = useSelector((state) => state.remember_unremember);
@@ -36,7 +36,7 @@ function UnrememberButton({ itemId, type, name = "" }) {
             return;
         };
         fetchStatus();
-    }, [itemId, type, userId, dispatch, GET_UNREMEMBER_STATUS_API]);
+    }, [itemId, type, userId, dispatch, GET_UNREMEMBER_STATUS_API,isFlipped]);
 
     // Function to remove the word from unremember list
     const removeFromunremember = async (itemId, type, userId, event) => {

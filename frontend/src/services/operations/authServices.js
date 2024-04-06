@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signOut, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, collection } from "firebase/firestore"; 
+import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { auth, db } from '../firebase';
@@ -15,13 +15,27 @@ export const signup = async (email, password, username) => {
       await updateProfile(user, {
         displayName: username,
       });
-
-      await setDoc(doc(collection(db, "users", user.uid, "user_info")), {
+      const docRef = doc(db, "Register User Data", user.uid);
+      const user_Data = {
         userId: user.uid,
         userName: username,
-      });
+        createdAt: new Date(),
+        email: user.email,
+      };
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists())
+        await updateDoc(docRef, { user_Data });
+      else
+        await setDoc(docRef, { user_Data });
+
+
+      // await setDoc(collection(db, "users", user.uid, "user_info"), {
+      //   userId: user.uid,
+      //   userName: username,
+      // });
     }).catch((err) => {
-      console.log("There is some error to send the verification link -",err);
+      console.log("There is some error to send the verification link -", err);
     });
   } catch (err) {
     let errorCode = err.code;
