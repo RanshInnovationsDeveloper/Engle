@@ -215,7 +215,7 @@ function FavouritesPage() {
                         </td>
                         <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
 
-                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} detailIndex={item?.detailIndex} />
+                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name}  />
                       </td>
                     </>
                   );
@@ -233,7 +233,7 @@ function FavouritesPage() {
 
                         </td>
                         <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
-                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} detailIndex={item?.detailIndex} />
+                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name}  />
                       </td> 
 
                     </>

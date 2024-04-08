@@ -245,7 +245,7 @@ function FlashCardpage() {
                 }
                 // if it is the last index and we haven't found a suitable candidate then set the last index 
                 else if (i === worddata?.details?.length - 1) {
-                    setDetailIndex(worddata?.details?.length - 1);
+                    setDetailIndex(i);
                 }
             }
         }
@@ -274,14 +274,13 @@ useEffect(() => {detailIndexSetterFunction()},[worddata])
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
                                         name={FLASH_CARD_SEEN}
-                                        isFlipped={isFlipped}                                         detailIndex={detailIndex}
+                                        isFlipped={isFlipped}                                        
                                     />:
                                     <FavouriteButton
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
                                         name={FLASH_CARD_UNSEEN}
                                         isFlipped={isFlipped} 
-                                        detailIndex={detailIndex}
                                     />}
                                 </div>
                                 <div >
@@ -337,7 +336,6 @@ useEffect(() => {detailIndexSetterFunction()},[worddata])
                                         type={WORD_FILE_TYPE}
                                         name={FLASH_CARD_SEEN}    // "Flashcards-seen"
                                         isFlipped={isFlipped}
-                                        detailIndex={detailIndex}
                                     />
                                 </div>
                                 <div className="relative flex flex-col overflow-auto" onClick={handleFlip}>

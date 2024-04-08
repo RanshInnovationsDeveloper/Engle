@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import "../styles/FlashCard.css"
 
 
-function FavouriteButton({ itemId, type, name = "",isFlipped,detailIndex }) {
+function FavouriteButton({ itemId, type, name = "",isFlipped }) {
 
   const { authUserId } = useSelector((state) => state.auth);
   const userId = authUserId;
@@ -29,7 +29,7 @@ function FavouriteButton({ itemId, type, name = "",isFlipped,detailIndex }) {
         GET_FAVOURITE_STATUS_API,
         null,
         null,
-        { itemId: String(itemId), type, userId,detailIndex }
+        { itemId: String(itemId), type, userId }
       );
       setIsFavourite(response.data.isFavourite);
       return;
@@ -38,7 +38,7 @@ function FavouriteButton({ itemId, type, name = "",isFlipped,detailIndex }) {
   },[itemId,userId,type,GET_FAVOURITE_STATUS_API,isFlipped]);
 
   // Function to handle add item to favourite call
-  const removeFromFavourite = async (itemId, type, userId, event,detailIndex) => {
+  const removeFromFavourite = async (itemId, type, userId, event) => {
     if (userId === null) {
       toast.error("Please Login !");
       return;
@@ -52,7 +52,6 @@ function FavouriteButton({ itemId, type, name = "",isFlipped,detailIndex }) {
         itemId,
         type,
         userId,
-        detailIndex
       });
 
       return;
@@ -61,7 +60,7 @@ function FavouriteButton({ itemId, type, name = "",isFlipped,detailIndex }) {
     }
   };
 
-  const addToFavourite = async (itemId, type, userId, name, event,detailIndex) => {
+  const addToFavourite = async (itemId, type, userId, name, event) => {
     if (userId === null) {
       toast.error("Please Login !");
       return;
@@ -75,7 +74,6 @@ function FavouriteButton({ itemId, type, name = "",isFlipped,detailIndex }) {
         type,
         userId,
         name,
-        detailIndex
       });
 
       return;
@@ -91,7 +89,7 @@ function FavouriteButton({ itemId, type, name = "",isFlipped,detailIndex }) {
         <div className="p-3">
           <FaHeart
             className={`text-red-600 w-[1.5rem] h-[1.5rem] heart-icon`}
-            onClick={(event) => removeFromFavourite(itemId, type, userId, event,detailIndex)}
+            onClick={(event) => removeFromFavourite(itemId, type, userId, event)}
           />
         </div>
 
@@ -99,7 +97,7 @@ function FavouriteButton({ itemId, type, name = "",isFlipped,detailIndex }) {
         <div className="p-[0.6rem]">
           <CiHeart
             className={`text-red-600 w-[1.7rem] h-[1.7rem] heart-icon `}
-            onClick={(event) => addToFavourite(itemId, type, userId, name, event,detailIndex)}
+            onClick={(event) => addToFavourite(itemId, type, userId, name, event)}
           />
         </div>
 

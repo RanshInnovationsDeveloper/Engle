@@ -27,7 +27,7 @@ const fetchFavouriteButtonStatus = async (req, res) => {
 
       if (docSnap.exists()) {
         const data = docSnap.data();
-        const itemExists = data[type]?.some((item) => item.itemId == itemId && item?.detailIndex == req.query.detailIndex);
+        const itemExists = data[type]?.some((item) => item.itemId == itemId );
         if (itemExists) {
           res.status(200).json({ isFavourite: true });
         } else {
@@ -48,14 +48,13 @@ const addToFavourite = async (req, res) => {
     //type is the file name from which item to be fetched
     //userId is id of user
     // name is name of from which it is to be displayed in () at favourite page
-    const { itemId, type, userId, name, detailIndex } = req.body;
+    const { itemId, type, userId, name  } = req.body;
     const docRef = doc(db, "favourite", userId);
     const obj = {
       itemId,
       createdAt: new Date(),
       isFavourite: true,
       name,
-      detailIndex,
     };
     const docSnap = await getDoc(docRef);
 
@@ -81,13 +80,13 @@ const removeFromFavourite = async (req, res) => {
   try {
     //these needed to be passed from frontend by any means here using body for all can be changed as per conviencnece
     //int type need to pass the name of file in which item is there originally
-    const { itemId, type, userId, detailIndex } = req.body;
+    const { itemId, type, userId } = req.body;
     const docRef = doc(db, "favourite", userId);
     const docSnap = await getDoc(docRef);
 
     if (docSnap.exists()) {
       const data = docSnap.data();
-      const newArray = data[type].filter((item) => item.itemId !== itemId && item.detailIndex !== detailIndex);
+      const newArray = data[type].filter((item) => item.itemId !== itemId );
 
       await updateDoc(docRef, {
         [type]: newArray,
