@@ -50,6 +50,7 @@ function FlashCardpage() {
     // this function is used to fetch the data from the backend
     const fetchWord = async (wordIndex) => {
         try {
+             (isFlipped)?setIsSeen(true):setIsSeen(false); //if the card is flipped then it is seen
 
             if (flashCardCategory !== "unseen" && authUserId === "null") {             // here it is a bug  ifauthUserId is null but it fetch as string "null" from session storage .
                 toast.error("please login!");
@@ -224,7 +225,7 @@ function FlashCardpage() {
 
     const handleFlip = async () => {
         setIsFlipped(!isFlipped);
-        setIsSeen(!isSeen)
+        if (isFlipped===true) setIsSeen(true); 
 
     };
 
