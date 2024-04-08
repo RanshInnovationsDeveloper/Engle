@@ -78,7 +78,7 @@ function FavouriteButton({ itemId, type, name = "",isFlipped }) {
 
       return;
     } catch (error) {
-      console.log("error to add the word in favourite list -",error);
+      console.log("Error to add the word in favourite list -",error);
     }
   };
 
