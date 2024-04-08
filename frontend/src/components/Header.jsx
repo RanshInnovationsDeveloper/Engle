@@ -7,9 +7,8 @@ import { useMediaQuery } from "react-responsive";
 import "../styles/Header.css"
 import { logout } from '../services/operations/authServices';
 import { useSelector, useDispatch } from "react-redux";
-import { setauthUserId, setuserEmail, setuserName, setLoading } from '../slices/authSlice'
-import { auth } from '../services/firebase'
-import { onAuthStateChanged } from "firebase/auth";
+import { setLoading } from '../slices/authSlice'
+import { onFirebaseStateChanged } from '../services/operations/authServices'
 import { FaBell } from "react-icons/fa";
 import { FaAngleDown } from "react-icons/fa6";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -24,23 +23,8 @@ const Header = ({ val }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user !== null && user.emailVerified === true) {
-        dispatch(setauthUserId(user.uid));
-        dispatch(setuserEmail(user.email));
-        dispatch(setuserName(user.displayName));
-      }
-      else {
-        dispatch(setauthUserId(null));
-        dispatch(setuserEmail(null));
-        dispatch(setuserName(null));
-      }
-    });
-
-    if (localStorage.getItem('authUserId') === null || !localStorage.getItem('authUserId')) {
-      localStorage.setItem('authUserId', authUserId);
-    }
-  }, [dispatch, authUserId]);
+    onFirebaseStateChanged(dispatch);
+  });
 
 
 

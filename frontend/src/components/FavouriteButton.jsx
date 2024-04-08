@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { apiConnector } from "../services/apiConnector";
 import { favouriteEndpoints } from "../services/apis";
 import { useSelector } from "react-redux";
@@ -8,10 +9,11 @@ import { toast } from "react-toastify";
 import "../styles/FlashCard.css"
 
 
-function FavouriteButton({ itemId, type, name = "",isFlipped }) {
+function FavouriteButton({ itemId, type, name = "", isFlipped }) {
 
   const { authUserId } = useSelector((state) => state.auth);
   const userId = authUserId;
+  const navigate = useNavigate();
 
   const [isFavourite, setIsFavourite] = useState(false);
 
@@ -35,13 +37,13 @@ function FavouriteButton({ itemId, type, name = "",isFlipped }) {
       return;
     };
     fetchStatus();
-  },[itemId,userId,type,GET_FAVOURITE_STATUS_API,isFlipped]);
+  }, [itemId, userId, type, GET_FAVOURITE_STATUS_API, isFlipped]);
 
   // Function to handle add item to favourite call
   const removeFromFavourite = async (itemId, type, userId, event) => {
-    if (userId === null) {
-      toast.error("Please Login !");
-      return;
+    if (!userId) {
+      localStorage.setItem("path", "/flashcards");
+      navigate("/login");
     }
 
     event.stopPropagation();
@@ -56,14 +58,14 @@ function FavouriteButton({ itemId, type, name = "",isFlipped }) {
 
       return;
     } catch (error) {
-      console.log("error to remove word from the favourite list -",error);
+      console.log("error to remove word from the favourite list -", error);
     }
   };
 
   const addToFavourite = async (itemId, type, userId, name, event) => {
-    if (userId === null) {
-      toast.error("Please Login !");
-      return;
+    if (!userId) {
+      localStorage.setItem("path", "/flashcards");
+      navigate("/login");
     }
     event.stopPropagation();
     setIsFavourite(true);

@@ -7,10 +7,10 @@ const CategoryHeader = ({ isOpen, isMobile }) => {
 
   const options = [
     { text: "Flashcards", link: "/flashcards", isButton: true },
-    { text: "Ambiguous Words", link: "/upcoming" },
-    { text: "Learn with Context", link: "/upcoming" },
-    { text: "Learn with story", link: "/upcoming" },
-    { text: "Learn with Friends", link: "/upcoming" },
+    { text: "Ambiguous Words", link: "/ambiguous_words" },
+    { text: "Learn with Context", link: "/learn_with_context" },
+    { text: "Learn with story", link: "/learn_with_story" },
+    { text: "Learn with Friends", link: "/learn_with_friends" },
     { text: "Favourites", link: "/favourites" },
     { text: "My Notes", link: "/mynotes" },
   ];

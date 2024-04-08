@@ -22,14 +22,13 @@ import UnrememberButton from '../components/UnrememberButton';
 function FlashCardpage() {
 
 
-    // const { authUserId } =useSelector((state) => state.auth);
-    const authUserId = localStorage.getItem('authUserId');
+    const { authUserId } =useSelector((state) => state.auth);
     const { FETCHWORD_API } = flashCardEndpoints;
     const { ADD_SEEN_API } = seenEndpoints;
 
     // store word recieve from backend
     const [worddata, setWorddata] = useState({});
-    const [flashCardCategory, setFlashCardCategory] = useState("unseen");
+    const [flashCardCategory, setFlashCardCategory] = useState(localStorage.getItem("flashCardCategory")||"unseen");
 
 
     // These state hook are used to control the flip functionality
@@ -46,7 +45,7 @@ function FlashCardpage() {
     const fetchWord = async (wordIndex) => {
         try {
 
-            if (flashCardCategory !== "unseen" && authUserId === "null") {             // here it is a bug  ifauthUserId is null but it fetch as string "null" from session storage .
+            if (flashCardCategory !== "unseen" && authUserId == null) {             // here it is a bug  ifauthUserId is null but it fetch as string "null" from session storage .
                 toast.error("please login!");
                 return;
             }
@@ -91,7 +90,7 @@ function FlashCardpage() {
     // function to add the word in seen category if user is logged in and flip the word .
     useEffect(() => {
         async function addWordInSeen() {
-            if (authUserId !== "null" && flashCardCategory === "unseen") {
+            if (authUserId != "null" && flashCardCategory === "unseen") {
                 await apiConnector("POST", ADD_SEEN_API,
                     {
                         itemId: unseenPreviousIndex[previousarrayindex - 1],
@@ -272,12 +271,14 @@ function FlashCardpage() {
                                                     type={WORD_FILE_TYPE}
                                                     name={WORD_FILE_NAME}
                                                     isFlipped={isFlipped}
+                                                    onClick={handleClickRight}
                                                 />
                                                 <UnrememberButton
                                                     itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                                     type={WORD_FILE_TYPE}
                                                     name={WORD_FILE_NAME}
                                                     isFlipped={isFlipped}
+                                                    onClick={handleFlip}
                                                 />
                                             </div>
                                         </div>

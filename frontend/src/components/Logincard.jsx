@@ -16,7 +16,7 @@ function Logincard() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, authUserId } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
 
   const [useremail, setUseremail] = useState('');
   const [password, setPassword] = useState('');
@@ -30,8 +30,11 @@ function Logincard() {
     if (error) {
       toast.error(error);
     } else {
-      navigate("/");
+    
+      const previousPath = localStorage.getItem('path');
+      navigate(previousPath||"/");
       toast.success("login successfully")
+      
     }
     dispatch(setLoading(false));
 
@@ -42,12 +45,6 @@ function Logincard() {
     setShowPassword(!showPassword);
   };
 
-useEffect(() => {
-  if(authUserId)
-  {
-    navigate("/")
-  }
-},[authUserId, navigate])
 
 if(loading)
 {

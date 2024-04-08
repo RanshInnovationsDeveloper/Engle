@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { apiConnector } from "../services/apiConnector";
 import { unrememberEndpoints, rememberEndpoints } from "../services/apis";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,6 +16,7 @@ function UnrememberButton({ itemId, type, name = "",isFlipped }) {
 
     const userId = authUserId;
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { GET_UNREMEMBER_STATUS_API, REMOVE_UNREMEMBER_API, ADD_UNREMEMBER_API } = unrememberEndpoints;
     const { REMOVE_REMEMBER_API } = rememberEndpoints;
@@ -23,6 +25,7 @@ function UnrememberButton({ itemId, type, name = "",isFlipped }) {
         const fetchStatus = async () => {
             if (userId === null) {
                 dispatch(setIsunremember(false));
+                localStorage.setItem("isunremember", false);
                 return;
             }
             const response = await apiConnector(
@@ -33,6 +36,7 @@ function UnrememberButton({ itemId, type, name = "",isFlipped }) {
                 { itemId: String(itemId), type, userId }
             );
             dispatch(setIsunremember(response.data.isUnremember));
+            localStorage.setItem("isunremember", response.data.isUnremember);
             return;
         };
         fetchStatus();
@@ -40,13 +44,14 @@ function UnrememberButton({ itemId, type, name = "",isFlipped }) {
 
     // Function to remove the word from unremember list
     const removeFromunremember = async (itemId, type, userId, event) => {
-        if (userId === null) {
-            toast.error("Please Login !");
-            return;
+        if (!userId) {
+            localStorage.setItem("path","/flashcards");
+            navigate("/login");
         }
         event.stopPropagation();
 
         dispatch(setIsunremember(false));
+        localStorage.setItem("isunremember", false);
 
         try {
             await apiConnector("POST", REMOVE_UNREMEMBER_API, {
@@ -62,13 +67,16 @@ function UnrememberButton({ itemId, type, name = "",isFlipped }) {
     };
 
     const addTounremember = async (itemId, type, userId, name, event) => {
-        if (userId === null) {
-            toast.error("Please Login !");
-            return;
+        if (!userId) {
+            localStorage.setItem("path","/flashcards");
+            navigate("/login");
         }
         event.stopPropagation();
         dispatch(setIsremember(false));
         dispatch(setIsunremember(true));
+        localStorage.setItem("isremember", false);
+        localStorage.setItem("isunremember", true);
+        
         try {
             await apiConnector("POST", ADD_UNREMEMBER_API, {
                 itemId,

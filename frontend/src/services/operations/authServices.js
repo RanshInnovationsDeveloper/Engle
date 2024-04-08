@@ -1,8 +1,9 @@
-import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signOut, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signOut, sendPasswordResetEmail, signInWithEmailAndPassword ,onAuthStateChanged} from "firebase/auth";
 import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { auth, db } from '../firebase';
+import { setauthUserId, setuserEmail, setuserName } from '../../slices/authSlice';
 
 export const signup = async (email, password, username) => {
   let error = "";
@@ -29,11 +30,6 @@ export const signup = async (email, password, username) => {
       else
         await setDoc(docRef, { user_Data });
 
-
-      // await setDoc(collection(db, "users", user.uid, "user_info"), {
-      //   userId: user.uid,
-      //   userName: username,
-      // });
     }).catch((err) => {
       console.log("There is some error to send the verification link -", err);
     });
@@ -79,7 +75,6 @@ export const signin = async (email, password) => {
 export const logout = () => {
   sessionStorage.clear();
   localStorage.clear();
-  localStorage.setItem('authUserId', null);
   signOut(auth);
 };
 
@@ -95,3 +90,26 @@ export const forgotPassword = async ({ useremail, navigate }) => {
     console.log(error);
   }
 };
+
+export const onFirebaseStateChanged=(dispatch)=>{
+
+  onAuthStateChanged(auth, (user) => {
+    if (user !== null && user.emailVerified === true) {
+      dispatch(setauthUserId(user.uid));
+      dispatch(setuserEmail(user.email));
+      dispatch(setuserName(user.displayName));
+      localStorage.setItem('authUserId', user.uid);
+      localStorage.setItem('userEmail', user.email);
+      localStorage.setItem('userName', user.displayName);
+    }
+    else {
+      dispatch(setauthUserId(null));
+      dispatch(setuserEmail(null));
+      dispatch(setuserName(null));
+      localStorage.setItem('authUserId', null);
+      localStorage.setItem('userEmail', null);
+      localStorage.setItem('userName', null);
+
+    }
+  });
+}

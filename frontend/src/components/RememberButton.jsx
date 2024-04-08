@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import { apiConnector } from "../services/apiConnector";
 import { rememberEndpoints,unrememberEndpoints } from "../services/apis";
 import { useDispatch, useSelector } from "react-redux"
@@ -15,6 +16,7 @@ function RememberButton({ itemId, type, name = "" ,isFlipped }) {
 
     const userId = authUserId;
     const dispatch = useDispatch();
+    const navigate=useNavigate();
     
     const { GET_REMEMBER_STATUS_API, REMOVE_REMEMBER_API, ADD_REMEMBER_API } =  rememberEndpoints;
     const {REMOVE_UNREMEMBER_API}=unrememberEndpoints ;
@@ -23,6 +25,7 @@ function RememberButton({ itemId, type, name = "" ,isFlipped }) {
         const fetchStatus = async () => {
             if (!userId) {
                 dispatch(setIsremember(false));
+                localStorage.setItem("isremember",false);
                 return;
             }
             const response = await apiConnector(
@@ -33,6 +36,7 @@ function RememberButton({ itemId, type, name = "" ,isFlipped }) {
                 { itemId: String(itemId), type, userId }
             );
             dispatch(setIsremember(response?.data?.isRemember));
+            localStorage.setItem("isremember",response?.data?.isRemember);
             return;
         };
         fetchStatus();
@@ -41,11 +45,12 @@ function RememberButton({ itemId, type, name = "" ,isFlipped }) {
     // Function to remove the word from remember list
     const removeFromremember = async (itemId, type, userId, event) => {
         if (!userId) {
-            toast.error("Please Login !");
-            return;
+            localStorage.setItem("path","/flashcards");
+            navigate("/login");
         }
         event.stopPropagation();
         dispatch(setIsremember(false));
+        localStorage.setItem("isremember",false);
         try {
             await apiConnector("POST", REMOVE_REMEMBER_API, {
                 itemId,
@@ -61,12 +66,14 @@ function RememberButton({ itemId, type, name = "" ,isFlipped }) {
 
     const addToremember = async (itemId, type, userId, name, event) => {
         if (!userId) {
-            toast.error("Please Login !");
-            return;
+            localStorage.setItem("path","/flashcards");
+            navigate("/login");
         }
         event.stopPropagation();
         dispatch(setIsremember(true));
         dispatch(setIsunremember(false));
+        localStorage.setItem("isremember",true);
+        localStorage.setItem("isunremember",false);
 
         try {
             await apiConnector("POST", ADD_REMEMBER_API, {
