@@ -2,7 +2,7 @@ const { db } = require("../config/firebase");
 const { doc, getDoc, updateDoc, arrayUnion, setDoc } = require("firebase/firestore");
 
 
-const wordsData = require("../resources/words.json");
+const words = require("../resources/words.json");
 
 // generate random number between startingIndex and endingIndex
 const generateRandomNumber = (startingIndex, endingIndex) => {
@@ -13,7 +13,7 @@ const generateRandomNumber = (startingIndex, endingIndex) => {
 }
 
 
-
+//Fetch the word for flashcard
 exports.fetchWord = async (req, res) => {
     try {
 
@@ -26,7 +26,7 @@ exports.fetchWord = async (req, res) => {
             let wordCategorySizeInDatabase;
             // fetch next word
             if (wordIndex === "-1") {
-                wordCategorySizeInDatabase = 35492;
+                wordCategorySizeInDatabase = 2014;
 
                 // the proccess to generate random word is done in while loop so that random words index not present in seen word array (in  firestore database).
                 newWordIndex = generateRandomNumber(0, wordCategorySizeInDatabase - 1);
@@ -86,8 +86,13 @@ exports.fetchWord = async (req, res) => {
             });
 
         else
+        // console.log(words[newWordIndex])
+    // console.log(words[newWordIndex])
+    // console.log("index",newWordIndex)
+    // console.log(words[25254])
+    
             return res.status(200).json({
-                data: wordsData[newWordIndex],
+                data: words[newWordIndex],
                 wordIndex: newWordIndex,
                 message: "data fetch successfully"
             });
