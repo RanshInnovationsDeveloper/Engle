@@ -21,6 +21,8 @@ import UnrememberButton from '../components/UnrememberButton';
 
 function FlashCardpage() {
 
+    //This is to set the first occurence of data where all data is present in words
+    const [detailIndex, setDetailIndex] = useState(0);
 
     const { authUserId } =useSelector((state) => state.auth);
     const { FETCHWORD_API } = flashCardEndpoints;
@@ -34,6 +36,9 @@ function FlashCardpage() {
     // These state hook are used to control the flip functionality
     const [isFlipped, setIsFlipped] = useState(false);
 
+    //State to check if item is seen
+    const [isSeen, setIsSeen] = useState(false);
+
 
     // This array is used to store the index of previous words .
     const [unseenPreviousIndex, setunseenPreviousIndex] = useState(JSON.parse(sessionStorage.getItem(flashCardCategory)) || []);
@@ -44,6 +49,7 @@ function FlashCardpage() {
     // this function is used to fetch the data from the backend
     const fetchWord = async (wordIndex) => {
         try {
+             (isFlipped)?setIsSeen(true):setIsSeen(false); //if the card is flipped then it is seen
 
             if (flashCardCategory !== "unseen" && authUserId == null) {             // here it is a bug  ifauthUserId is null but it fetch as string "null" from session storage .
                 toast.error("please login!");
@@ -75,6 +81,7 @@ function FlashCardpage() {
 
             if (response?.data?.data !== null) {
 
+                // console.log(response?.data)
                 setWorddata(response?.data?.data);
                 updatesessionstoragearray(response?.data?.wordIndex);
                 setpreviousarrayindex(previousarrayindex + 1);
@@ -217,8 +224,32 @@ function FlashCardpage() {
 
     const handleFlip = async () => {
         setIsFlipped(!isFlipped);
+        if (isFlipped===true) setIsSeen(true); 
 
     };
+
+    //set Index where all data is present 
+
+    const detailIndexSetterFunction=()=>{
+            for (let i = 0; i < worddata?.details?.length; i++) {
+                // iterate over all for a suitable candidate
+                if (
+                    worddata?.details?.[i]?.definition &&
+                    worddata?.details?.[i]?.examples?.length > 0 &&
+                    worddata?.details?.[i]?.synonyms?.length > 0 &&
+                    worddata?.details?.[i]?.antonyms?.length > 0
+                ) {
+                    setDetailIndex(i);
+                    break;
+                }
+                // if it is the last index and we haven't found a suitable candidate then set the last index 
+                else if (i === worddata?.details?.length - 1) {
+                    setDetailIndex(i);
+                }
+            }
+        }
+
+useEffect(() => {detailIndexSetterFunction()},[worddata])
 
 
 
@@ -236,16 +267,24 @@ function FlashCardpage() {
                         <div className="card__face p rounded-2xl ">
                             <div className="">
                                 <div className='flex justify-start ' >
+                                {/* {
+                                    console.log(isSeen)} */}
+                                    {isSeen?<FavouriteButton
+                                        itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                        type={WORD_FILE_TYPE}
+                                        name={FLASH_CARD_SEEN}
+                                        isFlipped={isFlipped}                                        
+                                    />:
                                     <FavouriteButton
                                         itemId={unseenPreviousIndex[previousarrayindex - 1]}
                                         type={WORD_FILE_TYPE}
                                         name={FLASH_CARD_UNSEEN}
-                                        isFlipped={isFlipped}
-                                    />
+                                        isFlipped={isFlipped} 
+                                    />}
                                 </div>
                                 <div >
                                     <div className='flex flex-col justify-center items-center'>
-                                        {<h2 className='text-black-800 pt-[4.75rem]  font-bold text-4xl flex justify-center items-center'>{worddata?.word}</h2>}
+                                        {<h2 className='text-black-800 pt-[4.75rem]  font-bold text-4xl flex justify-center items-center'>{worddata?.word && worddata.word.charAt(0).toUpperCase() + worddata.word.slice(1)}</h2>}
 
                                     </div>
                                     <div className="flex flex-col ml-3 pb-5 bottom-0 absolute">
@@ -301,22 +340,30 @@ function FlashCardpage() {
                                     />
                                 </div>
                                 <div className="relative flex flex-col overflow-auto" onClick={handleFlip}>
-                                    {<h2 className='text-black flex flex-col items-center text-4xl font-bold mt-6 mb-6'>{worddata?.word}</h2>}
+                                    <h2 className='text-black flex flex-col items-center text-4xl font-bold mt-6 mb-6'>
+                                        {worddata?.word && worddata.word.charAt(0).toUpperCase() + worddata.word.slice(1)}
+                                    </h2>
 
+                                    
 
                                     <div className=' mb-8 ml-6'>
-                                        {<p className='items-start flex flex-col font-semibold text-lg overflow-x-auto'>
-                                            Definition: {worddata?.definitions}
-                                        </p>}
+                                    {/* {console.log(worddata?.details?.[detailIndex])} */}
+                                            <p className='items-start flex flex-col font-semibold text-lg'>
+                                                Definition: {worddata?.details?.[detailIndex]?.definition && worddata.details[detailIndex].definition.charAt(0).toUpperCase() + worddata.details[detailIndex].definition.slice(1)}
+                                            </p>
 
+                                            <p className='items-start flex flex-col font-semibold text-lg'>
+                                                Example: {worddata?.details?.[detailIndex]?.examples?.[0] && worddata.details[detailIndex].examples[0].charAt(0).toUpperCase() + worddata.details[detailIndex].examples[0].slice(1)}
+                                            </p>
 
-                                        <p className='items-start flex flex-col font-semibold text-lg'>Example:</p>
+                                            <p className='items-start flex flex-col font-semibold text-lg'>
+                                                Synonyms: {worddata?.details?.[detailIndex]?.synonyms && worddata.details[detailIndex].synonyms.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(', ')}
+                                            </p>
 
-                                        <p className='items-start flex flex-col font-semibold text-lg'>Synonyms:</p>
-
-                                        <p className='items-start flex flex-col font-semibold text-lg'>Antonyms:</p>
-
-                                    </div>
+                                            <p className='items-start flex flex-col font-semibold text-lg'>
+                                                Antonyms: {worddata?.details?.[detailIndex]?.antonyms && worddata.details[detailIndex].antonyms.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(', ')}
+                                            </p>
+                                        </div>
                                 </div>
                                 <div className='flex md:flex-row flex-col gap-2 justify-center mt-6 relative mx-2'>
                                     <RememberButton
