@@ -47,6 +47,7 @@ function RememberButton({ itemId, type, name = "" ,isFlipped }) {
         if (!userId) {
             localStorage.setItem("path","/flashcards");
             navigate("/login");
+            return ;
         }
         event.stopPropagation();
         dispatch(setIsremember(false));
@@ -68,6 +69,7 @@ function RememberButton({ itemId, type, name = "" ,isFlipped }) {
         if (!userId) {
             localStorage.setItem("path","/flashcards");
             navigate("/login");
+            return ;
         }
         event.stopPropagation();
         dispatch(setIsremember(true));

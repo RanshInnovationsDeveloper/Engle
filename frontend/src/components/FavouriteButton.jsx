@@ -44,6 +44,7 @@ function FavouriteButton({ itemId, type, name = "", isFlipped }) {
     if (!userId) {
       localStorage.setItem("path", "/flashcards");
       navigate("/login");
+      return ;
     }
 
     event.stopPropagation();
@@ -66,6 +67,7 @@ function FavouriteButton({ itemId, type, name = "", isFlipped }) {
     if (!userId) {
       localStorage.setItem("path", "/flashcards");
       navigate("/login");
+      return ;
     }
     event.stopPropagation();
     setIsFavourite(true);
