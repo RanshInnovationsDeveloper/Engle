@@ -96,18 +96,22 @@ export default function MynotesPage() {
 
   //Filtering
   useEffect(() => {
+    // console.log('Running useEffect hook');
+    // console.log('Current query:', query);
+    // console.log('Current notes:', notes);
+  
     if (query === "") {
       setGroupedNotes(groupNotesByDate(notes));
-    }else{
-    for (let i = 0; i < notes.length; i++) {
+    } else {
       let newData = [];
-      if (notes[i].word.toLowerCase().includes(query.toLowerCase())|| notes[i].definitions.toLowerCase().includes(query.toLowerCase())) {
-        newData.push(notes[i]);
+      for (let i = 0; i < notes.length; i++) {
+        if (notes[i]?.word.toLowerCase().includes(query.toLowerCase()) || notes[i]?.definitions.toLowerCase().includes(query.toLowerCase())) {
+          newData.push(notes[i]);
+        }
       }
       setGroupedNotes(groupNotesByDate(newData));
     }
-  }}, [query, notes]);
-
+  }, [query, notes]);
   //number of pages
   const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
@@ -127,6 +131,7 @@ export default function MynotesPage() {
   // Rendering the component
   return (
     <>
+    {/* {console.log("groupedNotes",groupedNotes)} */}
       <Header />
       <CategoryHeader />
       <Link to ="/notecard">
@@ -161,35 +166,39 @@ export default function MynotesPage() {
 
         {/* Displaying grouped notes */}
         <div className='mx-28'>
-            <table className="table-auto w-full border mx-auto border-blue-900 justify-center items-center rounded-lg">
-                <thead className='bg-customBg rounded-lg'>
-                    <tr>
-                        <th className="border border-blue-700 px-4 py-4">Sr. No</th>
-                        <th className="border border-blue-700 px-4 py-4">Word</th>
-                        <th className="border border-blue-700 px-4 py-4">Notes</th>
-                        <th className="border border-blue-700 px-4 py-4">Empty</th>
-                        <th className="border border-blue-700 px-4 py-4">Favourite</th>
-                    </tr>
-                </thead>
-                <tbody className='bg-customBg border-blue-700 border'>
-                    {notes.map((note, index) => (
-                        <tr key={startIndex + index}>
-                            <td className="text-center border w-20 px-4 py-4 border-blue-700">{startIndex + index + 1}</td>
-                            <td className="text-center border w-64 px-4 py-4 border-blue-700">{note.word}</td>
-                            <td className="text-center border px-4 py-4 border-blue-700">{note.definitions}</td>
-                            <td className="text-center border w-40 px-4 py-4 border-blue-700">Empty</td>
-                            <td className="text-center border w-28 px-4 py-4 border-blue-700">
-                            <FavouriteButton
-                                        itemId={note.id}
-                                        type={NOTES_FILE_TYPE}
-                                        name={NOTES_FILE_NAME}
-                                    />
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            </div>
+  <table className="table-auto w-full border mx-auto border-blue-900 justify-center items-center rounded-lg">
+    <thead className='bg-customBg rounded-lg'>
+      <tr>
+        <th className="border border-blue-700 px-4 py-4">Sr. No</th>
+        <th className="border border-blue-700 px-4 py-4">Word</th>
+        <th className="border border-blue-700 px-4 py-4">Notes</th>
+        <th className="border border-blue-700 px-4 py-4">Empty</th>
+        <th className="border border-blue-700 px-4 py-4">Favourite</th>
+      </tr>
+    </thead>
+    <tbody className='bg-customBg border-blue-700 border'>
+      {/* {console.log("notes",notes)}  */}
+
+      {Object.keys(groupedNotes).map(date => (
+        groupedNotes[date].map((note,index) => (
+          <tr key={startIndex + index}>
+            <td className="text-center border w-20 px-4 py-4 border-blue-700">{startIndex + index + 1}</td>
+            <td className="text-center border w-64 px-4 py-4 border-blue-700">{note.word}</td>
+            <td className="text-center border px-4 py-4 border-blue-700">{note.definitions}</td>
+            <td className="text-center border w-40 px-4 py-4 border-blue-700">Empty</td>
+            <td className="text-center border w-28 px-4 py-4 border-blue-700">
+              <FavouriteButton
+                itemId={note.id}
+                type={NOTES_FILE_TYPE}
+                name={NOTES_FILE_NAME}
+              />
+            </td>
+          </tr>
+        ))
+      ))}
+    </tbody>
+  </table>
+</div>
             <div className="flex justify-center mt-8 gap-4 ">             
                     <FaArrowAltCircleLeft 
                     onClick={() => handleClick(currentPage - 1)}

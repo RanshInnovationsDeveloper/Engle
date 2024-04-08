@@ -196,6 +196,7 @@ function FavouritesPage() {
     
 
           {/* Rendering section divs */}
+                {/* {console.log(currentPageItems)} */}
           {currentPageItems.map((item, index) => (
             <tr>
             <React.Fragment key={item.itemId}>
@@ -203,6 +204,7 @@ function FavouritesPage() {
                 if (item?.type === "words") {
                   return (
                     <>
+                    {/* {console.log(item)} */}
                       <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                       <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
                       <td className="text-center border w-44 px-4 py-4 border-[#5B7ADE]">{item?.name=="Flashcards-Seen" ? "Seen Words" : "Unseen Words"}</td>
@@ -213,7 +215,7 @@ function FavouritesPage() {
                         </td>
                         <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
 
-                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} detailIndex={item?.detailIndex} />
                       </td>
                     </>
                   );
@@ -223,16 +225,16 @@ function FavouritesPage() {
                   return (
                     <>
                     <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.title}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.content}</td>
                     <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
                     <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
                           <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
 
                         </td>
                         <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
-
-                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
-                      </td>
+                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} detailIndex={item?.detailIndex} />
+                      </td> 
 
                     </>
                   );
@@ -242,7 +244,8 @@ function FavouritesPage() {
                   return (
                     <>
                     <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.word}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.definitions}</td>
                     <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
                     <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
                           <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
