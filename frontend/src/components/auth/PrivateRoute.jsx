@@ -3,12 +3,13 @@ import { useSelector } from "react-redux"
 import { Navigate } from "react-router-dom"
 
 
-function PrivateRoute({children}) {
+function PrivateRoute({children,path}) {
 
     const { authUserId } = useSelector((state) => state.auth)
+    localStorage.setItem('path',path);
     
     
-    if (authUserId !== null)
+    if (authUserId != null)
         return children
     else
         return <Navigate to="/login" />

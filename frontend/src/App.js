@@ -28,15 +28,15 @@ function App() {
     const location = useLocation();
 
 
-    useEffect(() => {
-      dispatch(setLoading(true));
+    // useEffect(() => {
+    //   dispatch(setLoading(true));
 
-        const loadingTimer = setTimeout(() => {
-          dispatch(setLoading(false));
-        }, 100); 
+    //     const loadingTimer = setTimeout(() => {
+    //       dispatch(setLoading(false));
+    //     }, 100); 
 
-        return () => clearTimeout(loadingTimer); 
-    }, [location.pathname,dispatch]);
+    //     return () => clearTimeout(loadingTimer); 
+    // }, [location.pathname,dispatch]);
 
 
   return (
@@ -50,12 +50,13 @@ function App() {
         <Route path="/contact" element={<ContactUspage />} />
         <Route path="/about" element={<AboutUspage />} />
         <Route path="/flashcards" element={<FlashCardpage />} />
-        <Route path="/upcoming" element={<Upcomingpage />} />
-        <Route path="/story" element={<Stories/>} />
-        {/*Individual story page */}
-        <Route path="/story/:id" element={<IndividualStory/>} />
-        {/* <Route path="/context" element={} /> */}
-        {/* <Route path="/ambiguouswords" element={} /> */}
+        <Route path="/ambiguous_words" element={< Upcomingpage />} />
+        <Route path="/learn_with_context" element={< Upcomingpage />} />
+        <Route path="/learn_with_story" element={< Upcomingpage />} />
+        <Route path="/learn_with_friends" element={< Upcomingpage />} />
+
+        {/* <Route path="/story" element={<Stories/>} /> */}
+        {/* <Route path="/story/:id" element={<IndividualStory/>} /> */}
 
 
         <Route
@@ -102,20 +103,6 @@ function App() {
           }
         />
 
-        {/* <Route
-          path="/flashcards"
-          element={
-
-            <PrivateRoute>
-              <FlashCardpage/>
-            </PrivateRoute>
-
-          }
-        /> */}
-
-      
-
-
         <Route
           path="/favourites/:type"
           element={
@@ -130,7 +117,7 @@ function App() {
           path="/favourites/"
           element={
 
-            <PrivateRoute>
+            <PrivateRoute path={"/favourites/"}>
               <FavouritesCategoryPage />
             </PrivateRoute>
 
@@ -142,7 +129,7 @@ function App() {
           path="/mynotes"
           element={
 
-            <PrivateRoute>
+            <PrivateRoute path={"/mynotes"}>
               <MynotesPage />
             </PrivateRoute>
 
@@ -151,25 +138,12 @@ function App() {
         <Route
           path="/notecard"
           element={
-            <PrivateRoute>
+            <PrivateRoute path={"/notecard"}>
               <Notecard />
             </PrivateRoute>
           }
         />
       
-        <Route
-          path="/learnwithfriends"
-          element={
-
-            <PrivateRoute>
-              {/* < LearnWithFriend /> */}
-            </PrivateRoute>
-
-          }
-        />
-
-
-
       </Routes>
       <ToastContainer position="bottom-center" reverseOrder={false} />
     </>

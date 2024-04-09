@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    isremember:false,
-    isunremember:false
+    isremember:localStorage.getItem("isremember")=='true'?true:false||false,
+    isunremember:localStorage.getItem("isunremember")=='true'?true:false||false,
 }
 
 const remember_unrememberSlice = createSlice({

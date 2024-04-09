@@ -27,7 +27,7 @@ const fetchFavouriteButtonStatus = async (req, res) => {
 
       if (docSnap.exists()) {
         const data = docSnap.data();
-        const itemExists = data[type]?.some((item) => item.itemId == itemId);
+        const itemExists = data[type]?.some((item) => item.itemId == itemId );
         if (itemExists) {
           res.status(200).json({ isFavourite: true });
         } else {
@@ -48,7 +48,7 @@ const addToFavourite = async (req, res) => {
     //type is the file name from which item to be fetched
     //userId is id of user
     // name is name of from which it is to be displayed in () at favourite page
-    const { itemId, type, userId, name } = req.body;
+    const { itemId, type, userId, name  } = req.body;
     const docRef = doc(db, "favourite", userId);
     const obj = {
       itemId,
@@ -86,7 +86,7 @@ const removeFromFavourite = async (req, res) => {
 
     if (docSnap.exists()) {
       const data = docSnap.data();
-      const newArray = data[type].filter((item) => item.itemId !== itemId);
+      const newArray = data[type].filter((item) => item.itemId !== itemId );
 
       await updateDoc(docRef, {
         [type]: newArray,
@@ -99,29 +99,29 @@ const removeFromFavourite = async (req, res) => {
   }
 };
 //Check seen status
-async function checkSeenStatus(userId, key, item) {
-  try {
-    let isSeen = false;
-    const docRef = doc(db, "seen", userId);
-    const docSnap = await getDoc(docRef);
-    if (!docSnap.exists) {
-      console.log('No such document!');
-    } else {
-      let data = docSnap.data();
-      if (key == "words" && data.word) {
-        data.word.forEach((wordItem, index) => {
-          if (wordItem === item.itemId) {
-            isSeen = true;
-          }
-        });
-      }
-    }
-    return isSeen;
-  } catch(error) {
-    console.error(error.message);
-    return false;
-  }
-}
+// async function checkSeenStatus(userId, key, item) {
+//   try {
+//     let isSeen = false;
+//     const docRef = doc(db, "seen", userId);
+//     const docSnap = await getDoc(docRef);
+//     if (!docSnap.exists) {
+//       console.log('No such document!');
+//     } else {
+//       let data = docSnap.data();
+//       if (key == "words" && data.word) {
+//         data.word.forEach((wordItem, index) => {
+//           if (wordItem === item.itemId) {
+//             isSeen = true;
+//           }
+//         });
+//       }
+//     }
+//     return isSeen;
+//   } catch(error) {
+//     console.error(error.message);
+//     return false;
+//   }
+// }
 
 //This is used to fetch all the contents of favourite
 const fetchFavouriteItems = async (req, res) => {
@@ -146,11 +146,11 @@ const fetchFavouriteItems = async (req, res) => {
 
     for (const key in data) {
   if (Array.isArray(data[key])) {
-    const checkSeenPromises = data[key].map(item => checkSeenStatus(userId, key, item));
-    const isSeenResults = await Promise.all(checkSeenPromises);
+    // const checkSeenPromises = data[key].map(item => checkSeenStatus(userId, key, item));
+    // const isSeenResults = await Promise.all(checkSeenPromises);
     for (let i = 0; i < data[key].length; i++) {
       const item = data[key][i];
-      const isSeen = isSeenResults[i];
+      // const isSeen = isSeenResults[i];
           // Convert Firestore Timestamp to JavaScript Date
           const createdAt = new Date(item.createdAt.seconds * 1000);
           // Format date as needed
@@ -164,7 +164,7 @@ const fetchFavouriteItems = async (req, res) => {
               type: key,
               val: keyArr[key][Number(item.itemId)],
               createdAt: createdAtFormatted,
-              isSeen
+              // isSeen
             });
           }
           if (key == "notes") {
@@ -179,7 +179,7 @@ const fetchFavouriteItems = async (req, res) => {
                     type: key,
                     val: data,
                     createdAt: createdAtFormatted,
-                    isSeen
+                    // isSeen
 
                   };
                 })

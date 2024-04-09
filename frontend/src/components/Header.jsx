@@ -7,9 +7,8 @@ import { useMediaQuery } from "react-responsive";
 import "../styles/Header.css"
 import { logout } from '../services/operations/authServices';
 import { useSelector, useDispatch } from "react-redux";
-import { setauthUserId, setuserEmail, setuserName, setLoading } from '../slices/authSlice'
-import { auth } from '../services/firebase'
-import { onAuthStateChanged } from "firebase/auth";
+import { setLoading } from '../slices/authSlice'
+import { onFirebaseStateChanged } from '../services/operations/authServices'
 import { FaBell } from "react-icons/fa";
 import { FaAngleDown } from "react-icons/fa6";
 import { MdKeyboardArrowRight } from "react-icons/md";
@@ -41,6 +40,8 @@ const Header = ({ val }) => {
       localStorage.setItem('authUserId', authUserId);
     }
   }, [dispatch, authUserId, isOpen]);
+    onFirebaseStateChanged(dispatch);
+  );
 
 
 

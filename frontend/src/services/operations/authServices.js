@@ -1,8 +1,9 @@
-import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signOut, sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, collection } from "firebase/firestore"; 
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signOut, sendPasswordResetEmail, signInWithEmailAndPassword ,onAuthStateChanged} from "firebase/auth";
+import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { auth, db } from '../firebase';
+import { setauthUserId, setuserEmail, setuserName } from '../../slices/authSlice';
 
 export const signup = async (email, password, username) => {
   let error = "";
@@ -15,13 +16,22 @@ export const signup = async (email, password, username) => {
       await updateProfile(user, {
         displayName: username,
       });
-
-      await setDoc(doc(collection(db, "users", user.uid, "user_info")), {
+      const docRef = doc(db, "Register User Data", user.uid);
+      const user_Data = {
         userId: user.uid,
         userName: username,
-      });
+        createdAt: new Date(),
+        email: user.email,
+      };
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists())
+        await updateDoc(docRef, { user_Data });
+      else
+        await setDoc(docRef, { user_Data });
+
     }).catch((err) => {
-      console.log("There is some error to send the verification link -",err);
+      console.log("There is some error to send the verification link -", err);
     });
   } catch (err) {
     let errorCode = err.code;
@@ -65,7 +75,6 @@ export const signin = async (email, password) => {
 export const logout = () => {
   sessionStorage.clear();
   localStorage.clear();
-  localStorage.setItem('authUserId', null);
   signOut(auth);
 };
 
@@ -81,3 +90,26 @@ export const forgotPassword = async ({ useremail, navigate }) => {
     console.log(error);
   }
 };
+
+export const onFirebaseStateChanged=(dispatch)=>{
+
+  onAuthStateChanged(auth, (user) => {
+    if (user !== null && user.emailVerified === true) {
+      dispatch(setauthUserId(user.uid));
+      dispatch(setuserEmail(user.email));
+      dispatch(setuserName(user.displayName));
+      localStorage.setItem('authUserId', user.uid);
+      localStorage.setItem('userEmail', user.email);
+      localStorage.setItem('userName', user.displayName);
+    }
+    else {
+      dispatch(setauthUserId(null));
+      dispatch(setuserEmail(null));
+      dispatch(setuserName(null));
+      localStorage.setItem('authUserId', null);
+      localStorage.setItem('userEmail', null);
+      localStorage.setItem('userName', null);
+
+    }
+  });
+}

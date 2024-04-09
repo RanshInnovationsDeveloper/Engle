@@ -47,23 +47,19 @@ function FavouritesPage() {
         );
         if (paramValue=="all") setData(response);
         else if (paramValue=="unseen-words"){
-          let unseenWords=response?.data.filter((item)=>item?.type=="words" && item?.isSeen==false)
+          let unseenWords=response?.data.filter((item)=>item?.type=="words" && item?.name=="Flashcards-Unseen")
           setData({data:unseenWords})
         }
         else if (paramValue=="seen-words"){
-          let seenWords=response?.data.filter((item)=>item?.type=="words" && item?.isSeen==true)
+          let seenWords=response?.data.filter((item)=>item?.type=="words" && item?.name=="Flashcards-Seen")
           setData({data:seenWords})
         }
-        else if (paramValue=="unseen-words"){
-          let unseenWords=response?.data.filter((item)=>item?.type=="words" && item?.isSeen==false)
-          setData({data:unseenWords})
-        }
-
         else if (paramValue=="learn-with-story"){
           let learnWithStory=response?.data.filter((item)=>item?.type=="sampleStory")
           setData({data:learnWithStory})
         }
 
+        //Just to handle the cases if somehow someone reaches here will be updated once other features are developed 
         else setData(response);
 
         setIsLoading(false);
@@ -131,12 +127,14 @@ function FavouritesPage() {
   //If the length of returned data is greater than 0, then display the data
   if (isLoading == false && filteredData?.length > 0 || query!="") {
 
-  const heading = paramValue
+    // setting the heading to be displayed on favourite page this is done on the basis of the type of favourite page
+    const heading = paramValue
   .replace(/-/g, ' ')
   .split(' ')
   .map(word => word.charAt(0).toUpperCase() + word.slice(1))
   .join(' ');
 
+  // setting the comment to be displayed on favourite page this is done on the basis of the type of favourite page
   const comment=(paramValue=="all" || paramValue=="ambiguous-words"|| paramValue=="learn-with-story")?""
   :(paramValue=="unseen-words"|| paramValue=="seen-words" || paramValue=="test-vocabulary"|| paramValue=="idioms"|| paramValue=="easy-words")?"(Flashcards)":"(Play with friends)"
 
@@ -183,24 +181,22 @@ function FavouritesPage() {
             </div>
           </div>
     
-    <h3>{comment}</h3>
     <div className="mx-28 ">
-    <table className="table-auto w-full border border-[#5B7ADE] rounded-xl mx-auto justify-center items-center r bg-[#F3F5FF]">
+  <table className="table-auto w-full border border-[#5B7ADE] rounded-xl mx-auto justify-center items-center r bg-[#F3F5FF]">
     <thead className='rounded-2xl'>
-
       <tr>
-
-        <th className=" px-4 py-4" colSpan={5}>{heading}</th>
-
-
+        <th className=" px-4 py-4" colSpan={10}>
+          <div className="font-bold text-xl">{heading}</div>
+          <div className="font-normal text-sm text-gray-500">{comment}</div>
+        </th>
       </tr>
-
     </thead>
     <tbody className=' border border-[#5B7ADE]'>
 
     
 
           {/* Rendering section divs */}
+                {/* {console.log(currentPageItems)} */}
           {currentPageItems.map((item, index) => (
             <tr>
             <React.Fragment key={item.itemId}>
@@ -208,9 +204,10 @@ function FavouritesPage() {
                 if (item?.type === "words") {
                   return (
                     <>
+                    {/* {console.log(item)} */}
                       <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                       <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
-                      <td className="text-center border w-44 px-4 py-4 border-[#5B7ADE]">{item?.isSeen ? "Seen Words" : "Unseen Words"}</td>
+                      <td className="text-center border w-44 px-4 py-4 border-[#5B7ADE]">{item?.name=="Flashcards-Seen" ? "Seen Words" : "Unseen Words"}</td>
                       <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
                       <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
                           <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
@@ -218,7 +215,7 @@ function FavouritesPage() {
                         </td>
                         <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
 
-                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name}  />
                       </td>
                     </>
                   );
@@ -228,16 +225,16 @@ function FavouritesPage() {
                   return (
                     <>
                     <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.title}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.content}</td>
                     <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
                     <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
                           <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
 
                         </td>
                         <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
-
-                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
-                      </td>
+                      <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name}  />
+                      </td> 
 
                     </>
                   );
@@ -247,7 +244,8 @@ function FavouritesPage() {
                   return (
                     <>
                     <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.word}</td>
+                    <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.definitions}</td>
                     <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
                     <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
                           <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>

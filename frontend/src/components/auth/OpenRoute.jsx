@@ -5,11 +5,13 @@ import { Navigate } from "react-router-dom"
 
 function OpenRoute({ children }) {
     const { authUserId } = useSelector((state) => state.auth)
+    const path=localStorage.getItem('path');
+    
 
-    if (authUserId === null)
+    if (authUserId == null)
         return children
     else
-        return <Navigate to="/" />        // baad mai is route ko profile vale route se change karna "/Profile"
+        return <Navigate to={path||"/"} />  
 
 
 }
