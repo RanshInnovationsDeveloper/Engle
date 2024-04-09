@@ -23,25 +23,10 @@ const Header = ({ val }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user !== null && user.emailVerified === true) {
-        dispatch(setauthUserId(user.uid));
-        dispatch(setuserEmail(user.email));
-        dispatch(setuserName(user.displayName));
-      }
-      else {
-        dispatch(setauthUserId(null));
-        dispatch(setuserEmail(null));
-        dispatch(setuserName(null));
-      }
-    });
-
-    if (localStorage.getItem('authUserId') === null || !localStorage.getItem('authUserId')) {
-      localStorage.setItem('authUserId', authUserId);
-    }
-  }, [dispatch, authUserId, isOpen]);
     onFirebaseStateChanged(dispatch);
-  );
+  });
+  
+
 
 
 
