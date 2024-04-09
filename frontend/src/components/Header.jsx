@@ -25,6 +25,8 @@ const Header = ({ val }) => {
   useEffect(() => {
     onFirebaseStateChanged(dispatch);
   });
+  
+
 
 
 
@@ -42,7 +44,7 @@ const Header = ({ val }) => {
   };
 
   const toggleCategoryMenu = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(prevState => !prevState);
   };
 
   const closeMobileMenu = () => {
@@ -62,21 +64,23 @@ const Header = ({ val }) => {
   const renderNavLinks = () => {
     const listClassName = isMobile ? "nav__list" : "nav__list__web";
     const linkClassName = "nav__link";
-
     return (
       <>
         <ul className={listClassName}>
           <li>
             <NavLink to="/"
               className={`${linkClassName} ${val === 0 ? "text-[#2E3D79] font-semibold" : "text-black"}`}
-              onClick={closeMobileMenu} >
+              onClick={() => {
+                closeMobileMenu();
+             
+              }} >
               Home
             </NavLink>
           </li>
           <li >
             <div className={`${val === 1 ? "text-[#2E3D79]" : "text-black"} flex justify-start items-center gap-3`}>
               <NavLink
-                to="/flashcards"
+              to=""
                 className={`${linkClassName} ${val === 1 ? "font-semibold" : ""} `}
                 onClick={() => {
                   toggleCategoryMenu();
@@ -92,7 +96,7 @@ const Header = ({ val }) => {
 
             </div>
 
-            {isMobile && (<CategoryHeader isOpen={isOpen} isMobile={isMobile} />)}
+            {isMobile && (<CategoryHeader isOpen={isOpen} isMobile={isMobile}  />)}
           </li>
           <li>
             <NavLink
@@ -238,7 +242,7 @@ const Header = ({ val }) => {
               </div>)}</>)}
         </nav>
       </header>
-      {!isMobile && (<CategoryHeader isOpen={isOpen} />)}
+      {!isMobile && (<CategoryHeader isOpen={isOpen} isMobile={isMobile} />)}
     </>
 
   );

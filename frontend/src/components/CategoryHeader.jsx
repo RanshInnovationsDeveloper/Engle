@@ -1,7 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import "../styles/CategoryHeader.css";
+import { useEffect, useState } from 'react';
 import { FaAngleDown } from "react-icons/fa6";
-
+import { useLocation } from 'react-router-dom';
 
 const CategoryHeader = ({ isOpen, isMobile }) => {
 
@@ -14,11 +15,25 @@ const CategoryHeader = ({ isOpen, isMobile }) => {
     { text: "Favourites", link: "/favourites" },
     { text: "My Notes", link: "/mynotes" },
   ];
-  
-  
 
-  return (<>
-    <div className={`menu-transition ${isOpen ? "menu-open" : ''}`}>
+
+  const [menuOpen, setMenuOpen] = useState(isOpen); // State to manage menu open/close
+  const location = useLocation();
+
+  useEffect(() => {
+    // Check if the current location matches any of the links in the options array
+    const isOnOptionLink = options.some(option => location.pathname === option.link);
+    // If the current location matches any link, set isOpen to true
+    if (isOnOptionLink || isOpen) {
+      setMenuOpen(true);
+    } else {
+      setMenuOpen(false);
+    }
+  }, [location.pathname, isOpen]);
+
+
+  return (
+    <div className={`menu-transition ${menuOpen ? "menu-open" : ''}`}>
       {(
         <div className={`flex flex-row justify-center ${isMobile ? "bg-transparent rounded-lg shadow-xl" : "bg-[#2E3D79]"} z-10`}>
           <ul className={`flex ${isMobile ? "flex-col mt-2 gap-1 justify-start items-start" : "py-2 flex-row gap-16 justify-center items-center"} `}>
@@ -48,7 +63,6 @@ const CategoryHeader = ({ isOpen, isMobile }) => {
         </div>
       )}
     </div>
-    </>
   );
 };
 
