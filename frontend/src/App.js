@@ -55,7 +55,7 @@ function App() {
         <Route path="/learn_with_context" element={< Upcomingpage />} />
         <Route path="/learn_with_story" element={< Upcomingpage />} />
         <Route path="/learn_with_friends" element={< Upcomingpage />} />
-        <Route path="/errorpage" element={< ErrorPage />} />
+        <Route path="*" element={< ErrorPage />} />
 
         {/* <Route path="/story" element={<Stories/>} /> */}
         {/* <Route path="/story/:id" element={<IndividualStory/>} /> */}

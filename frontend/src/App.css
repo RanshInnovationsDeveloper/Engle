@@ -247,3 +247,16 @@ box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1
     transform: rotate(360deg);
   }
 }
+
+
+/* scrollBar */
+::-webkit-scrollbar {
+  width: 1px!important;
+  height: 6px!important;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,.2);
+}
+::-webkit-scrollbar-track {
+  background: hsla(0,0%,100%,.1);
+}
