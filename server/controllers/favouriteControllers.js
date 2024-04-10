@@ -148,6 +148,7 @@ const fetchFavouriteItems = async (req, res) => {
   if (Array.isArray(data[key])) {
     // const checkSeenPromises = data[key].map(item => checkSeenStatus(userId, key, item));
     // const isSeenResults = await Promise.all(checkSeenPromises);
+     let wordsArrayLength=data["words"].length;
     for (let i = 0; i < data[key].length; i++) {
       const item = data[key][i];
       // const isSeen = isSeenResults[i];
@@ -158,7 +159,7 @@ const fetchFavouriteItems = async (req, res) => {
 
 
           //Checking as per the values of keys as different key have different data type some coming from firebase some from storage
-          if (key == "sampleStory" || key == "words") {
+          if (key == "sampleStory") {
             promises.push({
               ...item,
               type: key,
@@ -167,7 +168,18 @@ const fetchFavouriteItems = async (req, res) => {
               // isSeen
             });
           }
-          if (key == "notes") {
+
+          else if (key =="words"){
+            wordsArrayLength=wordsArrayLength-1;
+            promises.push({
+              ...item,
+              type: key,
+              val: keyArr[key][Number(item.itemId)],
+              createdAt: createdAtFormatted,
+              viewIndex:wordsArrayLength
+          })
+        }
+          else if (key == "notes") {
             const noteId = item?.itemId;
             promises.push(
               axios
