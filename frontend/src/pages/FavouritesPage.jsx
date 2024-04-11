@@ -3,19 +3,23 @@ import { useEffect, useState } from "react";
 import { GoSearch } from "react-icons/go";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import Header from "../components/Header";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { apiConnector } from "../services/apiConnector";
 import { favouriteEndpoints } from "../services/apis";
 import FavouriteButton from "../components/FavouriteButton";
 import Spinner from "../components/Spinner";
-import { useParams } from "react-router-dom";
+import { useParams ,useNavigate} from "react-router-dom";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import Notecard from "../components/Notecard";
+import { setCurrentCategoryWordIndex, setCurrentCategoryWordFileActualIndex, setFlashCardCategory } from '../slices/flashCardSlice';
 
 
 const { GET_FAVOURITE_API } = favouriteEndpoints;
 function FavouritesPage() {
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [query, setQuery] = useState('') //query to be searched
   const [filteredData, setFilteredData] = useState([]) //filtered data to be displayed
@@ -213,7 +217,17 @@ function FavouritesPage() {
                                 </h3></td>
 
                               <td className="text-center border w-40  border-[#5B7ADE]">
-                                <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4 w-[4.75rem] h-9">View</button>
+                                <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4 w-[4.75rem] h-9" onClick={
+                                  () => {
+                                    dispatch(setFlashCardCategory("favourite"));
+                                    localStorage.setItem("flashCardCategory", "favourite");
+                                    dispatch(setCurrentCategoryWordIndex(item?.viewIndex));
+                                    localStorage.setItem("currentCategoryWordIndex_favourite", item?.viewIndex);
+                                    dispatch(setCurrentCategoryWordFileActualIndex(item?.itemId));
+                                    localStorage.setItem("currentCategoryWordFileActualIndex_favourite", item?.itemId);
+                                    navigate("/flashcards");
+                                  }
+                                }>View</button>
 
                               </td>
 
@@ -295,10 +309,10 @@ function FavouritesPage() {
                 onBlur={(e) => {
                   const value = parseInt(e.target.value);
                   if (isNaN(value) || value < 1 || value > totalPages) {
-                      // Revert to the last valid value
-                      e.target.value = currentPage;
+                    // Revert to the last valid value
+                    e.target.value = currentPage;
                   }
-              }}
+                }}
               />
               <h1 className="text-center font-normal"> of {totalPages}</h1>
             </div>

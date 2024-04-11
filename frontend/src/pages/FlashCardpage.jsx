@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import CategoryHeader from "../components/CategoryHeader";
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { TiTick } from "react-icons/ti";
@@ -13,6 +13,7 @@ import { apiConnector } from '../services/apiConnector';
 import { flashCardEndpoints, seenEndpoints } from '../services/apis';
 import FavouriteButton from "../components/FavouriteButton";
 import { WORD_FILE_NAME, WORD_FILE_TYPE, FLASH_CARD_SEEN, FLASH_CARD_UNSEEN } from "../constants/constants";
+import { setCurrentCategoryWordIndex, setCurrentCategoryWordFileActualIndex, setFlashCardCategory } from '../slices/flashCardSlice';
 import RememberButton from '../components/RememberButton';
 import UnrememberButton from '../components/UnrememberButton';
 import Notecard from '../components/Notecard';
@@ -21,17 +22,22 @@ import Notecard from '../components/Notecard';
 
 function FlashCardpage() {
 
-    //This is to set the first occurence of data where all data is present in words
-    const [detailIndex, setDetailIndex] = useState(0);
-    const options = ['Unseen Words', 'Seen Words', 'Easy Words', 'Favourite Words', 'Test Vocabulary', 'Idioms'];
     const { authUserId } = useSelector((state) => state.auth);
+
+    // This state is used to store the current flashCardCategory data except unseen (Retrive from backend)
+    const { flashCardCategory, currentCategoryWordIndex, currentCategoryWordFileActualIndex } = useSelector((state) => state.flashCard);
+
     const { FETCHWORD_API } = flashCardEndpoints;
     const { ADD_SEEN_API } = seenEndpoints;
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     // store word recieve from backend
     const [worddata, setWorddata] = useState({});
-    const [flashCardCategory, setFlashCardCategory] = useState(localStorage.getItem("flashCardCategory") || "unseen");
 
+    //This is to set the first occurence of data where all data is present in words
+    const [detailIndex, setDetailIndex] = useState(0);
 
     // These state hook are used to control the flip functionality
     const [isFlipped, setIsFlipped] = useState(false);
@@ -42,11 +48,8 @@ function FlashCardpage() {
 
     // This State is used only in case of Unseen ( we do not store the data of unseen in backend So I store it in local storage)
     const [unseenArrayInStorage, setunseenArrayInStorage] = useState(JSON.parse(localStorage.getItem(`ArrayofWordFileActualIndex_${flashCardCategory}`)) || [-1]);
-    const [unseenPreviousArrayIndex, setunseenPreviousArrayIndex] = useState(parseInt(localStorage.getItem("unseenPreviousArrayIndex"))-1||unseenArrayInStorage.length-1);
+    const [unseenPreviousArrayIndex, setunseenPreviousArrayIndex] = useState(parseInt(localStorage.getItem("unseenPreviousArrayIndex")) - 1 || unseenArrayInStorage.length - 1);
 
-    // This state is used to store the current flashCardCategory data except unseen (Retrive from backend)
-    const [currentCategoryWordIndex, setCurrentCategoryWordIndex] = useState(parseInt(localStorage.getItem(`currentCategoryWordIndex_${flashCardCategory}`)) || 0);
-    const [currentCategoryWordFileActualIndex, setCurrentCategoryWordFileActualIndex] = useState(parseInt(localStorage.getItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`)) || 0);
 
 
 
@@ -54,25 +57,17 @@ function FlashCardpage() {
     const fetchWord = async (wordIndex) => {
         try {
 
-            (isFlipped) ? setIsSeen(true) : setIsSeen(false); //if the card is flipped then it is seen
-
-            if (flashCardCategory !== "unseen" && authUserId == null) {             // here it is a bug  ifauthUserId is null but it fetch as string "null" from session storage .
-                toast.error("please login!");
-                return;
-            }
-            else {
-                const response = await apiConnector("POST", FETCHWORD_API,
-                    {
-                        wordCategory: flashCardCategory,
-                        authUserId: `${authUserId}`,
-                        wordIndex: wordIndex
-                    })
-
-                return response;
-            }
+            const response = await apiConnector("POST", FETCHWORD_API,
+                {
+                    wordCategory: flashCardCategory,
+                    authUserId: `${authUserId}`,
+                    wordIndex: wordIndex
+                })
+            return response;
 
         } catch (err) {
             console.log("there is error to fetchWord => ", err);
+            return;
         }
     }
 
@@ -84,32 +79,45 @@ function FlashCardpage() {
             let response;
             if (flashCardCategory === "unseen")
                 response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex]));
-            else
+
+            else if (flashCardCategory !== "unseen" && authUserId === null) {
+                dispatch(setFlashCardCategory("unseen"));
+                localStorage.setItem("flashCardCategory", "unseen");
+                return;
+            }
+
+            else {
                 response = await fetchWord(JSON.stringify(currentCategoryWordIndex));
+            }
 
             if (response?.data?.data !== null) {
 
                 setWorddata(response?.data?.data);
-                setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);  
+                dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                 localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
 
-                if (flashCardCategory === "unseen"&&unseenArrayInStorage[unseenPreviousArrayIndex]===-1) {
-
+                if (flashCardCategory === "unseen" && unseenArrayInStorage[unseenPreviousArrayIndex] === -1) {
                     updatesessionstoragearray(response?.data?.wordIndex);
                     setunseenPreviousArrayIndex(unseenPreviousArrayIndex + 1);
-                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex+1);
+                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex + 1);
                 }
                 else {
-                    setCurrentCategoryWordIndex(currentCategoryWordIndex + 1);
+                    dispatch(setCurrentCategoryWordIndex(currentCategoryWordIndex + 1));
                     localStorage.setItem(`currentCategoryWordIndex_${flashCardCategory}`, currentCategoryWordIndex);
                 }
             }
-            else
+            else {
                 toast.error("No words found in this category!");
+                dispatch(setCurrentCategoryWordIndex(0));
+                localStorage.setItem(`currentCategoryWordIndex_${flashCardCategory}`, 0);
+                dispatch(setCurrentCategoryWordFileActualIndex(0));
+                localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, 0);
+            }
+
             return;
         }
         callOnlyWhenPageReload();
-    }, [])
+    }, [flashCardCategory])
 
 
 
@@ -118,8 +126,8 @@ function FlashCardpage() {
     // function to add the word in seen category if user is logged in and flip the word .
     useEffect(() => {
         async function addWordInSeen() {
-            
-            if (authUserId !== "null" && flashCardCategory === "unseen") {
+
+            if (authUserId != "null" && flashCardCategory === "unseen") {
                 await apiConnector("POST", ADD_SEEN_API,
                     {
                         itemId: unseenArrayInStorage[unseenPreviousArrayIndex - 1],
@@ -158,11 +166,11 @@ function FlashCardpage() {
                 if (response?.data?.data !== null) {
 
                     setWorddata(response?.data?.data);
-                    setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);
+                    dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                     localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
                     updatesessionstoragearray(response?.data?.wordIndex);
                     setunseenPreviousArrayIndex(unseenPreviousArrayIndex + 1);
-                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex+1);
+                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex + 1);
 
                 }
                 else
@@ -173,23 +181,23 @@ function FlashCardpage() {
                 if (response?.data !== null) {
 
                     setWorddata(response?.data?.data);
-                    setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);
+                    dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                     localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
                     setunseenPreviousArrayIndex(unseenPreviousArrayIndex + 1);
-                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex+1);
+                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex + 1);
                 }
             }
         }
         // flashCardCategory is seen or favourite
         else {
- 
+
             const response = await fetchWord(JSON.stringify(currentCategoryWordIndex));
             if (response?.data?.data !== null) {
 
                 setWorddata(response?.data?.data);
-                setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);
+                dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                 localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
-                setCurrentCategoryWordIndex(currentCategoryWordIndex+1);
+                dispatch(setCurrentCategoryWordIndex(currentCategoryWordIndex + 1));
                 localStorage.setItem(`currentCategoryWordIndex_${flashCardCategory}`, currentCategoryWordIndex);
             }
             else {
@@ -214,10 +222,10 @@ function FlashCardpage() {
                 if (response?.data?.data !== null) {
 
                     setWorddata(response?.data?.data);
-                    setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);
+                    dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                     localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
                     setunseenPreviousArrayIndex(unseenPreviousArrayIndex - 1);
-                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex-1);
+                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex - 1);
                 }
                 else {
                     toast.error("No more words!");
@@ -230,10 +238,10 @@ function FlashCardpage() {
             if (response?.data?.data !== null) {
 
                 setWorddata(response?.data?.data);
-                setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);
+                dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                 localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
-                setCurrentCategoryWordIndex(currentCategoryWordIndex - 1);
-                localStorage.setItem(`currentCategoryWordIndex_${flashCardCategory}`, currentCategoryWordIndex-2);
+                dispatch(setCurrentCategoryWordIndex(currentCategoryWordIndex - 1));
+                localStorage.setItem(`currentCategoryWordIndex_${flashCardCategory}`, currentCategoryWordIndex - 2);
             }
             else {
                 toast.error("No more words!");
@@ -356,7 +364,7 @@ function FlashCardpage() {
                                     <FavouriteButton
                                         itemId={currentCategoryWordFileActualIndex}
                                         type={WORD_FILE_TYPE}
-                                        name={FLASH_CARD_SEEN} 
+                                        name={FLASH_CARD_SEEN}
                                         isFlipped={isFlipped}
                                     />
                                 </div>
@@ -411,7 +419,7 @@ function FlashCardpage() {
                     <button onClick={handleClickRight}><FaArrowAltCircleRight className='text-blue-900 h-10 w-10' /></button>
                 </div>
             </div>
-        <Notecard/>
+            <Notecard />
         </>
     );
 }
