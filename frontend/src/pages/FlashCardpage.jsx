@@ -11,7 +11,6 @@ import "../styles/FlashCard.css";
 import Header from '../components/Header';
 import { apiConnector } from '../services/apiConnector';
 import { flashCardEndpoints, seenEndpoints } from '../services/apis';
-
 import FavouriteButton from "../components/FavouriteButton";
 import { WORD_FILE_NAME, WORD_FILE_TYPE, FLASH_CARD_SEEN, FLASH_CARD_UNSEEN } from "../constants/constants";
 import RememberButton from '../components/RememberButton';
@@ -25,13 +24,13 @@ function FlashCardpage() {
     //This is to set the first occurence of data where all data is present in words
     const [detailIndex, setDetailIndex] = useState(0);
 
-    const { authUserId } =useSelector((state) => state.auth);
+    const { authUserId } = useSelector((state) => state.auth);
     const { FETCHWORD_API } = flashCardEndpoints;
     const { ADD_SEEN_API } = seenEndpoints;
 
     // store word recieve from backend
     const [worddata, setWorddata] = useState({});
-    const [flashCardCategory, setFlashCardCategory] = useState(localStorage.getItem("flashCardCategory")||"unseen");
+    const [flashCardCategory, setFlashCardCategory] = useState(localStorage.getItem("flashCardCategory") || "unseen");
 
 
     // These state hook are used to control the flip functionality
@@ -41,16 +40,21 @@ function FlashCardpage() {
     const [isSeen, setIsSeen] = useState(false);
 
 
-    // This array is used to store the index of previous words .
-    const [unseenPreviousIndex, setunseenPreviousIndex] = useState(JSON.parse(sessionStorage.getItem(flashCardCategory)) || []);
-    const [previousarrayindex, setpreviousarrayindex] = useState(unseenPreviousIndex.length);   // 1 based indexing
+    // This State is used only in case of Unseen ( we do not store the data of unseen in backend So I store it in local storage)
+    const [unseenArrayInStorage, setunseenArrayInStorage] = useState(JSON.parse(localStorage.getItem(`ArrayofWordFileActualIndex_${flashCardCategory}`)) || [-1]);
+    const [unseenPreviousArrayIndex, setunseenPreviousArrayIndex] = useState(parseInt(localStorage.getItem("unseenPreviousArrayIndex"))-1||unseenArrayInStorage.length-1);
+
+    // This state is used to store the current flashCardCategory data except unseen (Retrive from backend)
+    const [currentCategoryWordIndex, setCurrentCategoryWordIndex] = useState(parseInt(localStorage.getItem(`currentCategoryWordIndex_${flashCardCategory}`)) || 0);
+    const [currentCategoryWordFileActualIndex, setCurrentCategoryWordFileActualIndex] = useState(parseInt(localStorage.getItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`)) || 0);
 
 
 
     // this function is used to fetch the data from the backend
     const fetchWord = async (wordIndex) => {
         try {
-             (isFlipped)?setIsSeen(true):setIsSeen(false); //if the card is flipped then it is seen
+
+            (isFlipped) ? setIsSeen(true) : setIsSeen(false); //if the card is flipped then it is seen
 
             if (flashCardCategory !== "unseen" && authUserId == null) {             // here it is a bug  ifauthUserId is null but it fetch as string "null" from session storage .
                 toast.error("please login!");
@@ -72,36 +76,53 @@ function FlashCardpage() {
         }
     }
 
+
+
+
     useEffect(() => {
         async function callOnlyWhenPageReload() {
             let response;
             if (flashCardCategory === "unseen")
-                response = await fetchWord("-1");
+                response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex]));
             else
-                response = await fetchWord(JSON.stringify(previousarrayindex));
+                response = await fetchWord(JSON.stringify(currentCategoryWordIndex));
 
             if (response?.data?.data !== null) {
 
-                // console.log(response?.data)
                 setWorddata(response?.data?.data);
-                updatesessionstoragearray(response?.data?.wordIndex);
-                setpreviousarrayindex(previousarrayindex + 1);
+                setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);  
+                localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
+
+                if (flashCardCategory === "unseen"&&unseenArrayInStorage[unseenPreviousArrayIndex]===-1) {
+
+                    updatesessionstoragearray(response?.data?.wordIndex);
+                    setunseenPreviousArrayIndex(unseenPreviousArrayIndex + 1);
+                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex+1);
+                }
+                else {
+                    setCurrentCategoryWordIndex(currentCategoryWordIndex + 1);
+                    localStorage.setItem(`currentCategoryWordIndex_${flashCardCategory}`, currentCategoryWordIndex);
+                }
             }
             else
-                toast.error("no words found");
+                toast.error("No words found in this category!");
             return;
         }
         callOnlyWhenPageReload();
-    }, [flashCardCategory, authUserId])
+    }, [])
+
+
+
 
 
     // function to add the word in seen category if user is logged in and flip the word .
     useEffect(() => {
         async function addWordInSeen() {
+            
             if (authUserId !== "null" && flashCardCategory === "unseen") {
                 await apiConnector("POST", ADD_SEEN_API,
                     {
-                        itemId: unseenPreviousIndex[previousarrayindex - 1],
+                        itemId: unseenArrayInStorage[unseenPreviousArrayIndex - 1],
                         userId: `${authUserId}`,
                         type: WORD_FILE_TYPE,
                         name: WORD_FILE_NAME,
@@ -115,67 +136,64 @@ function FlashCardpage() {
     }, [isFlipped]);
 
 
-    // update session storage array to store the previous word indexies 
+
+
+    // update session storage array of unseenArray to store the previous word indexies 
     const updatesessionstoragearray = (index) => {
-        const updatedarray = [...unseenPreviousIndex, index];
-        setunseenPreviousIndex(updatedarray);
-        sessionStorage.setItem(flashCardCategory, JSON.stringify(updatedarray));
+        const updatedarray = [...unseenArrayInStorage.slice(0, -1), index, -1];
+        setunseenArrayInStorage(updatedarray);
+        localStorage.setItem(`ArrayofWordFileActualIndex_${flashCardCategory}`, JSON.stringify(updatedarray));
         return;
     }
+
+
 
 
     // handler function to fetch next word 
     const handleClickRight = async () => {
 
         if (flashCardCategory === "unseen") {
-            // if currentwordindex isequal to "-1" means we fetch any random word from backend .
-            if (previousarrayindex === unseenPreviousIndex.length) {
-                const response = await fetchWord("-1");
+            if (unseenArrayInStorage[unseenPreviousArrayIndex] === -1) {
+                const response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex]));
                 if (response?.data?.data !== null) {
 
                     setWorddata(response?.data?.data);
+                    setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);
+                    localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
                     updatesessionstoragearray(response?.data?.wordIndex);
-                    setpreviousarrayindex(previousarrayindex + 1);
+                    setunseenPreviousArrayIndex(unseenPreviousArrayIndex + 1);
+                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex+1);
 
                 }
                 else
-                    toast.error("no words found");
+                    toast.error("No more words!");
             }
             else {
-                const response = await fetchWord(JSON.stringify(unseenPreviousIndex[previousarrayindex]));
+                const response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex]));
                 if (response?.data !== null) {
 
                     setWorddata(response?.data?.data);
-                    setpreviousarrayindex(previousarrayindex + 1);
+                    setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);
+                    localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
+                    setunseenPreviousArrayIndex(unseenPreviousArrayIndex + 1);
+                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex+1);
                 }
             }
         }
         // flashCardCategory is seen or favourite
         else {
-            if (previousarrayindex === unseenPreviousIndex.length) {
-                const response = await fetchWord(JSON.stringify(previousarrayindex));
-                if (response?.data?.data !== null) {
+ 
+            const response = await fetchWord(JSON.stringify(currentCategoryWordIndex));
+            if (response?.data?.data !== null) {
 
-                    setWorddata(response?.data?.data);
-                    updatesessionstoragearray(response?.data?.wordIndex);
-                    setpreviousarrayindex(previousarrayindex + 1);
-
-                }
-                else {
-                    toast.error("no words found");
-                }
+                setWorddata(response?.data?.data);
+                setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);
+                localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
+                setCurrentCategoryWordIndex(currentCategoryWordIndex+1);
+                localStorage.setItem(`currentCategoryWordIndex_${flashCardCategory}`, currentCategoryWordIndex);
             }
             else {
-                const response = await fetchWord(JSON.stringify(previousarrayindex));
-                if (response?.data?.data !== null) {
-
-                    setWorddata(response?.data?.data);
-                    setpreviousarrayindex(previousarrayindex + 1);
-
-                }
-                else {
-                    toast.error("no words found");
-                }
+                toast.error("No more words!");
             }
         }
         return;
@@ -188,34 +206,37 @@ function FlashCardpage() {
     const handleClickLeft = async () => {
 
         if (flashCardCategory === "unseen") {
-            // get index from the session storage 
-            if (previousarrayindex === 1) {
-                toast.error("no more words");
+            if (unseenPreviousArrayIndex === 1) {
+                toast.error("No more words!");
             }
             else {
-                const response = await fetchWord(JSON.stringify(unseenPreviousIndex[previousarrayindex - 2]));
+                const response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex - 2]));
                 if (response?.data?.data !== null) {
 
                     setWorddata(response?.data?.data);
-                    setpreviousarrayindex(previousarrayindex - 1);
-
+                    setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);
+                    localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
+                    setunseenPreviousArrayIndex(unseenPreviousArrayIndex - 1);
+                    localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex-1);
                 }
                 else {
-                    toast.error("no more words");
+                    toast.error("No more words!");
                 }
             }
         }
         // wordCategory is favourite or seen
         else {
-            const response = await fetchWord(JSON.stringify(previousarrayindex - 2));
+            const response = await fetchWord(JSON.stringify(currentCategoryWordIndex - 2));
             if (response?.data?.data !== null) {
 
                 setWorddata(response?.data?.data);
-                setpreviousarrayindex(previousarrayindex - 1);
-
+                setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex);
+                localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
+                setCurrentCategoryWordIndex(currentCategoryWordIndex - 1);
+                localStorage.setItem(`currentCategoryWordIndex_${flashCardCategory}`, currentCategoryWordIndex-2);
             }
             else {
-                toast.error("no words found");
+                toast.error("No more words!");
             }
         }
 
@@ -223,34 +244,36 @@ function FlashCardpage() {
     };
 
 
+
+
     const handleFlip = async () => {
         setIsFlipped(!isFlipped);
-        if (isFlipped===true) setIsSeen(true); 
+        if (isFlipped === true) setIsSeen(true);
 
     };
 
-    //set Index where all data is present 
 
-    const detailIndexSetterFunction=()=>{
-            for (let i = 0; i < worddata?.details?.length; i++) {
-                // iterate over all for a suitable candidate
-                if (
-                    worddata?.details?.[i]?.definition &&
-                    worddata?.details?.[i]?.examples?.length > 0 &&
-                    worddata?.details?.[i]?.synonyms?.length > 0 &&
-                    worddata?.details?.[i]?.antonyms?.length > 0
-                ) {
-                    setDetailIndex(i);
-                    break;
-                }
-                // if it is the last index and we haven't found a suitable candidate then set the last index 
-                else if (i === worddata?.details?.length - 1) {
-                    setDetailIndex(i);
-                }
+
+    //set Index where all data is present 
+    const detailIndexSetterFunction = () => {
+        for (let i = 0; i < worddata?.details?.length; i++) {
+            // iterate over all for a suitable candidate
+            if (
+                worddata?.details?.[i]?.definition &&
+                worddata?.details?.[i]?.examples?.length > 0 &&
+                worddata?.details?.[i]?.synonyms?.length > 0 &&
+                worddata?.details?.[i]?.antonyms?.length > 0
+            ) {
+                setDetailIndex(i);
+                break;
+            }
+            // if it is the last index and we haven't found a suitable candidate then set the last index 
+            else if (i === worddata?.details?.length - 1) {
+                setDetailIndex(i);
             }
         }
-
-useEffect(() => {detailIndexSetterFunction()},[worddata])
+    }
+    useEffect(() => { detailIndexSetterFunction() }, [worddata])
 
 
 
@@ -267,20 +290,18 @@ useEffect(() => {detailIndexSetterFunction()},[worddata])
                         <div className="card__face p rounded-2xl ">
                             <div className="">
                                 <div className='flex justify-start ' >
-                                {/* {
-                                    console.log(isSeen)} */}
-                                    {isSeen?<FavouriteButton
-                                        itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                    {isSeen ? <FavouriteButton
+                                        itemId={currentCategoryWordFileActualIndex}
                                         type={WORD_FILE_TYPE}
                                         name={FLASH_CARD_SEEN}
-                                        isFlipped={isFlipped}                                        
-                                    />:
-                                    <FavouriteButton
-                                        itemId={unseenPreviousIndex[previousarrayindex - 1]}
-                                        type={WORD_FILE_TYPE}
-                                        name={FLASH_CARD_UNSEEN}
-                                        isFlipped={isFlipped} 
-                                    />}
+                                        isFlipped={isFlipped}
+                                    /> :
+                                        <FavouriteButton
+                                            itemId={currentCategoryWordFileActualIndex}
+                                            type={WORD_FILE_TYPE}
+                                            name={FLASH_CARD_UNSEEN}
+                                            isFlipped={isFlipped}
+                                        />}
                                 </div>
                                 <div >
                                     <div className='flex flex-col justify-center items-center'>
@@ -306,14 +327,14 @@ useEffect(() => {detailIndexSetterFunction()},[worddata])
                                                     </div>
                                                 </button> */}
                                                 <RememberButton
-                                                    itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                                    itemId={currentCategoryWordFileActualIndex}
                                                     type={WORD_FILE_TYPE}
                                                     name={WORD_FILE_NAME}
                                                     isFlipped={isFlipped}
                                                     onClick={handleClickRight}
                                                 />
                                                 <UnrememberButton
-                                                    itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                                    itemId={currentCategoryWordFileActualIndex}
                                                     type={WORD_FILE_TYPE}
                                                     name={WORD_FILE_NAME}
                                                     isFlipped={isFlipped}
@@ -333,9 +354,9 @@ useEffect(() => {detailIndexSetterFunction()},[worddata])
                                 <div className='flex justify-start'>
 
                                     <FavouriteButton
-                                        itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                        itemId={currentCategoryWordFileActualIndex}
                                         type={WORD_FILE_TYPE}
-                                        name={FLASH_CARD_SEEN}    // "Flashcards-seen"
+                                        name={FLASH_CARD_SEEN} 
                                         isFlipped={isFlipped}
                                     />
                                 </div>
@@ -344,36 +365,35 @@ useEffect(() => {detailIndexSetterFunction()},[worddata])
                                         {worddata?.word && worddata.word.charAt(0).toUpperCase() + worddata.word.slice(1)}
                                     </h2>
 
-                                    
+
 
                                     <div className=' mb-8 ml-6'>
-                                    {/* {console.log(worddata?.details?.[detailIndex])} */}
-                                            <p className='items-start flex flex-col font-semibold text-lg'>
-                                                Definition: {worddata?.details?.[detailIndex]?.definition && worddata.details[detailIndex].definition.charAt(0).toUpperCase() + worddata.details[detailIndex].definition.slice(1)}
-                                            </p>
+                                        <p className='items-start flex flex-col font-semibold text-lg'>
+                                            Definition: {worddata?.details?.[detailIndex]?.definition && worddata.details[detailIndex].definition.charAt(0).toUpperCase() + worddata.details[detailIndex].definition.slice(1)}
+                                        </p>
 
-                                            <p className='items-start flex flex-col font-semibold text-lg'>
-                                                Example: {worddata?.details?.[detailIndex]?.examples?.[0] && worddata.details[detailIndex].examples[0].charAt(0).toUpperCase() + worddata.details[detailIndex].examples[0].slice(1)}
-                                            </p>
+                                        <p className='items-start flex flex-col font-semibold text-lg'>
+                                            Example: {worddata?.details?.[detailIndex]?.examples?.[0] && worddata.details[detailIndex].examples[0].charAt(0).toUpperCase() + worddata.details[detailIndex].examples[0].slice(1)}
+                                        </p>
 
-                                            <p className='items-start flex flex-col font-semibold text-lg'>
-                                                Synonyms: {worddata?.details?.[detailIndex]?.synonyms && worddata.details[detailIndex].synonyms.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(', ')}
-                                            </p>
+                                        <p className='items-start flex flex-col font-semibold text-lg'>
+                                            Synonyms: {worddata?.details?.[detailIndex]?.synonyms && worddata.details[detailIndex].synonyms.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(', ')}
+                                        </p>
 
-                                            <p className='items-start flex flex-col font-semibold text-lg'>
-                                                Antonyms: {worddata?.details?.[detailIndex]?.antonyms && worddata.details[detailIndex].antonyms.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(', ')}
-                                            </p>
-                                        </div>
+                                        <p className='items-start flex flex-col font-semibold text-lg'>
+                                            Antonyms: {worddata?.details?.[detailIndex]?.antonyms && worddata.details[detailIndex].antonyms.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(', ')}
+                                        </p>
+                                    </div>
                                 </div>
                                 <div className='flex md:flex-row flex-col gap-2 justify-center mt-6 relative mx-2'>
                                     <RememberButton
-                                        itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                        itemId={currentCategoryWordFileActualIndex}
                                         type={WORD_FILE_TYPE}
                                         name={WORD_FILE_NAME}
                                         isFlipped={isFlipped}
                                     />
                                     <UnrememberButton
-                                        itemId={unseenPreviousIndex[previousarrayindex - 1]}
+                                        itemId={currentCategoryWordFileActualIndex}
                                         type={WORD_FILE_TYPE}
                                         name={WORD_FILE_NAME}
                                         isFlipped={isFlipped}

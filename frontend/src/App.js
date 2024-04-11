@@ -21,6 +21,7 @@ import Spinner from "./components/Spinner";
 import FavouritesCategoryPage from "./pages/FavouritesCategoryPage.jsx"
 import { setLoading } from './slices/authSlice';
 import { useDispatch, useSelector } from "react-redux"
+import ErrorPage from "./pages/ErrorPage.jsx";
 
 function App() {
     const { loading } = useSelector((state) => state.auth);
@@ -54,6 +55,7 @@ function App() {
         <Route path="/learn_with_context" element={< Upcomingpage />} />
         <Route path="/learn_with_story" element={< Upcomingpage />} />
         <Route path="/learn_with_friends" element={< Upcomingpage />} />
+        <Route path="*" element={< ErrorPage />} />
 
         {/* <Route path="/story" element={<Stories/>} /> */}
         {/* <Route path="/story/:id" element={<IndividualStory/>} /> */}
