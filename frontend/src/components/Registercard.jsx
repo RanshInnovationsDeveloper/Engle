@@ -39,7 +39,7 @@ function Registercard() {
       } else {
 
         navigate("/");
-        toast.success("check your email for verification")
+        toast.success("Check your email for verification")
      
     }
   } else {

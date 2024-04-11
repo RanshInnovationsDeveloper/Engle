@@ -33,7 +33,7 @@ function Logincard() {
     
       const previousPath = localStorage.getItem('path');
       navigate(previousPath||"/");
-      toast.success("login successfully")
+      toast.success("Login Successfully")
       
     }
     dispatch(setLoading(false));
