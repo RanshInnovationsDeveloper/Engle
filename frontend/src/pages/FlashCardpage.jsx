@@ -16,6 +16,7 @@ import FavouriteButton from "../components/FavouriteButton";
 import { WORD_FILE_NAME, WORD_FILE_TYPE, FLASH_CARD_SEEN, FLASH_CARD_UNSEEN } from "../constants/constants";
 import RememberButton from '../components/RememberButton';
 import UnrememberButton from '../components/UnrememberButton';
+import Notecard from '../components/Notecard';
 
 
 
@@ -97,7 +98,7 @@ function FlashCardpage() {
     // function to add the word in seen category if user is logged in and flip the word .
     useEffect(() => {
         async function addWordInSeen() {
-            if (authUserId != "null" && flashCardCategory === "unseen") {
+            if (authUserId !== "null" && flashCardCategory === "unseen") {
                 await apiConnector("POST", ADD_SEEN_API,
                     {
                         itemId: unseenPreviousIndex[previousarrayindex - 1],
@@ -256,7 +257,6 @@ useEffect(() => {detailIndexSetterFunction()},[worddata])
     return (
         <>
             <Header val={1} />
-            <CategoryHeader />
             <div className='h-[90vh] flex flex-col mt-10  items-center '>
                 <h1 className='text-center text-4xl text-black '>FlashCards</h1>
                 <h3 className='text-center text-xl text-black mb-3'>{flashCardCategory}</h3>
@@ -391,7 +391,7 @@ useEffect(() => {detailIndexSetterFunction()},[worddata])
                     <button onClick={handleClickRight}><FaArrowAltCircleRight className='text-blue-900 h-10 w-10' /></button>
                 </div>
             </div>
-
+        <Notecard/>
         </>
     );
 }

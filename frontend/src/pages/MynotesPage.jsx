@@ -13,6 +13,7 @@ import { NOTES_FILE_NAME,NOTES_FILE_TYPE } from "../constants/constants";
 import { GoSearch } from "react-icons/go";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
+import Notecard from "../components/Notecard";
 
 // Function to group notes by date
 const groupNotesByDate = (notes) => {
@@ -133,10 +134,7 @@ export default function MynotesPage() {
     <>
     {/* {console.log("groupedNotes",groupedNotes)} */}
       <Header />
-      <CategoryHeader />
-      <Link to ="/notecard">
-                <button><FaSquarePlus className="text-blue-800 w-8 h-8"/></button>
-            </Link>
+
       <div className='mt-4'>
         {/* Search and filter bar */}
         <div className='flex flex-col gap-8 justify-between mx-3 lg:mx-28 mb-10 gap-{10rem} lg:flex lg:justify-between lg:flex-row'>
@@ -217,6 +215,7 @@ export default function MynotesPage() {
                     />
             </div>
             </div>
+            <Notecard/>
     </>
   );
 }

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {toast} from "react-toastify";
+import Header from '../components/Header';
+import Notecard from '../components/Notecard';
 const FavouritesCategoryPage = () => {
   // Sample array of favourite items
   
@@ -44,9 +46,9 @@ else{
 
   return (
     <>
-     
-    <div className="container mx-auto mt-8">
-      <h1 className="text-4xl md:text-left font-semibold mt-10 mb-20">Favourites</h1>
+     <Header val={1}/>
+    <div className="container mx-auto">
+      <h1 className="text-4xl md:text-left font-semibold mt-12 mb-20">Favourites</h1>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-16 ">
         {favouriteItems.map((item, index) => (
           <button
@@ -61,6 +63,7 @@ else{
         ))}
       </div>
     </div>
+    <Notecard/>
     </>
   );
 };

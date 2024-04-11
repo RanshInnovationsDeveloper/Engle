@@ -3,6 +3,7 @@ import "../styles/CategoryHeader.css";
 import { useEffect, useState } from 'react';
 import { FaAngleDown } from "react-icons/fa6";
 import { useLocation } from 'react-router-dom';
+import FlashcardDropdown from './FlashcardDropdown';
 
 const CategoryHeader = ({ isOpen, isMobile }) => {
 
@@ -16,53 +17,91 @@ const CategoryHeader = ({ isOpen, isMobile }) => {
     { text: "My Notes", link: "/mynotes" },
   ];
 
+  const [isFlashOpen, setIsFlashOpen] = useState(false);
+  const currentPath = window.location.pathname;
 
-  const [menuOpen, setMenuOpen] = useState(isOpen); // State to manage menu open/close
+  const toggleModal = () => {
+    setIsFlashOpen(!isFlashOpen);
+  };
   const location = useLocation();
-
-  useEffect(() => {
-    // Check if the current location matches any of the links in the options array
-    const isOnOptionLink = options.some(option => location.pathname === option.link);
-    // If the current location matches any link, set isOpen to true
-    if (isOnOptionLink || isOpen) {
-      setMenuOpen(true);
-    } else {
-      setMenuOpen(false);
-    }
-  }, [location.pathname, isOpen]);
-
+  const shouldRender = options.some(option => location.pathname === option.link);
+if (isMobile === undefined) {
+  return null;
+}
 
   return (
-    <div className={`menu-transition ${menuOpen ? "menu-open" : ''}`}>
-      {(
-        <div className={`flex flex-row justify-center ${isMobile ? "bg-transparent rounded-lg shadow-xl" : "bg-[#2E3D79]"} z-10`}>
-          <ul className={`flex ${isMobile ? "flex-col mt-2 gap-1 justify-start items-start" : "py-2 flex-row gap-16 justify-center items-center"} `}>
+    <>
+    {isMobile? (
+       <div className={`menu-transition ${isOpen ? "menu-open" : ''}`}>
+       {(
+         <div className={`flex flex-row justify-center bg-transparent rounded-lg shadow-xl z-10`}>
+           <ul className={`flex flex-col mt-2 gap-1 justify-start items-start `}>
+ 
+             {options.map((option, index) => (
+               <li key={index} className="py-1">
+                 {option.isButton ? (<>
+                   <div className='flex items-center gap-2 ' onClick={toggleModal}>
+                 <NavLink to={option.link} className={`text-black text-[1rem] `}>
+                     {option.text}
+                   </NavLink>
+                   <button className={` text-black`} id="flashcard-menu-button" >
+                     <FaAngleDown/>
+                   </button>
+                   
+                 </div>
+                 {isMobile && <FlashcardDropdown isOpen={isFlashOpen} isMobile={isMobile}/>}
+                 </>
+                 
+                 ) : (
+                   <NavLink to={option.link} className={`text-black text-[1rem] `}>
+                     {option.text}
+                   </NavLink>
+                 )}
+               </li>
+             ))}
+           </ul>
+         </div>
+       )}
+     </div>
+    )
+    :
+    (<>{shouldRender && <>{(<>
+      <div className={`flex flex-row justify-center items-center bg-[#34468A]  h-[3rem] z-10`}>
+        <ul className={`flex flex-row gap-20  `}>
 
-            {options.map((option, index) => (
-              <li key={index} className="py-1">
-                {option.isButton ? (<>
-                  <div className='flex items-center gap-2'>
-                <NavLink to={option.link} className={`${isMobile ? "text-black" : "text-white"} text-[1rem] `}>
-                    {option.text}
-                  </NavLink>
-                  <button className={` ${!isMobile ? 'text-white':'text-black'}`} id="flashcard-menu-button" >
-                    <FaAngleDown/>
-                  </button>
-                  
-                </div>
-                </>
+          {options.map((option, index) => (
+            <li key={index} className="py-1">
+              {option.isButton ? (<>
+                <div className='flex items-center gap-[0.5rem]' onClick={toggleModal}>
+              <NavLink to={option.link} className={`text-white ${currentPath !== option.link ? "opacity-[90%]":"font-extrabold "}  text-[1rem] hover:opacity-100 hover:font-extrabold tracking-wide  `}>
+                  {option.text}
+                </NavLink>
+                <button className={` text-white ${currentPath !== option.link ? "opacity-[90%]":"font-extrabold "} text-[1rem] hover:opacity-100 hover:font-extrabold `} id="flashcard-menu-button" >
+                  <FaAngleDown/>
+                </button>
                 
-                ) : (
-                  <NavLink to={option.link} className={`${isMobile ? "text-black" : "text-white"} text-[1rem] `}>
-                    {option.text}
-                  </NavLink>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
+              </div>
+              {!isMobile && <FlashcardDropdown isOpen={isFlashOpen} isMobile={isMobile}/>}
+            
+              </>
+              
+              ) : (
+                <NavLink to={option.link} className={`text-white text-[1rem] ${currentPath !== option.link ? "opacity-[90%]":"font-extrabold "} hover:opacity-100 hover:font-extrabold tracking-wide`}>
+                  {option.text}
+                </NavLink>
+              )}
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    
+      </>
+    )}</>
+}
+        </>)}
+    </>
+   
   );
 };
 

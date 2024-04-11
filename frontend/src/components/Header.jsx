@@ -13,10 +13,12 @@ import { FaBell } from "react-icons/fa";
 import { FaAngleDown } from "react-icons/fa6";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import CategoryHeader from "./CategoryHeader";
+import ProfileDropdown from "./ProfileDropdown";
 
 const Header = ({ val }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
   const navigate = useNavigate()
   const { authUserId, userName } = useSelector((state) => state.auth)
@@ -25,26 +27,21 @@ const Header = ({ val }) => {
   useEffect(() => {
     onFirebaseStateChanged(dispatch);
   });
-  
 
-
-
-
-  const handlesignout = () => {
-    dispatch(setLoading(true));
-    logout();
-    navigate('/');
-    toast.success("logout successfully");
-    dispatch(setLoading(false));
-
-  }
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const toggleProfile = () => {
+    setIsProfileOpen(!isProfileOpen);
+  }
+
   const toggleCategoryMenu = () => {
-    setIsOpen(prevState => !prevState);
+    if(isMobile){
+      setIsOpen(prevState => !prevState);
+    }
+    
   };
 
   const closeMobileMenu = () => {
@@ -53,11 +50,6 @@ const Header = ({ val }) => {
     }
   };
 
-  const closeCategoryMenu = () => {
-    if (isOpen) {
-      setIsOpen(false);
-    }
-  };
   const listClassName = isMobile ? "nav__list" : "nav__list__web";
   const linkClassName = "nav__link";
 
@@ -80,20 +72,20 @@ const Header = ({ val }) => {
           <li >
             <div className={`${val === 1 ? "text-[#2E3D79]" : "text-black"} flex justify-start items-center gap-3`}>
               <NavLink
-              to=""
+              to="/flashcards"
                 className={`${linkClassName} ${val === 1 ? "font-semibold" : ""} `}
                 onClick={() => {
                   toggleCategoryMenu();
                 }}
               >
                 Category
+                
               </NavLink>
-              <button onClick={() => {
-                toggleCategoryMenu();
-              }}>
+              {isMobile&& <button       onClick={() => {
+                  toggleCategoryMenu();
+                }}       > 
                 <FaAngleDown />
-              </button>
-
+              </button>}
             </div>
 
             {isMobile && (<CategoryHeader isOpen={isOpen} isMobile={isMobile}  />)}
@@ -102,7 +94,7 @@ const Header = ({ val }) => {
             <NavLink
               to="/contact"
               className={`${linkClassName} ${val === 2 ? "text-[#2E3D79] font-semibold" : "text-black"}`}
-              onClick={() => { closeCategoryMenu(); closeMobileMenu(); }}
+              onClick={() => { closeMobileMenu(); }}
             >
               Contact Us
             </NavLink>
@@ -226,17 +218,19 @@ const Header = ({ val }) => {
                 </li>
               </ul>
             </div>) :
-              (<div className="flex flex-row justify-center items-center gap-2">
+              (<div className="flex flex-row justify-center items-center gap-[0.3rem]">
                 <ul className={`${listClassName} flex flex-row justify-center items-center gap-2 lg:mt-0 mt-3`}>
                   <li>
-                    <button className='btn2 pr-1 pl-3 py-3' >
-                      <FaBell className="w-[1.75rem] h-[1.75rem]" />
+                    <button className='btn2 pr-1 pl-3 py-3 h-[3.125rem] w-[3.125rem]' >
+                      <FaBell className="w-[1.25rem] h-[1.5rem]" />
                     </button>
                   </li>
                   <li>
-                    <button className='btn pr-1 pl-3 py-3' onClick={handlesignout}>
-                      <IoPerson className="w-[1.75rem] h-[1.75rem]" />
+                    <button className='btn pr-1 pl-3 py-3' onClick={toggleProfile}>
+                      <IoPerson className="w-[1.5rem] h-[1.5rem]" />
+                      <FaAngleDown className="w-[1rem] h-[0.8rem] font-bold" />
                     </button>
+                    {!isMobile && <ProfileDropdown isOpen={isProfileOpen}/>}
                   </li>
                 </ul>
               </div>)}</>)}

@@ -12,6 +12,7 @@ import Spinner from "../components/Spinner";
 import { useParams } from "react-router-dom";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
+import Notecard from "../components/Notecard";
 
 
 const { GET_FAVOURITE_API } = favouriteEndpoints;
@@ -157,7 +158,6 @@ function FavouritesPage() {
       <div>
       
         <Header val={1} />
-        <CategoryHeader />
         <div className="container mx-auto p-4">
           <div className="flex justify-between items-center mb-4 flex-wrap">
             <h2 className="text-3xl font-medium mb-4 w-full sm:w-auto text-center">FAVOURITES</h2>
@@ -289,6 +289,7 @@ function FavouritesPage() {
         
 
         </div>
+        <Notecard/>
       </div>
     );
 }
