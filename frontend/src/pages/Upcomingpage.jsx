@@ -5,11 +5,11 @@ function Upcomingpage() {
   return (
     <div className='h-screen flex flex-col '>
     <Header/>
-    <div className=" flex-1 flex flex-col justify-center md:justify-end items-center mt-60 lg:mt-80 xl:mt-60 ">
+    <div className=" flex-1 flex flex-col justify-center md:justify-end items-center">
       <img
         src="UpcomingSoon.png"
         alt="Upcoming Soon"
-        className='mt-10 max-w-[60%] md:max-w-[40%] '
+        className='lg:mt-16 md:mt-40 mt-44  max-w-[60%] md:max-w-[40%] '
       />
       
       <footer  className=" text-center bg-[#34468A] w-full h-full ">

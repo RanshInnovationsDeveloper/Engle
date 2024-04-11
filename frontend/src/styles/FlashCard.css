@@ -1,4 +1,32 @@
-
+.flip-animation {
+    width: 200px;
+    height: 200px;
+    perspective: 1000px;
+  }
+  
+  .front,
+  .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+  }
+  
+  .front {
+    transform: rotateY(0deg);
+  }
+  
+  .back {
+    transform: rotateY(180deg);
+  }
+  
+  .flip-animation.flipped .front {
+    transform: rotateY(180deg);
+  }
+  
+  .flip-animation.flipped .back {
+    transform: rotateY(0deg);
+  }
   /*transform 1.75s*/
   .card__inner {
     width: 100%;

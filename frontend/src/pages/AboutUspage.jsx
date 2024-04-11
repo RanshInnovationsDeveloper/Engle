@@ -1,6 +1,11 @@
 import Header from "../components/Header"
 
+import "../styles/FlashCard.css";
 function AboutUspage() {
+
+
+  
+
   return (
   
 <>
@@ -8,6 +13,7 @@ function AboutUspage() {
 <div className="flex justify-center items-center">
   <h2>About us</h2>
 </div>
+
 </>
   )
 }
