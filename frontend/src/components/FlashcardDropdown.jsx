@@ -3,7 +3,15 @@ import "../styles/CategoryHeader.css";
 const FlashcardDropdown = ({ isOpen, isMobile }) => {
 
   const dropdownRef = useRef(null);
-  const options = ['Unseen Words', 'Seen Words', 'Easy Words', 'Favourite Words', 'Test Vocabulary', 'Idioms'];
+  const options = [
+    {text:'Unseen Words', category: 'unseen'},
+    {text:'Seen Words', category: 'seen'},
+    {text:'Favourite Words', category: 'favourite'},
+    {text:'Remembered Words', category: 'remember'},
+    {text:'Unremembered Words', category: 'unremember'},
+    // {text:'Idioms', category: 'idioms'},
+    // {text:'Test Vocabulary', category: 'test'},
+   ];
 
 
 
@@ -29,14 +37,17 @@ const FlashcardDropdown = ({ isOpen, isMobile }) => {
         <div className="absolute inset-0 top-[8.5rem] bg-gray-900 opacity-50 z-20"></div>
         <div ref={dropdownRef} className="absolute mt-3 z-20  ">
 
-          <div className="bg-white border w-[10rem]   flex flex-col rounded-b-xl">
+          <div className="bg-white border w-[11rem]   flex flex-col rounded-b-xl">
             {options.map((option, index) => (
-              <div className={` px-4 py-2 text-center hover:scale-y-105 hover:shadow-md  bg-[#EBEDFF]  hover:bg-[#FFFFFF] h-[3rem] ${index === options.length - 1 ? "rounded-b-xl": "border-b border-black border-opacity-20"}`}>
+              <div className={` flex flex-col justify-center px-2 text-center text-[1rem] hover:scale-y-105 hover:shadow-md  bg-[#EBEDFF]  hover:bg-[#FFFFFF] h-[3rem] ${index === options.length - 1 ? "rounded-b-xl": "border-b border-black border-opacity-20"}`}>
                 <button
                 key={index}
+                onClick={()=> {
+                  localStorage.setItem("flashCardCategory",option.category);
+                }}
                 
               >
-                {option}
+                {option.text}
               </button>
 
               </div>
@@ -58,8 +69,10 @@ const FlashcardDropdown = ({ isOpen, isMobile }) => {
  
              {options.map((option, index) => (
                <li key={index} className="py-1">
-                   <button className={`text-black text-[1rem] `}>
-                     {option}
+                   <button className={`text-black text-[1rem] `}
+                   onClick={option.category}
+                   >
+                     {option.text}
                    </button>
                </li>
              ))}

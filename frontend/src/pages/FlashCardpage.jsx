@@ -23,7 +23,7 @@ function FlashCardpage() {
 
     //This is to set the first occurence of data where all data is present in words
     const [detailIndex, setDetailIndex] = useState(0);
-
+    const options = ['Unseen Words', 'Seen Words', 'Easy Words', 'Favourite Words', 'Test Vocabulary', 'Idioms'];
     const { authUserId } = useSelector((state) => state.auth);
     const { FETCHWORD_API } = flashCardEndpoints;
     const { ADD_SEEN_API } = seenEndpoints;
@@ -280,9 +280,9 @@ function FlashCardpage() {
     return (
         <>
             <Header val={1} />
-            <div className='h-[90vh] flex flex-col mt-10  items-center '>
-                <h1 className='text-center text-4xl text-black '>FlashCards</h1>
-                <h3 className='text-center text-xl text-black mb-3'>{flashCardCategory}</h3>
+            <div className='h-[34rem] flex flex-col mt-10  items-center '>
+                <h1 className='text-center text-[1.875rem] leading-4 font-[700px] mb-2 tracking-wider text-black '>FLASHCARDS</h1>
+                <h3 className='text-center text-base text-black mb-6'>{flashCardCategory}</h3>
                 <div className='lg:w-[43%] w-[80%] h-[56%] rounded-2xl'>
 
                     <div className={`card__inner ${isFlipped ? 'is-flipped' : ''} border border-blue-400 rounded-2xl`} onClick={handleFlip}>
@@ -405,7 +405,7 @@ function FlashCardpage() {
                     </div>
                 </div>
 
-                <div className='flex flex-row gap-10'>
+                <div className='flex flex-row gap-10 mt-10'>
                     <button onClick={handleClickLeft}><FaArrowAltCircleLeft className='text-blue-900 h-10 w-10' /></button>
                     <button className='text-white text-lg font-mukta bg-blue-900 rounded-lg px-20 py-2' onClick={handleFlip}> Show </button>
                     <button onClick={handleClickRight}><FaArrowAltCircleRight className='text-blue-900 h-10 w-10' /></button>

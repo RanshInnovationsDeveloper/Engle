@@ -28,6 +28,24 @@ const Header = ({ val }) => {
     onFirebaseStateChanged(dispatch);
   });
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const button = document.getElementById('profileButton');
+ 
+      if (button && !button.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+   
+    }
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -77,6 +95,7 @@ const Header = ({ val }) => {
                 onClick={() => {
                   toggleCategoryMenu();
                 }}
+                
               >
                 Category
                 
@@ -226,7 +245,7 @@ const Header = ({ val }) => {
                     </button>
                   </li>
                   <li>
-                    <button className='btn pr-1 pl-3 py-3' onClick={toggleProfile}>
+                    <button id="profileButton" className='btn pr-1 pl-3 py-3' onClick={toggleProfile}>
                       <IoPerson className="w-[1.5rem] h-[1.5rem]" />
                       <FaAngleDown className="w-[1rem] h-[0.8rem] font-bold" />
                     </button>

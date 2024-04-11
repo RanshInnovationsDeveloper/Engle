@@ -24,10 +24,32 @@ const CategoryHeader = ({ isOpen, isMobile }) => {
     setIsFlashOpen(!isFlashOpen);
   };
   const location = useLocation();
-  const shouldRender = options.some(option => location.pathname === option.link);
+  const shouldRender = options.some(option => location.pathname.startsWith(option.link));
+
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      const button = document.getElementById('flashdrop');
+  
+      if (button && !button.contains(event.target)) {
+        setIsFlashOpen(false);
+      }
+   
+    }
+  
+    document.addEventListener('click', handleClickOutside);
+  
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+
 if (isMobile === undefined) {
   return null;
 }
+
+
 
   return (
     <>
@@ -66,13 +88,13 @@ if (isMobile === undefined) {
     )
     :
     (<>{shouldRender && <>{(<>
-      <div className={`flex flex-row justify-center items-center bg-[#34468A]  h-[3rem] z-10`}>
+      <div  className={`flex flex-row justify-center items-center bg-[#34468A]  h-[3rem] z-10`}>
         <ul className={`flex flex-row gap-20  `}>
 
           {options.map((option, index) => (
             <li key={index} className="py-1">
               {option.isButton ? (<>
-                <div className='flex items-center gap-[0.5rem]' onClick={toggleModal}>
+                <div id='flashdrop' className='flex items-center gap-[0.5rem]' onClick={toggleModal}>
               <NavLink to={option.link} className={`text-white ${currentPath !== option.link ? "opacity-[90%]":"font-extrabold "}  text-[1rem] hover:opacity-100 hover:font-extrabold tracking-wide  `}>
                   {option.text}
                 </NavLink>
@@ -81,7 +103,7 @@ if (isMobile === undefined) {
                 </button>
                 
               </div>
-              {!isMobile && <FlashcardDropdown isOpen={isFlashOpen} isMobile={isMobile}/>}
+              {!isMobile && <FlashcardDropdown  isOpen={isFlashOpen} isMobile={isMobile}/>}
             
               </>
               

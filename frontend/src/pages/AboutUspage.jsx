@@ -1,8 +1,11 @@
-import FlashcardDropdown from "../components/FlashcardDropdown"
 import Header from "../components/Header"
-import FlashCardpage from "./FlashCardpage"
 
+import "../styles/FlashCard.css";
 function AboutUspage() {
+
+
+  
+
   return (
   
 <>
