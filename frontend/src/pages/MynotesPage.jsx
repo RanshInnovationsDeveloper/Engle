@@ -1,19 +1,16 @@
 // Importing React components and icons
 import React, { useEffect, useState } from "react";
 import { useSelector } from 'react-redux';
-import {Link} from 'react-router-dom';
-import { RiFilter2Line, RiSearch2Line } from "react-icons/ri";
-import { FaSquarePlus } from "react-icons/fa6";
+import { RiSearch2Line } from "react-icons/ri";
 import Header from "../components/Header";
-import CategoryHeader from "../components/CategoryHeader";
 import { notesEndpoints } from '../services/apis';
 import { toast } from 'react-toastify';
 import FavouriteButton from "../components/FavouriteButton";
 import { NOTES_FILE_NAME,NOTES_FILE_TYPE } from "../constants/constants";
-import { GoSearch } from "react-icons/go";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import Notecard from "../components/Notecard";
+import { MdOutlineFilterAlt } from "react-icons/md";
 
 // Function to group notes by date
 const groupNotesByDate = (notes) => {
@@ -117,74 +114,94 @@ export default function MynotesPage() {
   const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
     const totalPages = Math.ceil(notes.length / itemsPerPage);
+    const [inputPage, setInputPage] = useState('');
 
-    const handleClick = (pageNumber) => {
-        setCurrentPage(pageNumber);
-    };
-
-    
-
-    const startIndex = (currentPage - 1) * itemsPerPage;
+    const startIndex = (currentPage -1 ) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const currentItems = notes.slice(startIndex, endIndex);
+
+    
+    const handlePageChange = (pageNumber) => {
+      if (pageNumber >= 1 && pageNumber <= totalPages) {
+        setCurrentPage(pageNumber);
+      }
+      setInputPage('');
+    };
+
+    const handleInputChange = (e) => {
+      setInputPage(e.target.value);
+    };
+  
+      // Function to handle input submit on Enter key
+  const handleInputSubmit = () => {
+    const pageNumber = parseInt(inputPage);
+    if (!isNaN(pageNumber)) {
+      handlePageChange(pageNumber);
+    }
+  };
+
+  // Function to handle input blur
+  const handleInputBlur = () => {
+    handleInputSubmit();
+  };
+  
 
   console.log(notes)
   // Rendering the component
   return (
     <>
     {/* {console.log("groupedNotes",groupedNotes)} */}
-      <Header />
+      <Header val={1} />
 
-      <div className='mt-4'>
-        {/* Search and filter bar */}
-        <div className='flex flex-col gap-8 justify-between mx-3 lg:mx-28 mb-10 gap-{10rem} lg:flex lg:justify-between lg:flex-row'>
-                <h1 className='lg:font-bold lg:text-3xl flex justify-center font-bold text-3xl'>
-                    My Notes
-                </h1>
-                <div>
-                  {/* Search Input */}
-                    <div className="flex max-w-sm mx-auto">
-                    <div className='border border-gray-500 rounded-lg mr-2 mb-2 sm:mb-0 sm:mx-2 flex'>
-                    <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
-            <input
-              type="text"
-              placeholder="Search..."
-              className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-                        {/* Filter */}
-                        <button type="submit" className="p-2 ms-2 text-lg font-medium text-gray-600 bg-white rounded-lg border border-gray-700">
-                            <RiFilter2Line className='w-7 h-7' />
-                        </button>
-                    </div>
+      <div className=" mx-[5rem] ">
+          <div className="flex flex-row justify-between items-center  mt-8 mb-8">
+            <h1 className="text-[1.875rem] leading-4 text-center font-bold ">MY NOTES</h1>
+            <div className="flex items-center justify-center gap-3">
+              <div className='border border-[#5B5B5B] rounded-lg  flex items-center w-[19.5rem]  h-[2.5rem]'>
+                <div className=" mx-5 flex items-center gap-3">
+                <RiSearch2Line className='fill-[#5B5B5B]  w-6 h-6 ' />
+                <input
+                  type="text"
+                  placeholder="Search"
+                  className="rounded-lg  focus:outline-none placeholder:text-[#5B5B5B] "
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
                 </div>
+                
+              </div>
+
+              <div className='border border-[#5B5B5B] rounded-lg flex justify-center items-center h-[2.5rem] w-[2.5rem]'>
+                <button>
+                  <MdOutlineFilterAlt className='fill-[#5B5B5B] w-7 h-7 ' />
+                </button>
+              </div>
             </div>
+          </div>
 
         {/* Displaying grouped notes */}
-        <div className='mx-28'>
-  <table className="table-auto w-full border mx-auto border-blue-900 justify-center items-center rounded-lg">
-    <thead className='bg-customBg rounded-lg'>
-      <tr>
-        <th className="border border-blue-700 px-4 py-4">Sr. No</th>
-        <th className="border border-blue-700 px-4 py-4">Word</th>
-        <th className="border border-blue-700 px-4 py-4">Notes</th>
-        <th className="border border-blue-700 px-4 py-4">Empty</th>
-        <th className="border border-blue-700 px-4 py-4">Favourite</th>
+        <div className='rounded-t-xl border-x border-t border-[#5B7ADE] '>
+  <table className="table-auto w-full  rounded-t-xl mx-auto justify-center items-center  bg-[#F3F5FF] ">
+    <thead className='rounded-2xl'>
+      <tr className="h-[3.5rem]">
+        <th className="border-r border-[#5B7ADE]">Sr. No</th>
+        <th className="border-r border-[#5B7ADE]">Word</th>
+        <th className="border-r border-[#5B7ADE] ">Notes</th>
+        {/* <th className="border border-blue-700 ">Empty</th> */}
+        <th className="">Favourite</th>
       </tr>
     </thead>
-    <tbody className='bg-customBg border-blue-700 border'>
+    <tbody className='border-t border-[#5B7ADE]'>
       {/* {console.log("notes",notes)}  */}
 
-      {Object.keys(groupedNotes).map(date => (
-        groupedNotes[date].map((note,index) => (
-          <tr key={startIndex + index}>
-            <td className="text-center border w-20 px-4 py-4 border-blue-700">{startIndex + index + 1}</td>
-            <td className="text-center border w-64 px-4 py-4 border-blue-700">{note.word}</td>
-            <td className="text-center border px-4 py-4 border-blue-700">{note.definitions}</td>
-            <td className="text-center border w-40 px-4 py-4 border-blue-700">Empty</td>
-            <td className="text-center border w-28 px-4 py-4 border-blue-700">
+      
+        {currentItems.map((note,index) => (
+          <tr key={startIndex + index} className="h-[3.5rem]">
+            <td className="text-center border-y border-r w-24 border-[#5B7ADE]">{startIndex + index + 1}.</td>
+            <td className="text-center border w-64 border-[#5B7ADE]">{note.word}</td>
+            <td className="text-center border  border-[#5B7ADE]">{note.definitions}</td>
+            {/* <td className="text-center border w-40  border-blue-700">Empty</td> */}
+            <td className="text-center border-y brder-l w-32  border-[#5B7ADE]">
               <FavouriteButton
                 itemId={note.id}
                 type={NOTES_FILE_TYPE}
@@ -193,27 +210,48 @@ export default function MynotesPage() {
             </td>
           </tr>
         ))
-      ))}
+      }
     </tbody>
   </table>
 </div>
-            <div className="flex justify-center mt-8 gap-4 ">             
-                    <FaArrowAltCircleLeft 
-                    onClick={() => handleClick(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className='text-blue-900 h-6 w-6'
-                    />
-                <div>
-                    <h1 className="text-center">
-                        page {currentPage} of {totalPages}
-                    </h1>
-                </div>        
-                    <FaArrowAltCircleRight 
-                    onClick={() => handleClick(currentPage + 1)}
-                    disabled={currentPage === totalPages}       
-                    className='text-blue-900 h-6 w-6'
-                    />
+<div className="flex items-center justify-center mt-8 gap-4 ">
+            <FaArrowAltCircleLeft
+              onClick={() => {
+                if (currentPage !== 1)
+                  setCurrentPage(currentPage - 1)
+              }
+              }
+              disabled={currentPage === 1}
+              className={`text-blue-900 h-7 w-7 ${currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"} `}
+            />
+            <div className=" flex justify-center items-center gap-3">
+              <h1 className=" font-normal">Page </h1>
+              <input
+          type="numeric"
+          className="text-center placeholder:text-black w-[1.875rem] h-[1.875rem] rounded-[5px] border border-black"
+          // min="1"
+          max={totalPages}
+          value={inputPage || currentPage} 
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              handleInputSubmit();
+            }
+          }}
+        />
+              <h1 className="text-center font-normal"> of {totalPages}</h1>
             </div>
+            <FaArrowAltCircleRight
+            onClick={() => {
+              if (currentPage !== totalPages)
+                setCurrentPage(currentPage + 1)
+            }
+            }
+            disabled={currentPage === totalPages}
+            className={`text-blue-900  h-7 w-7 ${currentPage === totalPages ? "cursor-not-allowed" : "cursor-pointer"} `}
+            />
+          </div>
             </div>
             <Notecard/>
     </>
