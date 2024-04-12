@@ -1,14 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
 import "../styles/CategoryHeader.css";
+import { useDispatch } from 'react-redux';
+import { setFlashCardCategory } from '../slices/flashCardSlice';
+
 const FlashcardDropdown = ({ isOpen, isMobile }) => {
 
   const dropdownRef = useRef(null);
+  const dispatch = useDispatch();
+
   const options = [
     {text:'Unseen Words', category: 'unseen'},
     {text:'Seen Words', category: 'seen'},
     {text:'Favourite Words', category: 'favourite'},
-    {text:'Remembered Words', category: 'remember'},
-    {text:'Unremembered Words', category: 'unremember'},
+    {text:'Remember Words', category: 'remember'},
+    {text:'Unremember Words', category: 'unremember'},
     // {text:'Idioms', category: 'idioms'},
     // {text:'Test Vocabulary', category: 'test'},
    ];
@@ -43,7 +48,9 @@ const FlashcardDropdown = ({ isOpen, isMobile }) => {
                 <button
                 key={index}
                 onClick={()=> {
-                  localStorage.setItem("flashCardCategory",option.category);
+                  dispatch(setFlashCardCategory(option.category));
+                  localStorage.setItem('flashCardCategory', option.category);
+                  window.location.reload();
                 }}
                 
               >
