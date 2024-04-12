@@ -157,7 +157,7 @@ function FavouritesPage() {
         <Header val={1} />
         <div className=" mx-auto p-4">
           <div className="flex justify-between items-center mb-4 flex-wrap">
-            <h1 className="text-[1.875rem] leading-4 md:text-left font-bold md:mt-10 mt-8 md:mb-20 mb-12">FAVOURITES</h1>
+            <h1 className="text-[1.875rem] leading-4 md:text-left font-bold md:mt-10 mt-8 md:mb-20 mb-4">FAVOURITES</h1>
             <div className="flex items-center mb-4 w-full sm:w-auto justify-center">
               <div className='border border-gray-500 rounded-lg mr-2 mb-2 sm:mb-0 sm:mx-2 flex h-[2.5rem]'>
                 <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
@@ -195,20 +195,20 @@ function FavouritesPage() {
                 {/* Rendering section divs */}
                 {/* {console.log(currentPageItems)} */}
                 {currentPageItems.map((item, index) => (
-                  <tr className="h-[3rem]">
+                  <tr className="">
                     <React.Fragment key={item.itemId}>
                       {(() => {
                         if (item?.type === "words") {
                           return (
                             <>
                               {/* {console.log(item)} */}
-                              <td className="text-center border-y border-r w-20 px-4 py-4  border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}.</td>
-                              <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
-                              <td className="text-center border w-44 px-4 py-4 border-[#5B7ADE]">
+                              <td className="text-center border-y border-r w-20  border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}.</td>
+                              <td className="text-center border w-64  border-[#5B7ADE] ">{item?.val?.word}</td>
+                              <td className="text-center border w-44  border-[#5B7ADE] ">
                                 <h1 className=" text-base font-normal ">
                                   {item?.name === "Flashcards-Seen" ? "Seen Words" : "Unseen Words"}
                                 </h1>
-                                <h3 className=" text-sm">
+                                <h3 className=" text-sm ">
                                   (Flashcards)
                                 </h3></td>
 
@@ -217,7 +217,7 @@ function FavouritesPage() {
 
                               </td>
 
-                              <td className="text-center border-y brder-l w-28 px-4 py-4 border-[#5B7ADE]">
+                              <td className="text-center border-y brder-l w-28  border-[#5B7ADE]">
 
                                 <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
                               </td>

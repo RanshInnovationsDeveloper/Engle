@@ -79,7 +79,7 @@ const Header = ({ val }) => {
         <ul className={listClassName}>
           <li>
             <NavLink to="/"
-              className={`${linkClassName} ${val === 0 ? "text-[#2E3D79] font-semibold" : "text-black"}`}
+              className={`${linkClassName} ${val === 0 ? "text-[#2E3D79] font-semibold" : "text-black font-normal"}`}
               onClick={() => {
                 closeMobileMenu();
              
@@ -91,7 +91,7 @@ const Header = ({ val }) => {
             <div className={`${val === 1 ? "text-[#2E3D79]" : "text-black"} flex justify-start items-center gap-3`}>
               <NavLink
               to="/flashcards"
-                className={`${linkClassName} ${val === 1 ? "font-semibold" : ""} `}
+                className={`${linkClassName} ${val === 1 ? "font-semibold" : "font-normal"} `}
                 onClick={() => {
                   toggleCategoryMenu();
                 }}
@@ -112,7 +112,7 @@ const Header = ({ val }) => {
           <li>
             <NavLink
               to="/contact"
-              className={`${linkClassName} ${val === 2 ? "text-[#2E3D79] font-semibold" : "text-black"}`}
+              className={`${linkClassName} ${val === 2 ? "text-[#2E3D79] font-semibold" : "text-black font-normal"}`}
               onClick={() => { closeMobileMenu(); }}
             >
               Contact Us
@@ -121,7 +121,7 @@ const Header = ({ val }) => {
           <li>
             <NavLink
               to="/about"
-              className={`${linkClassName}  ${val === 3 ? "text-[#2E3D79] font-semibold" : "text-black"}`}
+              className={`${linkClassName}  ${val === 3 ? "text-[#2E3D79] font-semibold" : "text-black font-normal"}`}
               onClick={closeMobileMenu}
             >
               About Us
