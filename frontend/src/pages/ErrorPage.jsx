@@ -7,7 +7,7 @@ function ErrorPage() {
     <div className='h-screen flex flex-col '>
 
     <Header/>
-     <div className=" flex-1 flex flex-col justify-center md:justify-end items-center mt-20 lg:mt-80 xl:mt-60 ">
+     <div className=" flex-1 flex flex-col justify-center md:justify-end items-center  ">
 
        <img
         src="404error.png"

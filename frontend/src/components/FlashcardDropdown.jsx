@@ -44,14 +44,15 @@ const FlashcardDropdown = ({ isOpen, isMobile }) => {
 
           <div className="bg-white border w-[11rem]   flex flex-col rounded-b-xl">
             {options.map((option, index) => (
-              <div className={` flex flex-col justify-center px-2 text-center text-[1rem] hover:scale-y-105 hover:shadow-md  bg-[#EBEDFF]  hover:bg-[#FFFFFF] h-[3rem] ${index === options.length - 1 ? "rounded-b-xl": "border-b border-black border-opacity-20"}`}>
+              <div  onClick={()=> {
+                dispatch(setFlashCardCategory(option.category));
+                localStorage.setItem('flashCardCategory', option.category);
+                window.location.reload();
+              }}
+              className={` flex flex-col justify-center cursor-pointer px-2 text-center text-[1rem] hover:scale-y-105 hover:shadow-md  bg-[#EBEDFF]  hover:bg-[#FFFFFF] h-[3rem] ${index === options.length - 1 ? "rounded-b-xl": "border-b border-black border-opacity-20"}`}>
                 <button
                 key={index}
-                onClick={()=> {
-                  dispatch(setFlashCardCategory(option.category));
-                  localStorage.setItem('flashCardCategory', option.category);
-                  window.location.reload();
-                }}
+               
                 
               >
                 {option.text}
