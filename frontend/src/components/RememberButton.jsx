@@ -5,11 +5,11 @@ import { rememberEndpoints,unrememberEndpoints } from "../services/apis";
 import { useDispatch, useSelector } from "react-redux"
 import { setIsremember,setIsunremember } from "../slices/remember_unrememberSlice";
 import { toast } from "react-toastify";
-import { TiTick } from "react-icons/ti";
+import { MdCheck } from "react-icons/md";
 
 
 //This component fetches the stautus of remember button and does the necessary job to update it
-function RememberButton({ itemId, type, name = "" ,isFlipped }) {
+function RememberButton({ itemId, type, name = "" ,isFlipped, side }) {
 
     const { authUserId } = useSelector((state) => state.auth);
     const {isremember}=useSelector((state)=>state.remember_unremember);
@@ -49,7 +49,6 @@ function RememberButton({ itemId, type, name = "" ,isFlipped }) {
             navigate("/login");
             return ;
         }
-        event.stopPropagation();
         dispatch(setIsremember(false));
         localStorage.setItem("isremember",false);
         try {
@@ -71,7 +70,7 @@ function RememberButton({ itemId, type, name = "" ,isFlipped }) {
             navigate("/login");
             return ;
         }
-        event.stopPropagation();
+        // event.stopPropagation();
         dispatch(setIsremember(true));
         dispatch(setIsunremember(false));
         localStorage.setItem("isremember",true);
@@ -100,23 +99,20 @@ function RememberButton({ itemId, type, name = "" ,isFlipped }) {
     return (
        
         <>
-            { isremember ? (
-                <button onClick={(event) => removeFromremember(itemId, type, userId, event)} className='items-center  bg-green-500 gap-2 border-2 border-green-600 border-green flex flex-row justify-center rounded-md px-20'>
-                    <div className='flex flex-row'>
-                        <TiTick className='h-6 w-6 text-green-900' />
-                        <span className="text-green-900">Remembered</span>
+                <button onClick={(event) =>{
+                    if(isremember){
+                    removeFromremember(itemId, type, userId, event)}
+                    else {
+                        addToremember(itemId, type, userId, name, event)
+                    }}}
+                    className={`items-center w-[17.5rem] h-[3.125rem] ${isremember? "bg-green-500  border-green-600":"border-[#2BD500] bg-[#D7FFCD]"}     border flex flex-row justify-center rounded-[0.6125rem] `}>
+                    <div className={`flex flex-row ${isremember? "text-green-900":"text-[#43A047]"} gap-2 `}>
+                        <MdCheck className='h-6 w-6 ' />
+                        <span className=" font-normal text-base">{side === "front" ? "I know this word" : "Remembered"}</span>
                     </div>
 
                 </button>
-            ) : (
-                <button onClick={(event) => addToremember(itemId, type, userId, name, event)} className='items-center  bg-green-200 gap-2 border-2 border-green-400 border-green flex flex-row justify-center rounded-md px-20'>
-                    <div className='flex flex-row'>
-                        <TiTick className='h-6 w-6 text-green-600' />
-                        <span className="text-green-600">Remembered</span>
-                    </div>
-
-                </button>
-            )}
+ 
         </>
 
     );

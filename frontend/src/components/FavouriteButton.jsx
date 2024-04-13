@@ -4,6 +4,8 @@ import { apiConnector } from "../services/apiConnector";
 import { favouriteEndpoints } from "../services/apis";
 import { useSelector } from "react-redux";
 import { CiHeart } from "react-icons/ci";
+import { IoMdHeartEmpty } from "react-icons/io";
+import { VscHeartFilled } from "react-icons/vsc";
 import { FaHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "../styles/FlashCard.css"
@@ -87,20 +89,20 @@ function FavouriteButton({ itemId, type, name = "", isFlipped }) {
   };
 
   return (
-    <div className="relative inline-block w-">
+    <div className="relative inline-block">
 
       {isFavourite ? (
-        <div className="p-3">
-          <FaHeart
-            className={`text-red-600 w-[1.5rem] h-[1.5rem] heart-icon`}
+        <div className="">
+          <VscHeartFilled 
+            className={`text-[#F44336] w-[2rem] h-[2rem] `}
             onClick={(event) => removeFromFavourite(itemId, type, userId, event)}
           />
         </div>
 
       ) : (
-        <div className="p-[0.6rem]">
-          <CiHeart
-            className={`text-red-600 w-[1.7rem] h-[1.7rem] heart-icon `}
+        <div className="">
+          <IoMdHeartEmpty 
+            className={`text-[#F44336] w-[2rem] h-[2rem]   `}
             onClick={(event) => addToFavourite(itemId, type, userId, name, event)}
           />
         </div>

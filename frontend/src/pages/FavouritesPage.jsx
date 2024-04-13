@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { GoSearch } from "react-icons/go";
+import { RiSearch2Line } from "react-icons/ri";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import Header from "../components/Header";
 import { useSelector, useDispatch } from "react-redux";
@@ -30,7 +30,7 @@ function FavouritesPage() {
 
   const itemsPerPage = 6; // Number of items to display per page
   const [currentPage, setCurrentPage] = useState(1); // Current page number
-
+  const [inputPage, setInputPage] = useState('');
 
 
   const { type } = useParams()
@@ -154,35 +154,63 @@ function FavouritesPage() {
 
     const currentPageItems = filteredData.slice(startIndex, endIndex);
 
+    const handlePageChange = (pageNumber) => {
+      if (pageNumber >= 1 && pageNumber <= totalPages) {
+        setCurrentPage(pageNumber);
+      }
+      setInputPage('');
+    };
+
+    const handleInputChange = (e) => {
+      setInputPage(e.target.value);
+    };
+  
+      // Function to handle input submit on Enter key
+  const handleInputSubmit = () => {
+    const pageNumber = parseInt(inputPage);
+    if (!isNaN(pageNumber)) {
+      handlePageChange(pageNumber);
+    }
+  };
+
+  // Function to handle input blur
+  const handleInputBlur = () => {
+    handleInputSubmit();
+  };
+  
+  
 
     return (
       <div>
 
         <Header val={1} />
-        <div className=" mx-auto p-4">
-          <div className="flex justify-between items-center mb-4 flex-wrap">
-            <h1 className="text-[1.875rem] leading-4 md:text-left font-bold md:mt-10 mt-8 md:mb-20 mb-12">FAVOURITES</h1>
-            <div className="flex items-center mb-4 w-full sm:w-auto justify-center">
-              <div className='border border-gray-500 rounded-lg mr-2 mb-2 sm:mb-0 sm:mx-2 flex h-[2.5rem]'>
-                <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
+        <div className=" mx-[5rem] ">
+          <div className="flex flex-row justify-between items-center  mt-8 mb-8">
+            <h1 className="text-[1.875rem] leading-4 text-center font-bold ">FAVOURITES</h1>
+            <div className="flex items-center justify-center gap-3">
+              <div className='border border-[#5B5B5B] rounded-lg  flex items-center w-[19.5rem]  h-[2.5rem]'>
+                <div className=" mx-5 flex items-center gap-3">
+                <RiSearch2Line className='fill-[#5B5B5B]  w-6 h-6 ' />
                 <input
                   type="text"
-                  placeholder="Search..."
-                  className="rounded-lg py-2 px-4 mr-2 focus:outline-none text-left"
+                  placeholder="Search"
+                  className="rounded-lg  focus:outline-none placeholder:text-[#5B5B5B] "
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                 />
+                </div>
+                
               </div>
 
-              <div className='border border-gray-500 rounded-lg mr-2 mb-2 sm:mb-0 sm:mx-2 flex items-center'>
+              <div className='border border-[#5B5B5B] rounded-lg flex justify-center items-center h-[2.5rem] w-[2.5rem]'>
                 <button>
-                  <MdOutlineFilterAlt className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem]' />
+                  <MdOutlineFilterAlt className='fill-[#5B5B5B] w-7 h-7 ' />
                 </button>
               </div>
             </div>
           </div>
 
-          <div className="mx-28  rounded-t-xl border-x border-t border-[#5B7ADE] ">
+          <div className="  rounded-t-xl border-x border-t border-[#5B7ADE] ">
             <table className="table-auto w-full  rounded-t-xl mx-auto justify-center items-center  bg-[#F3F5FF]">
               <thead className='rounded-2xl'>
                 <tr>
@@ -199,24 +227,26 @@ function FavouritesPage() {
                 {/* Rendering section divs */}
                 {/* {console.log(currentPageItems)} */}
                 {currentPageItems.map((item, index) => (
-                  <tr className="h-[3rem]">
+                  <tr className="h-[3.5rem]">
                     <React.Fragment key={item.itemId}>
                       {(() => {
                         if (item?.type === "words") {
                           return (
                             <>
                               {/* {console.log(item)} */}
-                              <td className="text-center border-y border-r w-20 px-4 py-4  border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}.</td>
-                              <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.word}</td>
-                              <td className="text-center border w-44 px-4 py-4 border-[#5B7ADE]">
+                              <td className="text-center border-y border-r w-24  border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}.</td>
+                              <td className="text-center border   border-[#5B7ADE] ">{item?.val?.word}</td>
+                              {paramValue === "all" && 
+                                <td className="text-center border w-[24rem]  border-[#5B7ADE] ">
                                 <h1 className=" text-base font-normal ">
                                   {item?.name === "Flashcards-Seen" ? "Seen Words" : "Unseen Words"}
                                 </h1>
-                                <h3 className=" text-sm">
+                                <h3 className=" text-sm ">
                                   (Flashcards)
-                                </h3></td>
+                                </h3></td>}
 
-                              <td className="text-center border w-40  border-[#5B7ADE]">
+
+                              <td className="text-center border w-[18rem]  border-[#5B7ADE]">
                                 <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4 w-[4.75rem] h-9" onClick={
                                   () => {
                                     dispatch(setFlashCardCategory("favourite"));
@@ -231,7 +261,7 @@ function FavouritesPage() {
 
                               </td>
 
-                              <td className="text-center border-y brder-l w-28 px-4 py-4 border-[#5B7ADE]">
+                              <td className="text-center border-y brder-l w-32  border-[#5B7ADE]">
 
                                 <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
                               </td>
@@ -292,34 +322,34 @@ function FavouritesPage() {
               }
               }
               disabled={currentPage === 1}
-              className={`text-blue-900 h-6 w-6 ${currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"} `}
+              className={`text-blue-900 h-7 w-7 ${currentPage === 1 ? "cursor-not-allowed" : "cursor-pointer"} `}
             />
             <div className=" flex justify-center items-center gap-3">
               <h1 className=" font-normal">Page </h1>
               <input
-                type="numeric"
-                className="text-center w-[1.875rem] h-[1.875rem] rounded-[5px] border border-black "
-                onChange={(e) => {
-                  const value = parseInt(e.target.value);
-                  if (!isNaN(value) && value >= 1 && value <= totalPages) {
-                    setCurrentPage(value);
-                  }
-                }}
-                value={currentPage}
-                onBlur={(e) => {
-                  const value = parseInt(e.target.value);
-                  if (isNaN(value) || value < 1 || value > totalPages) {
-                    // Revert to the last valid value
-                    e.target.value = currentPage;
-                  }
-                }}
-              />
+          type="numeric"
+          className="text-center placeholder:text-black w-[1.875rem] h-[1.875rem] rounded-[5px] border border-black"
+          // min="1"
+          max={totalPages}
+          value={inputPage || currentPage} 
+          onChange={handleInputChange}
+          onBlur={handleInputBlur}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              handleInputSubmit();
+            }
+          }}
+        />
               <h1 className="text-center font-normal"> of {totalPages}</h1>
             </div>
             <FaArrowAltCircleRight
-              onClick={() => setCurrentPage(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className='text-blue-900 h-6 w-6'
+            onClick={() => {
+              if (currentPage !== totalPages)
+                setCurrentPage(currentPage + 1)
+            }
+            }
+            disabled={currentPage === totalPages}
+            className={`text-blue-900  h-7 w-7 ${currentPage === totalPages ? "cursor-not-allowed" : "cursor-pointer"} `}
             />
           </div>
 

@@ -5,11 +5,11 @@ import { unrememberEndpoints, rememberEndpoints } from "../services/apis";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsremember, setIsunremember } from "../slices/remember_unrememberSlice";
 import { toast } from "react-toastify";
-import { ImCross } from "react-icons/im";
+import { RxCross1 } from "react-icons/rx";
 
 
 //This component fetches the stautus of unremember button and does the necessary job to update it
-function UnrememberButton({ itemId, type, name = "",isFlipped }) {
+function UnrememberButton({ itemId, type, name = "",isFlipped, side }) {
 
     const { authUserId } = useSelector((state) => state.auth);
     const { isunremember } = useSelector((state) => state.remember_unremember);
@@ -49,7 +49,6 @@ function UnrememberButton({ itemId, type, name = "",isFlipped }) {
             navigate("/login");
             return ;
         }
-        event.stopPropagation();
 
         dispatch(setIsunremember(false));
         localStorage.setItem("isunremember", false);
@@ -73,7 +72,7 @@ function UnrememberButton({ itemId, type, name = "",isFlipped }) {
             navigate("/login");
             return ;
         }
-        event.stopPropagation();
+
         dispatch(setIsremember(false));
         dispatch(setIsunremember(true));
         localStorage.setItem("isremember", false);
@@ -101,23 +100,19 @@ function UnrememberButton({ itemId, type, name = "",isFlipped }) {
 
     return (
         <>
-            {
-                isunremember ? (
-                    <button onClick={(event) => removeFromunremember(itemId, type, userId, event)} className='items-center  bg-green-500 gap-2 border-2 border-green-600 border-green flex flex-row justify-center rounded-md px-20'>
-                        <div className='flex flex-row'>
-                            <ImCross className='h-6 w-6 text-green-700' />
-                            <span className="text-green-700">Not Remembered</span>
-                        </div>
-                    </button>
-                ) : (
-                    <button onClick={(event) => addTounremember(itemId, type, userId, name, event)} className='items-center  bg-green-200 gap-2 border-2 border-green-400 border-green flex flex-row justify-center rounded-md px-20'>
-                        <div className='flex flex-row'>
-                            <ImCross className='h-6 w-6 text-green-600' />
-                            <span className="text-green-600">Not Remembered</span>
-                        </div>
-                    </button>
-                )
-            }
+            <button onClick={(event) =>{
+                    if(isunremember){
+                    removeFromunremember(itemId, type, userId, event)}
+                    else {
+                        addTounremember(itemId, type, userId, name, event)
+                    }}}
+                    className={`items-center w-[17.5rem] h-[3.125rem] ${isunremember? "bg-green-500  border-green-600":"border-[#D80000] bg-[#FFE1DB]"}  border flex flex-row justify-center rounded-[0.6125rem] `}>
+                    <div className={`flex flex-row ${isunremember? "text-green-900":"text-[#E53935]"} gap-2 items-center `}>
+                        <RxCross1 className='h-5 w-5 ' />
+                        <span className=" font-normal text-base">{side === "front" ? "I don't know this word" : "Not Remembered"}</span>
+                    </div>
+
+                </button>
         </>
     );
 }

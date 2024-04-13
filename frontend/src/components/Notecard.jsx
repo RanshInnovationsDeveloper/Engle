@@ -87,6 +87,14 @@ const Notecard = () => {
     } catch (error) {
       console.error('Error during fetch:', error.message);
     }
+
+    setFormData({
+      word: '',
+      type: '',
+      definitions: '',
+      example: '',
+      breakdown: '',
+    });
   };
 
   return (
@@ -172,7 +180,7 @@ const Notecard = () => {
         {/* Submit button */}
         <div className='flex justify-between items-center'>
         <FaPlus className='text-[#4A5995] w-[0.875] h-[0.875] ml-1'/>
-        <button type="submit" className='bg-customBlue px-20 text-white rounded-md py-2'>Save</button>
+        <button type="submit" onClick={handleSubmit} className='bg-customBlue px-20 text-white rounded-md py-2'>Save</button>
         </div>
       </form>
       </div>
