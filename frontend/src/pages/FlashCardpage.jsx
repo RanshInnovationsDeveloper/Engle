@@ -22,6 +22,7 @@ import Notecard from '../components/Notecard';
 
 function FlashCardpage() {
 
+   
     const { authUserId } = useSelector((state) => state.auth);
 
     // This state is used to store the current flashCardCategory data except unseen (Retrive from backend)
@@ -41,7 +42,7 @@ function FlashCardpage() {
 
     // These state hook are used to control the flip functionality
     const [isFlipped, setIsFlipped] = useState(false);
-
+    const [isSide, setIsSide] = useState("front");
     //State to check if item is seen
     const [isSeen, setIsSeen] = useState(false);
 
@@ -49,9 +50,30 @@ function FlashCardpage() {
     // This State is used only in case of Unseen ( we do not store the data of unseen in backend So I store it in local storage)
     const [unseenArrayInStorage, setunseenArrayInStorage] = useState(JSON.parse(localStorage.getItem(`ArrayofWordFileActualIndex_${flashCardCategory}`)) || [-1]);
     const [unseenPreviousArrayIndex, setunseenPreviousArrayIndex] = useState(parseInt(localStorage.getItem("unseenPreviousArrayIndex")) - 1 || unseenArrayInStorage.length - 1);
-
-
-
+    // const [expanded, setExpanded] = useState(false);
+    
+    // const toggleExpanded = (e) => {
+    //     e.stopPropagation();
+    //     setExpanded(!expanded);
+    // };
+    function ExpandableParagraph({ text }) {
+        const [expanded, setExpanded] = useState(false);
+    
+        const toggleExpanded = (e) => {
+            e.stopPropagation();
+            setExpanded(!expanded);
+        };
+    
+        return (
+            
+                <p
+                    className={`scrollable-p text-left ${expanded ? 'expanded' : ''}`}
+                    onClick={toggleExpanded}
+                >
+                    {text}
+                </p>
+        );
+    }
 
     // this function is used to fetch the data from the backend
     const fetchWord = async (wordIndex) => {
@@ -160,6 +182,11 @@ function FlashCardpage() {
     // handler function to fetch next word 
     const handleClickRight = async () => {
 
+        if(isSide === "back")
+        {
+           handleFlip();
+        }
+
         if (flashCardCategory === "unseen") {
             if (unseenArrayInStorage[unseenPreviousArrayIndex] === -1) {
                 const response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex]));
@@ -212,6 +239,10 @@ function FlashCardpage() {
 
     // handler function to fetch previous word
     const handleClickLeft = async () => {
+         if(isSide === "back")
+         {
+            handleFlip();
+         }
 
         if (flashCardCategory === "unseen") {
             if (unseenPreviousArrayIndex === 1) {
@@ -256,8 +287,13 @@ function FlashCardpage() {
 
     const handleFlip = async () => {
         setIsFlipped(!isFlipped);
+        if(isSide ==="front"){
+            setIsSide("back");
+            // setExpanded(false);
+        } 
+        else
+        setIsSide("front");
         if (isFlipped === true) setIsSeen(true);
-
     };
 
 
@@ -290,8 +326,183 @@ function FlashCardpage() {
             <Header val={1} />
             <div className='h-[34rem] flex flex-col mt-10  items-center '>
                 <h1 className='text-center text-[1.875rem] leading-4 font-[700px] mb-2 tracking-wider text-black '>FLASHCARDS</h1>
-                <h3 className='text-center text-base text-black mb-6'>{flashCardCategory}</h3>
-                <div className='lg:w-[43%] w-[80%] h-[56%] rounded-2xl'>
+                <h3 className='text-center text-base text-black mb-4'>{flashCardCategory}</h3>
+                   <div className="cube-container">
+                   <div className="cube flex flex-row justify-center items-center">
+                   
+                   <div
+                       className={`flip-card ${isFlipped ? "flipped" : ""
+                           }  shadow-xl rounded-2xl  cube-face-front`}
+                       onClick={handleFlip}
+                   >
+                       <div className="flip-card-inner ">
+                           <div className="flip-card-front border border-[#5B7ADE] rounded-2xl">
+                               <div className="card-content flex flex-col justify-center  h-full">
+                                   <div className='flex justify-start ' >
+                                       {isSeen ? <FavouriteButton
+                                           itemId={currentCategoryWordFileActualIndex}
+                                           type={WORD_FILE_TYPE}
+                                           name={FLASH_CARD_SEEN}
+                                           isFlipped={isFlipped}
+                                       /> :
+                                           <FavouriteButton
+                                               itemId={currentCategoryWordFileActualIndex}
+                                               type={WORD_FILE_TYPE}
+                                               name={FLASH_CARD_UNSEEN}
+                                               isFlipped={isFlipped}
+                                           />}
+                                   </div>
+                                   <div className=' flex flex-col justify-between h-full ' >
+                                       <div className='flex flex-col justify-center items-center h-[70%]'>
+                                           <div className="">
+                                               {<h2 className='text-[#212121]  font-bold text-4xl flex justify-center items-center'>{worddata?.word && worddata.word.charAt(0).toUpperCase() + worddata.word.slice(1)}</h2>}
+                                           </div>
+
+                                       </div>
+                                       <div className="flex flex-col justify-end gap-2 items-center h-[30%]">
+
+                                           <h6 className=' text-[#757575]'>Tap on Card to Flip it</h6>
+
+                                           <div className='flex flex-row justify-center gap-3'>
+                                               <div className="" onClick={(e)=> {
+                                                   handleClickRight();
+                                                   e.stopPropagation();
+
+                                               }}>
+                                               <RememberButton
+                                                   itemId={currentCategoryWordFileActualIndex}
+                                                   type={WORD_FILE_TYPE}
+                                                   name={WORD_FILE_NAME}
+                                                   isFlipped={isFlipped}
+                                                   side="front"
+                                               />
+
+                                               </div>
+
+
+
+                                               <div className="" onClick={(e)=> {
+                                                   handleFlip();
+                                                   e.stopPropagation();
+                                               }}>
+                                               <UnrememberButton
+                                                   itemId={currentCategoryWordFileActualIndex}
+                                                   type={WORD_FILE_TYPE}
+                                                   name={WORD_FILE_NAME}
+                                                   isFlipped={isFlipped}
+                                                   side="front"
+                                               />
+
+                                               </div>
+                                               
+                                           </div>
+                                       </div>
+
+
+                                   </div>
+                               </div>
+
+                           </div>
+                           <div className="flip-card-back border border-[#5B7ADE] rounded-2xl">
+                               <div className="card-content flex flex-col justify-center  h-full">
+                                   <div className='flex justify-start ' >
+                                       {isSeen ? <FavouriteButton
+                                           itemId={currentCategoryWordFileActualIndex}
+                                           type={WORD_FILE_TYPE}
+                                           name={FLASH_CARD_SEEN}
+                                           isFlipped={isFlipped}
+                                       /> :
+                                           <FavouriteButton
+                                               itemId={currentCategoryWordFileActualIndex}
+                                               type={WORD_FILE_TYPE}
+                                               name={FLASH_CARD_UNSEEN}
+                                               isFlipped={isFlipped}
+                                           />}
+                                   </div>
+                                   <div className=' flex flex-col justify-between h-full ' >
+                                       <div className='flex flex-col gap-2  items-center  h-[80%]'>
+                                           <div className="">
+                                               {<h2 className='text-[#212121]  font-bold text-4xl flex justify-center items-center'>{worddata?.word && worddata.word.charAt(0).toUpperCase() + worddata.word.slice(1)}</h2>}
+                                           </div>
+                                           <div className='text-[#212121]  h-full gap-2 flex flex-col justify-center items-start font-medium text-base w-full  '>
+                                              
+                                                 <ExpandableParagraph text={`Definition: ${worddata?.details?.[detailIndex]?.definition && worddata.details[detailIndex].definition.charAt(0).toUpperCase() + worddata.details[detailIndex].definition.slice(1)}`} />
+                                                      
+                                                 <ExpandableParagraph text={`Example: ${worddata?.details?.[detailIndex]?.examples?.[0] && worddata.details[detailIndex].examples[0].charAt(0).toUpperCase() + worddata.details[detailIndex].examples[0].slice(1)}`}/>
+                                                        
+                                                 <ExpandableParagraph text={`Synonyms: ${worddata?.details?.[detailIndex]?.synonyms && worddata.details[detailIndex].synonyms.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(', ')}`}/>
+
+                                                 <ExpandableParagraph  text={`Antonyms: ${worddata?.details?.[detailIndex]?.antonyms && worddata.details[detailIndex].antonyms.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(', ')}`} />
+
+                                           </div>
+
+                                       </div>
+                                       <div className="flex flex-col justify-end items-center   h-[20%]">
+
+
+
+                                           <div className='flex flex-row justify-center gap-3'>
+                                               <div className="" onClick={(e)=> {
+                                                   e.stopPropagation();
+                                               }}>
+                                                   <RememberButton
+                                                   itemId={currentCategoryWordFileActualIndex}
+                                                   type={WORD_FILE_TYPE}
+                                                   name={WORD_FILE_NAME}
+                                                   isFlipped={isFlipped}
+                                                   side="back"
+                                               />
+                                               </div>
+
+                                               <div className="" onClick={(e)=> {
+                                                   e.stopPropagation();
+                                               }}>
+                                                   <UnrememberButton
+                                                   itemId={currentCategoryWordFileActualIndex}
+                                                   type={WORD_FILE_TYPE}
+                                                   name={WORD_FILE_NAME}
+                                                   isFlipped={isFlipped}
+                                                 
+                                                   side="back"
+                                               />
+
+                                               </div>
+                                               
+                                           </div>
+                                       </div>
+
+
+                                   </div>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div className="cube-face cube-face-right shadow-xl rounded-2xl border border-[#5B7ADE] items-center flex flex-row justify-center text-lg font-normal text-[#757575] ">Tap to Prev</div>
+           <div className="cube-face cube-face-left shadow-xl rounded-2xl border border-[#5B7ADE] items-center flex flex-row justify-center text-[#757575] text-lg font-normal">
+            Tap to Next
+           </div>
+               </div>
+
+                   </div>
+                
+
+
+                <div className='flex flex-row gap-10 mt-8'>
+                    <button onClick={handleClickLeft}><FaArrowAltCircleLeft className='text-blue-900 h-10 w-10' /></button>
+                    <button className='text-white text-lg font-mukta bg-blue-900 rounded-lg px-20 py-2' onClick={handleFlip}> Show </button>
+                    <button onClick={handleClickRight}><FaArrowAltCircleRight className='text-blue-900 h-10 w-10' /></button>
+                </div>
+            </div>
+            <Notecard />
+        </>
+    );
+}
+
+export default FlashCardpage;
+
+
+
+/* <div className='lg:w-[43%] w-[80%] h-[56%] rounded-2xl'>
 
                     <div className={`card__inner ${isFlipped ? 'is-flipped' : ''} border border-blue-400 rounded-2xl`} onClick={handleFlip}>
 
@@ -333,7 +544,7 @@ function FlashCardpage() {
                                                         <ImCross className='h-4 w-4 text-red-600' />
                                                         <span className="text-red-600"> I don't know this word</span>
                                                     </div>
-                                                </button> */}
+                                                </button> 
                                                 <RememberButton
                                                     itemId={currentCategoryWordFileActualIndex}
                                                     type={WORD_FILE_TYPE}
@@ -411,17 +622,4 @@ function FlashCardpage() {
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div className='flex flex-row gap-10 mt-10'>
-                    <button onClick={handleClickLeft}><FaArrowAltCircleLeft className='text-blue-900 h-10 w-10' /></button>
-                    <button className='text-white text-lg font-mukta bg-blue-900 rounded-lg px-20 py-2' onClick={handleFlip}> Show </button>
-                    <button onClick={handleClickRight}><FaArrowAltCircleRight className='text-blue-900 h-10 w-10' /></button>
-                </div>
-            </div>
-            <Notecard />
-        </>
-    );
-}
-
-export default FlashCardpage;
+                </div> */

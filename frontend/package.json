@@ -22,6 +22,7 @@
     "react-toastify": "^10.0.4",
     "redux": "^5.0.1",
     "rsuite": "^5.56.0",
+    "styled-components": "^6.1.8",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

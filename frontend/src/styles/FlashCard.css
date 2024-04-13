@@ -1,4 +1,4 @@
-.flip-animation {
+/* .flip-animation {
     width: 200px;
     height: 200px;
     perspective: 1000px;
@@ -27,7 +27,7 @@
   .flip-animation.flipped .back {
     transform: rotateY(0deg);
   }
-  /*transform 1.75s*/
+  /*transform 1.75s
   .card__inner {
     width: 100%;
     height: 100%;
@@ -76,13 +76,13 @@
     object-fit: cover;
 }
 
-/* heart smooth transition */
+/* heart smooth transition 
 .heart-icon {
-    transition: transform 0.3s ease-in-out; /* Example transition */
+    transition: transform 0.3s ease-in-out; /* Example transition 
   }
   
   /* .heart-icon:hover {
-    transform: scale(1.2); /* Example transformation */
+    transform: scale(1.2); /* Example transformation 
 
     .heart-scale-effect {
         transform: scale(1.25);
@@ -92,4 +92,106 @@
     
 
 
+   */
+
+
+   .contain {
+    display: flex;
+    justify-content: center;
+ 
+    margin: auto;
+}
+ 
+.flip-card {
+    perspective: 1000px;
+    width: 39rem;
+    height: 24.5rem;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 1.5s;
+}
+ 
+.flip-card.flipped {
+    transform: rotateY(180deg);
+}
+ 
+.flip-card-inner {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+}
+ 
+.flip-card-front,
+.flip-card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+}
+ 
+.flip-card-front {
+    background-color: #EBEDFF;
+    /* color: #EBEDFF; */
+}
+ 
+.flip-card-back {
+    background-color: #EBEDFF;
+    /* color: blue; */
+    transform: rotateY(180deg);
+}
+ 
+.card-content {
+    padding: 20px;
+    text-align: center;
+}
+.scrollable-p {
+  max-width: 36rem; /* Set maximum width */
+  overflow: hidden; /* Hide overflowing content */
+  text-overflow: ellipsis; /* Add ellipsis (...) to indicate truncated text */
+  white-space: nowrap; /* Prevent text wrapping */
+  cursor: pointer; /* Add pointer cursor for indicating clickable element */
+}
+
+.scrollable-p.expanded {
+  white-space: normal; /* Revert to normal white-space for displaying full content */
+}
+
+.cube-container {
+  width: 74rem;
+    height: 24.5rem;
+  position: relative;
+  perspective: 100rem;
+
+}
+
+.cube {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+}
+
+.cube-face {
+  width: 30rem;
+    height: 24.5rem;
+  position: absolute;
   
+}
+
+.cube-face-front {
+  width: 39rem;
+  height: 24.5rem;
+position: absolute;
+  /* transform: translateZ(10rem); */
+}
+
+.cube-face-right {
+  background-color: #F6F8FF;
+  transform: rotateY(27.5deg) translateZ(10rem) translateX(33.5rem);
+  
+}
+
+.cube-face-left {
+  background-color: #F6F8FF;
+  transform: rotateY(-27.5deg) translateZ(10rem) translateX(-33.5rem);
+}
