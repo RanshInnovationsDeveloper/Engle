@@ -32,18 +32,21 @@ const ProfileDropdown = ({ isOpen}) => {
         <div  className="absolute mt-3 z-20  ">
 
           <div className="bg-white border w-[10rem] border-[#001F92]  flex flex-col ">
-            {options.map((option, index) => (
-              <div className={` px-4 py-2 text-center  hover:shadow-md  bg-[#EBEDFF]  hover:bg-[#FFFFFF] h-[3rem] ${index === options.length - 1 ? "": "border-b border-[#5B7ADE] "}`}>
+          <div className={` px-4 py-2 text-center  hover:shadow-md  bg-[#EBEDFF]  hover:bg-[#FFFFFF] h-[3rem] border-b border-[#5B7ADE] `}>
                 <button
-                key={index}
-                onClick={index === options.length - 1 ? handlesignout : () => {}}
               >
-                {option}
+                {userName}
               </button>
 
               </div>
-              
-            ))}
+              <div onClick={handlesignout} className={` px-4 py-2 text-center cursor-pointer  hover:shadow-md  bg-[#EBEDFF]  hover:bg-[#FFFFFF] h-[3rem] `}>
+                <button
+                
+              >
+                Logout
+              </button>
+
+              </div>
           </div>
         </div>
 
