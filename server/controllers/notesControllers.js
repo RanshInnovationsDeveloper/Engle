@@ -1,7 +1,7 @@
 // ../controllers/notes.js
 const { db, notesCollection } = require('../config/firebase');
 const { validationResult } = require('express-validator');
-const { collection, query, getDocs, where, serverTimestamp,getDoc,doc } = require('firebase/firestore');
+const { collection, query,orderBy,limit, getDocs, where, serverTimestamp,getDoc,doc,addDoc } = require('firebase/firestore');
 
 exports.createNote = async (req, res) => {
   try {
@@ -51,6 +51,24 @@ exports.getNoteById = async (req, res) => {
       ...noteDoc.data(),
     };
     res.status(200).json({ success: true, data: noteData });
+  } catch (err) {
+    res.status(500).json({ status: "error", success: false, message: 'Internal server error', error: err.message });
+  }
+};
+
+exports.getRecentNotes = async (req, res) => {
+  try {
+    const querySnapshot = await getDocs(query(notesCollection, orderBy("timestamp", "desc"), limit(5)));
+    
+    const recentNotes = [];
+    querySnapshot.forEach((doc) => {
+      recentNotes.push({
+        id: doc.id,
+        ...doc.data()
+      });
+    });
+
+    res.status(200).json({ success: true, data: recentNotes });
   } catch (err) {
     res.status(500).json({ status: "error", success: false, message: 'Internal server error', error: err.message });
   }
