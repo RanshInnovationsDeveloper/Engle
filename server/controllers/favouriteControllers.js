@@ -148,7 +148,7 @@ const fetchFavouriteItems = async (req, res) => {
   if (Array.isArray(data[key])) {
     // const checkSeenPromises = data[key].map(item => checkSeenStatus(userId, key, item));
     // const isSeenResults = await Promise.all(checkSeenPromises);
-     let wordsArrayLength=data["words"].length;
+     let wordsArrayLength=data["words"]?.length;
     for (let i = 0; i < data[key].length; i++) {
       const item = data[key][i];
       // const isSeen = isSeenResults[i];
