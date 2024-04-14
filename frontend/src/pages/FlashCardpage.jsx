@@ -59,14 +59,9 @@ function FlashCardpage() {
 
 
     // This State is used only in case of Unseen ( we do not store the data of unseen in backend So I store it in local storage)
-    const [unseenArrayInStorage, setunseenArrayInStorage] = useState(JSON.parse(localStorage.getItem(`ArrayofWordFileActualIndex_${flashCardCategory}`)) || [-1]);
+    const [unseenArrayInStorage, setunseenArrayInStorage] = useState(JSON.parse(localStorage.getItem("ArrayofWordFileActualIndex_unseen")) || [-1]);
     const [unseenPreviousArrayIndex, setunseenPreviousArrayIndex] = useState(parseInt(localStorage.getItem("unseenPreviousArrayIndex")) - 1 || unseenArrayInStorage.length - 1);
-    // const [expanded, setExpanded] = useState(false);
-    
-    // const toggleExpanded = (e) => {
-    //     e.stopPropagation();
-    //     setExpanded(!expanded);
-    // };
+
     function ExpandableParagraph({ text }) {
         const [expanded, setExpanded] = useState(false);
     
@@ -113,7 +108,8 @@ function FlashCardpage() {
             if (flashCardCategory === "unseen")
                 response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex]));
 
-            else if (flashCardCategory !== "unseen" && authUserId === null) {
+            else if (flashCardCategory !== "unseen" && authUserId == null) {
+                navigate("/login");
                 dispatch(setFlashCardCategory("unseen"));
                 localStorage.setItem("flashCardCategory", "unseen");
                 return;
@@ -125,7 +121,8 @@ function FlashCardpage() {
 
             if (response?.data?.data !== null) {
 
-                setWorddata(response?.data?.data);
+                isFlipped ? setTimeout(() => setWorddata(response?.data?.data), 500) : setWorddata(response?.data?.data);
+
                 dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                 localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
 
@@ -135,7 +132,7 @@ function FlashCardpage() {
                     localStorage.setItem("unseenPreviousArrayIndex", unseenPreviousArrayIndex + 1);
                 }
                 else {
-                    dispatch(setCurrentCategoryWordIndex(currentCategoryWordIndex + 1));
+                    dispatch(setCurrentCategoryWordIndex(currentCategoryWordIndex));
                     localStorage.setItem(`currentCategoryWordIndex_${flashCardCategory}`, currentCategoryWordIndex);
                 }
             }
@@ -203,7 +200,8 @@ function FlashCardpage() {
                 const response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex]));
                 if (response?.data?.data !== null) {
 
-                    setWorddata(response?.data?.data);
+                    isFlipped ? setTimeout(() => setWorddata(response?.data?.data), 500) : setWorddata(response?.data?.data);
+
                     dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                     localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
                     updatesessionstoragearray(response?.data?.wordIndex);
@@ -218,7 +216,8 @@ function FlashCardpage() {
                 const response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex]));
                 if (response?.data !== null) {
 
-                    setWorddata(response?.data?.data);
+                    isFlipped ? setTimeout(() => setWorddata(response?.data?.data), 500) : setWorddata(response?.data?.data);
+
                     dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                     localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
                     setunseenPreviousArrayIndex(unseenPreviousArrayIndex + 1);
@@ -231,8 +230,9 @@ function FlashCardpage() {
 
             const response = await fetchWord(JSON.stringify(currentCategoryWordIndex));
             if (response?.data?.data !== null) {
+                
+               isFlipped ? setTimeout(() => setWorddata(response?.data?.data), 500) : setWorddata(response?.data?.data);
 
-                setWorddata(response?.data?.data);
                 dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                 localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
                 dispatch(setCurrentCategoryWordIndex(currentCategoryWordIndex + 1));
@@ -263,7 +263,8 @@ function FlashCardpage() {
                 const response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex - 2]));
                 if (response?.data?.data !== null) {
 
-                    setWorddata(response?.data?.data);
+                    isFlipped ? setTimeout(() => setWorddata(response?.data?.data), 500) : setWorddata(response?.data?.data);
+
                     dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                     localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
                     setunseenPreviousArrayIndex(unseenPreviousArrayIndex - 1);
@@ -279,7 +280,8 @@ function FlashCardpage() {
             const response = await fetchWord(JSON.stringify(currentCategoryWordIndex - 2));
             if (response?.data?.data !== null) {
 
-                setWorddata(response?.data?.data);
+                isFlipped ? setTimeout(() => setWorddata(response?.data?.data), 500) : setWorddata(response?.data?.data);
+
                 dispatch(setCurrentCategoryWordFileActualIndex(response?.data?.wordIndex));
                 localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, response?.data?.wordIndex);
                 dispatch(setCurrentCategoryWordIndex(currentCategoryWordIndex - 1));
@@ -376,7 +378,7 @@ function FlashCardpage() {
 
                                            <div className='flex flex-row justify-center gap-3'>
                                                <div className="" onClick={(e)=> {
-                                                   handleClickRight();
+                                                   setTimeout(handleClickRight, 1000); // 1500 milliseconds = 1.5 seconds
                                                    e.stopPropagation();
 
                                                }}>
@@ -393,7 +395,7 @@ function FlashCardpage() {
 
 
                                                <div className="" onClick={(e)=> {
-                                                   handleFlip();
+                                                setTimeout(handleFlip,1000);
                                                    e.stopPropagation();
                                                }}>
                                                <UnrememberButton
