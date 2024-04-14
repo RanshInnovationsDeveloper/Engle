@@ -7,6 +7,7 @@ import { FaPlus, FaWindowClose } from 'react-icons/fa';
 import "../styles/Notecard.css";
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from "react-responsive";
+import {useNavigate} from 'react-router-dom';
 
 const Notecard = () => {
   // Fetching userid
@@ -15,6 +16,10 @@ const Notecard = () => {
   const [noteCreated,setnoteCreated]=useState(false)
   const [selectedWord, setSelectedWord] = useState(null); // State variable to store the selected word
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
+
+  const navigate = useNavigate();
+
+
   // State object to store input values
   const [formData, setFormData] = useState({
     word: '',
@@ -88,6 +93,7 @@ const Notecard = () => {
       }
     } catch (error) {
       console.error('Error during fetch:', error.message);
+      navigate('/error');      
     }
 
     setFormData({
@@ -122,6 +128,7 @@ const Notecard = () => {
       }
     } catch (error) {
       console.error('Error during fetch:', error.message);
+      navigate('/error');
     }}
      getnotes();
   }, [noteCreated]);

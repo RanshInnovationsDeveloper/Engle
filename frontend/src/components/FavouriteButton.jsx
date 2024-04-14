@@ -24,18 +24,25 @@ function FavouriteButton({ itemId, type, name = "", isFlipped }) {
 
   useEffect(() => {
     const fetchStatus = async () => {
-      if (userId === null) {
+      if (userId == null) {
         setIsFavourite(false);
         return;
       }
-      const response = await apiConnector(
-        "GET",
-        GET_FAVOURITE_STATUS_API,
-        null,
-        null,
-        { itemId: String(itemId), type, userId }
-      );
-      setIsFavourite(response.data.isFavourite);
+      try {
+        const response = await apiConnector(
+          "GET",
+          GET_FAVOURITE_STATUS_API,
+          null,
+          null,
+          { itemId: String(itemId), type, userId }
+        );
+        setIsFavourite(response.data.isFavourite);
+      }
+      catch (err) {
+        console.log("There is some error to fetch the status of favourite button -", err);
+        toast.error("There is some server error!");
+        navigate("/error");
+      }
       return;
     };
     fetchStatus();
@@ -46,7 +53,7 @@ function FavouriteButton({ itemId, type, name = "", isFlipped }) {
     if (!userId) {
       localStorage.setItem("path", "/flashcards");
       navigate("/login");
-      return ;
+      return;
     }
 
     event.stopPropagation();
@@ -62,6 +69,7 @@ function FavouriteButton({ itemId, type, name = "", isFlipped }) {
       return;
     } catch (error) {
       console.log("error to remove word from the favourite list -", error);
+      toast.error("There is some server error!");
     }
   };
 
@@ -69,7 +77,7 @@ function FavouriteButton({ itemId, type, name = "", isFlipped }) {
     if (!userId) {
       localStorage.setItem("path", "/flashcards");
       navigate("/login");
-      return ;
+      return;
     }
     event.stopPropagation();
     setIsFavourite(true);
@@ -84,7 +92,8 @@ function FavouriteButton({ itemId, type, name = "", isFlipped }) {
 
       return;
     } catch (error) {
-      console.log("Error to add the word in favourite list -",error);
+      console.log("Error to add the word in favourite list -", error);
+      toast.error("There is some server error!");
     }
   };
 
@@ -93,7 +102,7 @@ function FavouriteButton({ itemId, type, name = "", isFlipped }) {
 
       {isFavourite ? (
         <div className="">
-          <VscHeartFilled 
+          <VscHeartFilled
             className={`text-[#F44336] w-[2rem] h-[2rem] `}
             onClick={(event) => removeFromFavourite(itemId, type, userId, event)}
           />
@@ -101,7 +110,7 @@ function FavouriteButton({ itemId, type, name = "", isFlipped }) {
 
       ) : (
         <div className="">
-          <IoMdHeartEmpty 
+          <IoMdHeartEmpty
             className={`text-[#F44336] w-[2rem] h-[2rem]   `}
             onClick={(event) => addToFavourite(itemId, type, userId, name, event)}
           />

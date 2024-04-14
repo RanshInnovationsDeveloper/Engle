@@ -95,6 +95,7 @@ function FlashCardpage() {
 
         } catch (err) {
             console.log("there is error to fetchWord => ", err);
+            toast.error("There is some server error!");
             return;
         }
     }
@@ -104,6 +105,7 @@ function FlashCardpage() {
 
     useEffect(() => {
         async function callOnlyWhenPageReload() {
+          try{
             let response;
             if (flashCardCategory === "unseen")
                 response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex]));
@@ -143,7 +145,12 @@ function FlashCardpage() {
                 dispatch(setCurrentCategoryWordFileActualIndex(0));
                 localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, 0);
             }
-
+          }
+          catch(err){
+            console.log("error in fetching word",err);
+            toast.error("There is some server error!");
+            navigate("/error");
+          }
             return;
         }
         callOnlyWhenPageReload();

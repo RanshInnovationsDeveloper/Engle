@@ -28,15 +28,24 @@ function UnrememberButton({ itemId, type, name = "",isFlipped, side }) {
                 localStorage.setItem("isunremember", false);
                 return;
             }
-            const response = await apiConnector(
-                "GET",
-                GET_UNREMEMBER_STATUS_API,
-                null,
-                null,
-                { itemId: String(itemId), type, userId }
-            );
-            dispatch(setIsunremember(response.data.isUnremember));
-            localStorage.setItem("isunremember", response.data.isUnremember);
+            try{
+
+                const response = await apiConnector(
+                    "GET",
+                    GET_UNREMEMBER_STATUS_API,
+                    null,
+                    null,
+                    { itemId: String(itemId), type, userId }
+                );
+                dispatch(setIsunremember(response.data.isUnremember));
+                localStorage.setItem("isunremember", response.data.isUnremember);
+            }
+            catch(error){
+                console.log("There is some error to fetch the status of unremember button -", error);
+                toast.error("There is some server error!");
+                navigate("/error");
+            }
+  
             return;
         };
         fetchStatus();
@@ -63,6 +72,7 @@ function UnrememberButton({ itemId, type, name = "",isFlipped, side }) {
             return;
         } catch (error) {
             console.log("There is some error to remove the word from unremember list -", error);
+            toast.error("There is some server error!");
         }
     };
 
@@ -94,6 +104,7 @@ function UnrememberButton({ itemId, type, name = "",isFlipped, side }) {
             return;
         } catch (error) {
             console.log("There is some error to add the word from remember list -", error);
+            toast.error("There is some server error!");
         }
     };
 
