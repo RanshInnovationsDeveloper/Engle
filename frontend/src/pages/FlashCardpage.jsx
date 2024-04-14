@@ -45,6 +45,17 @@ function FlashCardpage() {
     const [isSide, setIsSide] = useState("front");
     //State to check if item is seen
     const [isSeen, setIsSeen] = useState(false);
+    const options = [
+        {text:'Unseen Words', category: 'unseen'},
+        {text:'Seen Words', category: 'seen'},
+        {text:'Favourite Words', category: 'favourite'},
+        {text:'Remember Words', category: 'remember'},
+        {text:'Unremember Words', category: 'unremember'},
+        // {text:'Idioms', category: 'idioms'},
+        // {text:'Test Vocabulary', category: 'test'},
+       ];
+
+       const selectedoption = options.find(option => option.category === flashCardCategory)
 
 
     // This State is used only in case of Unseen ( we do not store the data of unseen in backend So I store it in local storage)
@@ -326,7 +337,7 @@ function FlashCardpage() {
             <Header val={1} />
             <div className='h-[34rem] flex flex-col mt-10  items-center '>
                 <h1 className='text-center text-[1.875rem] leading-4 font-[700px] mb-2 tracking-wider text-black '>FLASHCARDS</h1>
-                <h3 className='text-center text-base text-black mb-4'>{flashCardCategory}</h3>
+                <h3 className='text-center text-base text-black mb-4'>{selectedoption.text}</h3>
                    <div className="cube-container">
                    <div className="cube flex flex-row justify-center items-center">
                    
@@ -499,127 +510,3 @@ function FlashCardpage() {
 }
 
 export default FlashCardpage;
-
-
-
-/* <div className='lg:w-[43%] w-[80%] h-[56%] rounded-2xl'>
-
-                    <div className={`card__inner ${isFlipped ? 'is-flipped' : ''} border border-blue-400 rounded-2xl`} onClick={handleFlip}>
-
-                        <div className="card__face p rounded-2xl ">
-                            <div className="">
-                                <div className='flex justify-start ' >
-                                    {isSeen ? <FavouriteButton
-                                        itemId={currentCategoryWordFileActualIndex}
-                                        type={WORD_FILE_TYPE}
-                                        name={FLASH_CARD_SEEN}
-                                        isFlipped={isFlipped}
-                                    /> :
-                                        <FavouriteButton
-                                            itemId={currentCategoryWordFileActualIndex}
-                                            type={WORD_FILE_TYPE}
-                                            name={FLASH_CARD_UNSEEN}
-                                            isFlipped={isFlipped}
-                                        />}
-                                </div>
-                                <div >
-                                    <div className='flex flex-col justify-center items-center'>
-                                        {<h2 className='text-black-800 pt-[4.75rem]  font-bold text-4xl flex justify-center items-center'>{worddata?.word && worddata.word.charAt(0).toUpperCase() + worddata.word.slice(1)}</h2>}
-
-                                    </div>
-                                    <div className="flex flex-col ml-3 pb-5 bottom-0 absolute">
-                                        <div className='flex flex-col justify-center items-center gap-2'>
-                                            <h6 className=' text-gray-600'>Tap on Card to Flip it</h6>
-
-                                            <div className='flex md:flex-row flex-col justify-center gap-2'>
-                                                {/* <button onClick={handleClickRight} className="bg-green-200 border-2 border-green-400 items-center flex flex-row justify-center rounded-md px-20 py-2" >
-                                                    <div className='flex flex-row'>
-                                                        <TiTick className='h-6 w-6 text-green-600' />
-                                                        <span className="text-green-600">I know this word</span>
-                                                    </div>
-
-                                                </button>
-                                                <button onClick={handleFlip} className="bg-red-200 border-2 border-red-400 items-center gap-1 flex flex-row rounded-md justify-center px-14 py-2">
-                                                    <div className="flex flex-row items-center gap-1">
-                                                        <ImCross className='h-4 w-4 text-red-600' />
-                                                        <span className="text-red-600"> I don't know this word</span>
-                                                    </div>
-                                                </button> 
-                                                <RememberButton
-                                                    itemId={currentCategoryWordFileActualIndex}
-                                                    type={WORD_FILE_TYPE}
-                                                    name={WORD_FILE_NAME}
-                                                    isFlipped={isFlipped}
-                                                    onClick={handleClickRight}
-                                                />
-                                                <UnrememberButton
-                                                    itemId={currentCategoryWordFileActualIndex}
-                                                    type={WORD_FILE_TYPE}
-                                                    name={WORD_FILE_NAME}
-                                                    isFlipped={isFlipped}
-                                                    onClick={handleFlip}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                            </div>
-
-                        </div>
-                        <div className="card__face card__face--back p rounded-2xl">
-                            <div className="">
-                                <div className='flex justify-start'>
-
-                                    <FavouriteButton
-                                        itemId={currentCategoryWordFileActualIndex}
-                                        type={WORD_FILE_TYPE}
-                                        name={FLASH_CARD_SEEN}
-                                        isFlipped={isFlipped}
-                                    />
-                                </div>
-                                <div className="relative flex flex-col overflow-auto" onClick={handleFlip}>
-                                    <h2 className='text-black flex flex-col items-center text-4xl font-bold mt-6 mb-6'>
-                                        {worddata?.word && worddata.word.charAt(0).toUpperCase() + worddata.word.slice(1)}
-                                    </h2>
-
-
-
-                                    <div className=' mb-8 ml-6'>
-                                        <p className='items-start flex flex-col font-semibold text-lg'>
-                                            Definition: {worddata?.details?.[detailIndex]?.definition && worddata.details[detailIndex].definition.charAt(0).toUpperCase() + worddata.details[detailIndex].definition.slice(1)}
-                                        </p>
-
-                                        <p className='items-start flex flex-col font-semibold text-lg'>
-                                            Example: {worddata?.details?.[detailIndex]?.examples?.[0] && worddata.details[detailIndex].examples[0].charAt(0).toUpperCase() + worddata.details[detailIndex].examples[0].slice(1)}
-                                        </p>
-
-                                        <p className='items-start flex flex-col font-semibold text-lg'>
-                                            Synonyms: {worddata?.details?.[detailIndex]?.synonyms && worddata.details[detailIndex].synonyms.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(', ')}
-                                        </p>
-
-                                        <p className='items-start flex flex-col font-semibold text-lg'>
-                                            Antonyms: {worddata?.details?.[detailIndex]?.antonyms && worddata.details[detailIndex].antonyms.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(', ')}
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className='flex md:flex-row flex-col gap-2 justify-center mt-6 relative mx-2'>
-                                    <RememberButton
-                                        itemId={currentCategoryWordFileActualIndex}
-                                        type={WORD_FILE_TYPE}
-                                        name={WORD_FILE_NAME}
-                                        isFlipped={isFlipped}
-                                    />
-                                    <UnrememberButton
-                                        itemId={currentCategoryWordFileActualIndex}
-                                        type={WORD_FILE_TYPE}
-                                        name={WORD_FILE_NAME}
-                                        isFlipped={isFlipped}
-                                    />
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> */

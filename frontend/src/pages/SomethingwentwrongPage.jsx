@@ -7,7 +7,7 @@ function SomethingwentwrongPage() {
     <div className='h-screen flex flex-col '>
 
     <Header/>
-     <div className=" h-[83vh] flex-1 flex flex-col justify-center md:justify-end items-center mt-10 lg:mt-80 xl:mt-60 ">
+     <div className=" h-[83vh] flex-1 flex flex-col justify-center md:justify-end items-center ">
 
        <img
         src="Somethingwentwrong.png"

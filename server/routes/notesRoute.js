@@ -16,4 +16,8 @@ router.get('/getnotes/:userId',getNotesByUserId);
 
 // Route for getting a specific note by ID
 router.get('/getnote/:id', getNoteById);
+
+//Route for getting recent 5 notes
+router.get('/getrecentnotes',getRecentNotes);
+
 module.exports = router;
