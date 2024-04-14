@@ -181,8 +181,8 @@
 .cube-face-front {
   width: 39rem;
   height: 24.5rem;
-position: absolute;
-  transform: rotateY(0deg) translateZ(10rem) translateX(0rem);
+  position: absolute;
+  transform: rotateY(0deg) translateZ(0rem) translateX(0rem);
   transition: transform 1s;
 }
 

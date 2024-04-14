@@ -105,8 +105,8 @@ function RememberButton({ itemId, type, name = "" ,isFlipped, side }) {
                     else {
                         addToremember(itemId, type, userId, name, event)
                     }}}
-                    className={`items-center w-[17.5rem] h-[3.125rem] ${isremember? "bg-green-500  border-green-600":"border-[#2BD500] bg-[#D7FFCD]"}     border flex flex-row justify-center rounded-[0.6125rem] `}>
-                    <div className={`flex flex-row ${isremember? "text-green-900":"text-[#43A047]"} gap-2 `}>
+                    className={`items-center w-[17.5rem] h-[3.125rem] ${isremember? "text-white bg-[#23AD00]":"border-[#23AD00] bg-[#D7FFCD]"}     border flex flex-row justify-center rounded-[0.6125rem] `}>
+                    <div className={`flex flex-row ${isremember? "text-white":"text-[#43A047]"} gap-2 `}>
                         <MdCheck className='h-6 w-6 ' />
                         <span className=" font-normal text-base">{side === "front" ? "I know this word" : "Remembered"}</span>
                     </div>
