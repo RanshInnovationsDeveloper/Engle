@@ -39,33 +39,32 @@ const FlashcardDropdown = ({ isOpen, isMobile }) => {
     <div>
       {!isMobile ? (<>
         {isOpen && (<div className='flex flex-col  items-center'>
-        <div className="absolute inset-0 top-[8.5rem] bg-gray-900 opacity-50 z-20"></div>
-        <div ref={dropdownRef} className="absolute mt-3 z-20  ">
+          <div className="absolute inset-0 top-[8.5rem] bg-gray-900 opacity-50 z-20"></div>
+          <div ref={dropdownRef} className="absolute mt-3 z-20  ">
 
-          <div className="bg-white border w-[11rem]   flex flex-col rounded-b-xl">
-            {options.map((option, index) => (
+            <div className="bg-white border w-[11rem]   flex flex-col rounded-b-xl">
+              {options.map((option, index) => (
               <div  onClick={()=> {
-                dispatch(setFlashCardCategory(option.category));
-                localStorage.setItem('flashCardCategory', option.category);
-                window.location.reload();
-              }}
+                  dispatch(setFlashCardCategory(option.category));
+                  localStorage.setItem('flashCardCategory', option.category);
+                }}
               className={` flex flex-col justify-center cursor-pointer px-2 text-center text-[1rem] hover:scale-y-105 hover:shadow-md  bg-[#EBEDFF]  hover:bg-[#FFFFFF] h-[3rem] ${index === options.length - 1 ? "rounded-b-xl": "border-b border-black border-opacity-20"}`}>
-                <button
-                key={index}
-               
-                
-              >
-                {option.text}
-              </button>
+                  <button
+                    key={index}
 
-              </div>
-              
-            ))}
+
+                  >
+                    {option.text}
+                  </button>
+
+                </div>
+
+              ))}
+            </div>
           </div>
-        </div>
 
-      </div>
-      )}
+        </div>
+        )}
       </>
       ) : 
       (
@@ -80,17 +79,17 @@ const FlashcardDropdown = ({ isOpen, isMobile }) => {
                    <button className={`text-black text-[1rem] `}
                    onClick={option.category}
                    >
-                     {option.text}
-                   </button>
-               </li>
-             ))}
-           </ul>
-         </div>
-       )}
-     </div>
-        </>
+                          {option.text}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </>
       ) }
-      
+
     </div>
   );
 };

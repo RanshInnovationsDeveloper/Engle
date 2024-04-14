@@ -28,6 +28,7 @@ function RememberButton({ itemId, type, name = "" ,isFlipped, side }) {
                 localStorage.setItem("isremember",false);
                 return;
             }
+           try{
             const response = await apiConnector(
                 "GET",
                 GET_REMEMBER_STATUS_API,
@@ -37,6 +38,12 @@ function RememberButton({ itemId, type, name = "" ,isFlipped, side }) {
             );
             dispatch(setIsremember(response?.data?.isRemember));
             localStorage.setItem("isremember",response?.data?.isRemember);
+           }
+           catch(err){
+            console.log("There is some error to fetch the status of remember button -", err);
+            toast.error("There is some server error!");
+            navigate("/error");
+           }
             return;
         };
         fetchStatus();
@@ -61,6 +68,7 @@ function RememberButton({ itemId, type, name = "" ,isFlipped, side }) {
             return;
         } catch (error) {
             console.log("There is some error to remove the word from remember list -",error);
+            toast.error("There is some server error!");
         }
     };
 
@@ -94,6 +102,7 @@ function RememberButton({ itemId, type, name = "" ,isFlipped, side }) {
             return;
         } catch (error) {
             console.log("There is some error to add the word from remember list -",error);
+            toast.error("There is some server error!");
         }
     };
     return (

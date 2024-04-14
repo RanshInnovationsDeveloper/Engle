@@ -56,13 +56,15 @@ export default function MynotesPage() {
   //States for search   
   const [query, setQuery] = useState('');
   const [notes,setNotes] = useState([]);
+
   // State to store grouped notes
   const [groupedNotes, setGroupedNotes] = useState([]);
-  const { authUserId } = useSelector((state) => state.auth);
-  // console.log(authUserId)
+  const { authUserId ,loading } = useSelector((state) => state.auth);
+  
   // Fetching notes from the server
   useEffect(() => {
     const fetchNotes = async () => {
+    
       try {
         // Define the options for the fetch request
         const options = { method: 'GET' };
@@ -76,7 +78,6 @@ export default function MynotesPage() {
 
         // Parse the response as JSON
         const response = await resp.json();
-        // console.log(response)
         // Sort the notes by timestamp in descending order
         const sortedNotes = response.data.sort(
           (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
@@ -88,15 +89,14 @@ export default function MynotesPage() {
         console.error('There was a problem with the fetch operation:', error);
         toast.error('Failed to fetch notes. Please try again later.');
       }
+      
     };
     fetchNotes();
   }, []);
 
   //Filtering
   useEffect(() => {
-    // console.log('Running useEffect hook');
-    // console.log('Current query:', query);
-    // console.log('Current notes:', notes);
+
   
     if (query === "") {
       setGroupedNotes(groupNotesByDate(notes));
@@ -146,11 +146,10 @@ export default function MynotesPage() {
   };
   
 
-  console.log(notes)
   // Rendering the component
   return (
     <>
-    {/* {console.log("groupedNotes",groupedNotes)} */}
+
       <Header val={1} />
 
       <div className=" mx-[5rem] ">
