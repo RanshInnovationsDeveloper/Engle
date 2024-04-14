@@ -39,7 +39,8 @@ function FlashCardpage() {
 
     //This is to set the first occurence of data where all data is present in words
     const [detailIndex, setDetailIndex] = useState(0);
-
+    const [leftclicked, setLeftClicked] = useState(false);
+    const [rightclicked, setRightClicked] = useState(false);
     // These state hook are used to control the flip functionality
     const [isFlipped, setIsFlipped] = useState(false);
     const [isSide, setIsSide] = useState("front");
@@ -197,6 +198,8 @@ function FlashCardpage() {
         {
            handleFlip();
         }
+        setRightClicked(true);
+        setLeftClicked(false);
 
         if (flashCardCategory === "unseen") {
             if (unseenArrayInStorage[unseenPreviousArrayIndex] === -1) {
@@ -254,6 +257,8 @@ function FlashCardpage() {
          {
             handleFlip();
          }
+         setLeftClicked(true);
+         setRightClicked(false);
 
         if (flashCardCategory === "unseen") {
             if (unseenPreviousArrayIndex === 1) {
@@ -488,9 +493,9 @@ function FlashCardpage() {
                            </div>
                        </div>
                    </div>
-                   <div className="cube-face cube-face-right shadow-xl rounded-2xl border border-[#5B7ADE] items-center flex flex-row justify-center text-lg font-normal text-[#757575] ">Tap to Prev</div>
-           <div className="cube-face cube-face-left shadow-xl rounded-2xl border border-[#5B7ADE] items-center flex flex-row justify-center text-[#757575] text-lg font-normal">
-            Tap to Next
+                   <div className={`cube-face cube-face-right ${rightclicked? "move":""} shadow-xl rounded-2xl border border-[#5B7ADE] items-center flex flex-row justify-center text-lg font-normal text-[#757575] `}>Tap to Next</div>
+           <div className={`cube-face cube-face-left ${leftclicked? "move":""}  shadow-xl rounded-2xl border border-[#5B7ADE] items-center flex flex-row justify-center text-[#757575] text-lg font-normal`}>
+            Tap to Prev
            </div>
                </div>
 
