@@ -149,7 +149,6 @@ export default function MynotesPage() {
   // Rendering the component
   return (
     <>
-
       <Header val={1} />
 
       <div className=" mx-[5rem] ">
