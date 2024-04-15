@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import "../styles/CategoryHeader.css";
 import { useEffect, useState } from 'react';
-import { FaAngleDown } from "react-icons/fa6";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { useLocation } from 'react-router-dom';
 import FlashcardDropdown from './FlashcardDropdown';
 
@@ -56,7 +56,7 @@ if (isMobile === undefined) {
     {isMobile? (
        <div className={`menu-transition ${isOpen ? "menu-open" : ''}`}>
        {(
-         <div className={`flex flex-row justify-center bg-transparent rounded-lg shadow-xl z-10`}>
+         <div className={`flex flex-row justify-center bg-transparent z-10 ml-10`}>
            <ul className={`flex flex-col mt-2 gap-1 justify-start items-start `}>
  
              {options.map((option, index) => (
@@ -66,10 +66,13 @@ if (isMobile === undefined) {
                  <NavLink to={option.link} className={`text-black text-[1rem] `}>
                      {option.text}
                    </NavLink>
+                   {isFlashOpen? <button className={` text-black`} id="flashcard-menu-button" >
+                     <FaAngleUp/>
+                   </button> : 
                    <button className={` text-black`} id="flashcard-menu-button" >
                      <FaAngleDown/>
-                   </button>
-                   
+                   </button>}
+                 
                  </div>
                  {isMobile && <FlashcardDropdown isOpen={isFlashOpen} isMobile={isMobile}/>}
                  </>
@@ -95,12 +98,16 @@ if (isMobile === undefined) {
             <li key={index} className="py-1">
               {option.isButton ? (<>
                 <div id='flashdrop' className='flex items-center gap-[0.5rem]' onClick={toggleModal}>
-              <NavLink to={option.link} className={`text-white ${currentPath !== option.link ? "opacity-[90%]":"font-extrabold "}  text-[1rem] hover:opacity-100 hover:font-extrabold tracking-wide  `}>
+              <NavLink to={option.link} className={`text-white ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "}  text-[1rem] hover:opacity-100  tracking-wide  `}>
                   {option.text}
                 </NavLink>
-                <button className={` text-white ${currentPath !== option.link ? "opacity-[90%]":"font-extrabold "} text-[1rem] hover:opacity-100 hover:font-extrabold `} id="flashcard-menu-button" >
-                  <FaAngleDown/>
-                </button>
+                {isFlashOpen ? <button className={` text-white ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "} text-[1rem] hover:opacity-100  `} id="flashcard-menu-button" >
+                  <FaAngleUp/>
+                </button>:
+                <button className={` text-white ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "} text-[1rem] hover:opacity-100  `} id="flashcard-menu-button" >
+                <FaAngleDown/>
+              </button>}
+
                 
               </div>
               {!isMobile && <FlashcardDropdown  isOpen={isFlashOpen} isMobile={isMobile}/>}
@@ -108,7 +115,7 @@ if (isMobile === undefined) {
               </>
               
               ) : (
-                <NavLink to={option.link} className={`text-white text-[1rem] ${currentPath !== option.link ? "opacity-[90%]":"font-extrabold "} hover:opacity-100 hover:font-extrabold tracking-wide`}>
+                <NavLink to={option.link} className={`text-white text-[1rem] ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "} hover:opacity-100 tracking-wide`}>
                   {option.text}
                 </NavLink>
               )}

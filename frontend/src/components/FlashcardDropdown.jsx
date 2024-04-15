@@ -66,21 +66,18 @@ const FlashcardDropdown = ({ isOpen, isMobile }) => {
         </div>
         )}
       </>
-      ) :
-        (
-          <>
-            <div className={`menu-transition ${isOpen ? "menu-open" : ''}`}>
-              {(
-                <div className={`flex flex-row justify-center bg-transparent rounded-lg shadow-xl z-10`}>
-                  <ul className={`flex flex-col mt-2 gap-1 justify-start items-start `}>
-
-                    {options.map((option, index) => (
-                      <li key={index} className="py-1">
-                        <button className={`text-black text-[1rem] `}
-                          onClick={() => {
-                            dispatch(setFlashCardCategory(option.category));
-                            localStorage.setItem('flashCardCategory', option.category);
-                          }}
+      ) : 
+      (
+        <>
+         <div className={`menu-transition ${isOpen ? "menu-open" : ''}`}>
+       {(
+         <div className={`flex flex-row justify-center bg-transparent  z-10 ml-10`}>
+           <ul className={`flex flex-col mt-2 gap-1 justify-start items-start `}>
+ 
+             {options.map((option, index) => (
+               <li key={index} className="py-1">
+                   <button className={`text-black text-[1rem] `}
+                   onClick={option.category}
                    >
                           {option.text}
                         </button>

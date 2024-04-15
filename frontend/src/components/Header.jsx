@@ -9,8 +9,8 @@ import { logout } from '../services/operations/authServices';
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from '../slices/authSlice'
 import { onFirebaseStateChanged } from '../services/operations/authServices'
-import { FaBell } from "react-icons/fa";
-import { FaAngleDown } from "react-icons/fa6";
+import {  FaBell } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { MdKeyboardArrowRight } from "react-icons/md";
 import CategoryHeader from "./CategoryHeader";
 import ProfileDropdown from "./ProfileDropdown";
@@ -100,11 +100,15 @@ const Header = ({ val }) => {
                 Category
                 
               </NavLink>
-              {isMobile&& <button       onClick={() => {
+              {isMobile ?( !isOpen? (<button       onClick={() => {
                   toggleCategoryMenu();
                 }}       > 
                 <FaAngleDown />
-              </button>}
+              </button> ): (<button       onClick={() => {
+                  toggleCategoryMenu();
+                }}       > 
+                <FaAngleUp />
+              </button>)):(<></>)}  
             </div>
 
             {isMobile && (<CategoryHeader isOpen={isOpen} isMobile={isMobile}  />)}
