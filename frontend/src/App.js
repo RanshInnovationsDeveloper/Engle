@@ -88,10 +88,10 @@ function App() {
         <Route
           path="/forgotpass"
           element={
-
-            <OpenRoute>
-              < ForgotPasspage />
-            </OpenRoute>
+           
+            // <OpenRoute>
+              <ForgotPasspage/>
+            // </OpenRoute> 
 
           }
         />
@@ -137,14 +137,6 @@ function App() {
               <MynotesPage />
             </PrivateRoute>
 
-          }
-        />
-        <Route
-          path="/notecard"
-          element={
-            <PrivateRoute path={"/notecard"}>
-              <Notecard />
-            </PrivateRoute>
           }
         />
       

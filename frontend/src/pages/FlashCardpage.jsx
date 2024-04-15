@@ -112,8 +112,9 @@ function FlashCardpage() {
                 response = await fetchWord(JSON.stringify(unseenArrayInStorage[unseenPreviousArrayIndex]));
 
             else if (flashCardCategory !== "unseen" && authUserId == null) {
-                navigate("/login");
-                dispatch(setFlashCardCategory("unseen"));
+                localStorage.setItem('path','/flashcards');                 // to redirect to the same page after login
+                navigate("/login");                                         // if user is not logged in then redirect to login page
+                dispatch(setFlashCardCategory("unseen"));                   // set the category to unseen after login 
                 localStorage.setItem("flashCardCategory", "unseen");
                 return;
             }
@@ -467,7 +468,8 @@ function FlashCardpage() {
 
 
                                            <div className='flex flex-row justify-center gap-3'>
-                                               <div className="" onClick={(e)=> {
+                                               <div className=""onClick={(e)=> {
+                                                   setTimeout(handleClickRight, 1000); // 1500 milliseconds = 1.5 seconds
                                                    e.stopPropagation();
                                                }}>
                                                    <RememberButton
@@ -480,7 +482,8 @@ function FlashCardpage() {
                                                </div>
 
                                                <div className="" onClick={(e)=> {
-                                                   e.stopPropagation();
+                                                   setTimeout(handleClickRight, 1000); // 1500 milliseconds = 1.5 seconds
+                                                  e.stopPropagation();
                                                }}>
                                                    <UnrememberButton
                                                    itemId={currentCategoryWordFileActualIndex}

@@ -57,6 +57,11 @@ const Notecard = () => {
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(authUserId==null){
+      navigate('/login');
+      localStorage.setItem("path", "/flashcards");
+    }
+
     try {
       // Add authUserId to formData
       const formDataWithUserId = {

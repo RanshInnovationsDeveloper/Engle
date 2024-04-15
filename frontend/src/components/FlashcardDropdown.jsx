@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import "../styles/CategoryHeader.css";
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { setFlashCardCategory } from '../slices/flashCardSlice';
 
 const FlashcardDropdown = ({ isOpen, isMobile }) => {
 
   const dropdownRef = useRef(null);
   const dispatch = useDispatch();
+  const { authUserId } = useSelector((state) => state.auth);
 
   const options = [
     {text:'Unseen Words', category: 'unseen'},
@@ -47,6 +48,9 @@ const FlashcardDropdown = ({ isOpen, isMobile }) => {
               <div  onClick={()=> {
                   dispatch(setFlashCardCategory(option.category));
                   localStorage.setItem('flashCardCategory', option.category);
+                  if(authUserId!=null)
+                  window.location.reload();
+                  
                 }}
               className={` flex flex-col justify-center cursor-pointer px-2 text-center text-[1rem] hover:scale-y-105 hover:shadow-md  bg-[#EBEDFF]  hover:bg-[#FFFFFF] h-[3rem] ${index === options.length - 1 ? "rounded-b-xl": "border-b border-black border-opacity-20"}`}>
                   <button
@@ -77,7 +81,12 @@ const FlashcardDropdown = ({ isOpen, isMobile }) => {
              {options.map((option, index) => (
                <li key={index} className="py-1">
                    <button className={`text-black text-[1rem] `}
-                   onClick={option.category}
+                     onClick={()=> {
+                      dispatch(setFlashCardCategory(option.category));
+                      localStorage.setItem('flashCardCategory', option.category);
+                      if(authUserId!=null)
+                      window.location.reload();
+                    }}
                    >
                           {option.text}
                         </button>
