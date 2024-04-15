@@ -56,6 +56,7 @@ export const signin = async (email, password) => {
         error = "User not exist!";
       } else {
         localStorage.setItem('authUserId', user.uid);
+        localStorage.setItem('flashCardCategory', "unseen");
       }
     }).catch((err) => {
       let errorCode = err.code;

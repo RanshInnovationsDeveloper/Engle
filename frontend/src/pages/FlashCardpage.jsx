@@ -164,7 +164,7 @@ function FlashCardpage() {
     useEffect(() => {
         async function addWordInSeen() {
 
-            if (authUserId != "null" && flashCardCategory === "unseen") {
+            if (authUserId != null && flashCardCategory === "unseen") {
                 await apiConnector("POST", ADD_SEEN_API,
                     {
                         itemId: unseenArrayInStorage[unseenPreviousArrayIndex - 1],
