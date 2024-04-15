@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import "../styles/CategoryHeader.css";
 import { useEffect, useState } from 'react';
-import { FaAngleDown } from "react-icons/fa6";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { useLocation } from 'react-router-dom';
 import FlashcardDropdown from './FlashcardDropdown';
 
@@ -66,10 +66,13 @@ if (isMobile === undefined) {
                  <NavLink to={option.link} className={`text-black text-[1rem] `}>
                      {option.text}
                    </NavLink>
+                   {isFlashOpen? <button className={` text-black`} id="flashcard-menu-button" >
+                     <FaAngleUp/>
+                   </button> : 
                    <button className={` text-black`} id="flashcard-menu-button" >
                      <FaAngleDown/>
-                   </button>
-                   
+                   </button>}
+                 
                  </div>
                  {isMobile && <FlashcardDropdown isOpen={isFlashOpen} isMobile={isMobile}/>}
                  </>
@@ -98,9 +101,13 @@ if (isMobile === undefined) {
               <NavLink to={option.link} className={`text-white ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "}  text-[1rem] hover:opacity-100  tracking-wide  `}>
                   {option.text}
                 </NavLink>
+                {isFlashOpen ? <button className={` text-white ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "} text-[1rem] hover:opacity-100  `} id="flashcard-menu-button" >
+                  <FaAngleUp/>
+                </button>:
                 <button className={` text-white ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "} text-[1rem] hover:opacity-100  `} id="flashcard-menu-button" >
-                  <FaAngleDown/>
-                </button>
+                <FaAngleDown/>
+              </button>}
+
                 
               </div>
               {!isMobile && <FlashcardDropdown  isOpen={isFlashOpen} isMobile={isMobile}/>}
