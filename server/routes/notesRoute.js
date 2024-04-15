@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
-const { createNote, getNotesByUserId,getNoteById,getRecentNotes} = require('../controllers/notesControllers');
+const { createNote, getNotesByUserId,getNoteById, getRecentNotes} = require('../controllers/notesControllers');
 // Route for creating a new note
 router.post('/createnote', [
   body('word', 'Value must be a string').isString().notEmpty().withMessage('Word must be a non-empty string'),

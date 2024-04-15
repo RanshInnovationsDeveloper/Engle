@@ -117,8 +117,8 @@ function UnrememberButton({ itemId, type, name = "",isFlipped, side }) {
                     else {
                         addTounremember(itemId, type, userId, name, event)
                     }}}
-                    className={`items-center w-[17.5rem] h-[3.125rem] ${isunremember? "bg-green-500  border-green-600":"border-[#D80000] bg-[#FFE1DB]"}  border flex flex-row justify-center rounded-[0.6125rem] `}>
-                    <div className={`flex flex-row ${isunremember? "text-green-900":"text-[#E53935]"} gap-2 items-center `}>
+                    className={`items-center w-[17.5rem] h-[3.125rem] ${isunremember? "bg-[#D20000]  text-white":"border-[#D20000] bg-[#FFE1DB]"}  border flex flex-row justify-center rounded-[0.6125rem] `}>
+                    <div className={`flex flex-row ${isunremember? "text-white":"text-[#E53935]"} gap-2 items-center `}>
                         <RxCross1 className='h-5 w-5 ' />
                         <span className=" font-normal text-base">{side === "front" ? "I don't know this word" : "Not Remembered"}</span>
                     </div>
