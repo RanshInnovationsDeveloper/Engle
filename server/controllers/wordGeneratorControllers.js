@@ -1,3 +1,4 @@
+//This is to handel word genrator
 const { db } = require("../config/firebase");
 const { doc, getDoc, updateDoc, arrayUnion, setDoc } = require("firebase/firestore");
 
@@ -8,7 +9,7 @@ const words = require("../resources/words.json");
 const generateRandomNumber = (startingIndex, endingIndex) => {
 
     let number;
-    number = Math.floor(Math.random() * (endingIndex - startingIndex + 1)) + startingIndex;
+    number = Math.floor(Math.random() * (endingIndex - startingIndex + 1)) + startingIndex;//Get a random number between startingIndex and endingIndex
     return number;
 }
 
@@ -16,18 +17,18 @@ const generateRandomNumber = (startingIndex, endingIndex) => {
 //Fetch the word for flashcard
 exports.fetchWord = async (req, res) => {
     try {
-
+        //Items coming from body
         let { wordCategory, authUserId, wordIndex } = req.body;
         let newWordIndex = -1;
 
         // fetch data if wordCategory is unseen  .
+        //Handling if category is unseen
         if (wordCategory === "unseen") {
 
             let wordCategorySizeInDatabase;
             // fetch next word
             if (wordIndex === "-1") {
-                wordCategorySizeInDatabase = 2014;
-
+                wordCategorySizeInDatabase = words.length(); //Size of words data in database
                 // the proccess to generate random word is done in while loop so that random words index not present in seen word array (in  firestore database).
                 newWordIndex = generateRandomNumber(0, wordCategorySizeInDatabase - 1);
 
@@ -46,7 +47,7 @@ exports.fetchWord = async (req, res) => {
 
             // here wordIndex is the index of favourite word array in dataBase .
             let wordCategorySizeInDatabase=0;
-            const docRef = doc(db, wordCategory, authUserId);
+            const docRef = doc(db, wordCategory, authUserId);//get the reference of the document
             const docSnap = await getDoc(docRef);
 
             // find the size of array in which we store the data of choose category from firestore.
@@ -66,18 +67,18 @@ exports.fetchWord = async (req, res) => {
 
         }
 
-        
+        //Block to handle error part
         else{
             return res.status(404).json({
                 status:"error",
                 data:null,
                 // wordIndex: newWordIndex,
-                error: "This category is not found!"
+                message: "This category is not found!"
             });
             
         }
 
-
+        //Block to handle exception part
         if (newWordIndex === -1)
             return res.status(202).json({
                 data: null,
@@ -85,25 +86,26 @@ exports.fetchWord = async (req, res) => {
                 message: "no data found !",
             });
 
-        else
+        //Block for success part
+            else
         // console.log(words[newWordIndex])
     // console.log(words[newWordIndex])
     // console.log("index",newWordIndex)
     // console.log(words[25254])
-    
+
             return res.status(200).json({
                 data: words[newWordIndex],
                 wordIndex: newWordIndex,
                 message: "data fetch successfully"
             });
 
-
+            //To handle error part
     } catch (err) {
 
         console.log("error to fetch word => ", err);
         return res.status(404).json({
             status:"error",
-            error: "server error"
+            message: "Server error"
         });
     }
 

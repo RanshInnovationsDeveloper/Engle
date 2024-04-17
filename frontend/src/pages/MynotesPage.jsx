@@ -146,7 +146,7 @@ export default function MynotesPage() {
   };
   
 
-  console.log(notes)
+  // console.log(notes)
   // Rendering the component
   return (
     <>
@@ -194,8 +194,8 @@ export default function MynotesPage() {
     <tbody className='border-t border-[#5B7ADE]'>
       {/* {console.log("notes",notes)}  */}
 
-      
-        {currentItems.map((note,index) => (
+      {Object.keys(groupedNotes).map(date => (
+        groupedNotes[date].map((note,index) => 
           <tr key={startIndex + index} className="h-[3.5rem]">
             <td className="text-center border-y border-r w-24 border-[#5B7ADE]">{startIndex + index + 1}.</td>
             <td className="text-center border w-64 border-[#5B7ADE]">{note.word}</td>
@@ -210,7 +210,7 @@ export default function MynotesPage() {
             </td>
           </tr>
         ))
-      }
+      )}
     </tbody>
   </table>
 </div>

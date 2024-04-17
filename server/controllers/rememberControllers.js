@@ -1,3 +1,5 @@
+//This controller is here to handle functionlaity of remember words
+//Importing items
 const { db } = require("../config/firebase");
 const {
     doc,
@@ -8,7 +10,7 @@ const {
 } = require("firebase/firestore");
 const axios = require("axios");
 
-//Every time you add new json file add that over here as of now
+//TODO:Every time you add new json file add that over here as of now
 const words = require("../resources/words.json");
 const sampleStory = require("../resources/sampleStory.json");
 // const { SINGLE_NOTE_FETCHING_API_URL } = require("../constants/constants");
@@ -17,20 +19,22 @@ const keyArr = { words, sampleStory };
 
 
 
-
+//This fetch the status of favourite button
 const fetchRememberButtonStatus = async (req, res) => {
-    //this is to fetch the status of Remember button if item is in Remember it will give true else false so can be used to set the status of button on frontend.
     try {
-       
+       //Getting items from query 
         const { itemId, type, userId } = req.query;
         if (userId) {
-            //Looking for doc
-            const docRef = doc(db, "remember", userId);
-            const docSnap = await getDoc(docRef);
+        
+            const docRef = doc(db, "remember", userId);//Refernce of doc from db from documet remeber where collection is userId
+            const docSnap = await getDoc(docRef);//Snapshot of doc
 
+            //Block executing if docSnap exists
             if (docSnap.exists()) {
                 const data = docSnap.data();
+                //Checking if items exist
                 const itemExists = data[type]?.some((item) => item.itemId == itemId);
+                //If item exists sending it as remember true else false
                 if (itemExists) {
                     res.status(200).json({ isRemember: true });
                 } else {
@@ -41,7 +45,7 @@ const fetchRememberButtonStatus = async (req, res) => {
             }
         }
     } catch (error) {
-        res.status(500).json({ status: "error", error: error.message });
+        res.status(500).json({ status: "error", message: error.message });
     }
 };
 

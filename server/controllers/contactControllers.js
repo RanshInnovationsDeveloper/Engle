@@ -1,3 +1,4 @@
+//Thiis is the controller for contact us page
 //Various Imports
 const nodemailer = require("nodemailer");
 require("dotenv").config();
@@ -24,35 +25,41 @@ async (req, res) => {
     const { name, subject, message, email } = req.body;
     
 
-    //Setting Up nodemailer
+    //Setting Up nodemailer 
     let transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         type: "OAuth2",
-        user: String(process.env.EMAIL),
-        clientId: String(process.env.CLIENT_ID),
-        clientSecret: String(process.env.CLIENT_SECRET),
-        refreshToken: String(process.env.REFRESH_TOKEN),
-        accessToken: String(process.env.ACCESS_TOKEN),
+        user: String(process.env.EMAIL), //Your Email
+        clientId: String(process.env.CLIENT_ID), //Your client id
+        clientSecret: String(process.env.CLIENT_SECRET), //Your client secret
+        refreshToken: String(process.env.REFRESH_TOKEN), //Your refresh token
+        accessToken: String(process.env.ACCESS_TOKEN), //Your access token
       },
     });
 
     //Setting up mail options for node mailer
-    const mailOptions = {
-      from: email,
-      to: process.env.EMAIL,
-      subject: subject,
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
-    };
-
-    await transporter.sendMail(mailOptions);
-
-    // Successful Submission
-    res.status(200).json({status:"success", message: "We will get back to you soon " });
+    try {
+      const mailOptions = {
+        from: email,
+        to: process.env.EMAIL,
+        subject: subject,
+        html: `<p>Name: ${name}</p>
+               <p>Email: ${email}</p>
+               <p>Message: ${message}</p>`,
+      };
+    
+      await transporter.sendMail(mailOptions);
+    
+      res.status(200).json({status:"success", message: "We will get back to you soon " });
+    } 
+    catch (error) {
+      res.status(500).json({status:"error", message: error?.message });
+    }
   } 
   catch (error) {
     //Unscuccessfull Submission
-    res.status(500).json({status:"error", error: "Internal Server Error While Submiting" });
+    res.status(500).json({status:"error", message: error?.message });
   }
 
 }

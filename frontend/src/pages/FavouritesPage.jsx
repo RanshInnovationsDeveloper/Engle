@@ -76,7 +76,7 @@ function FavouritesPage() {
 
   //Filtering the data
   useEffect(() => {
-    if (query == "") {
+    if (query === "") {
       setFilteredData(data?.data);
     } else {
       const dataArr = data?.data;
@@ -85,7 +85,7 @@ function FavouritesPage() {
       // console.log(dataArr[0])
       for (let i = 0; i < dataArr?.length; i++) {
         if (
-          dataArr[i]?.type == "words" &&
+          dataArr[i]?.type === "words" &&
           (
             typeof dataArr[i]?.val?.word === 'string' && dataArr[i]?.val?.word.toLowerCase().includes(query.toLowerCase())
             //|| Array.isArray(dataArr[i]?.val?.definitions) && dataArr[i]?.val?.definitions.some(def => typeof def === 'string' && def.toLowerCase().includes(query.toLowerCase()))
@@ -94,7 +94,7 @@ function FavouritesPage() {
           newData.push(dataArr[i]);
         }
         if (
-          dataArr[i]?.type == "sampleStory" &&
+          dataArr[i]?.type === "sampleStory" &&
           (
             typeof dataArr[i]?.val?.title === 'string' && dataArr[i]?.val?.title.toLowerCase().includes(query.toLowerCase())
             // || typeof dataArr[i]?.val?.content === 'string' && dataArr[i]?.val?.content.toLowerCase().includes(query.toLowerCase())
@@ -120,10 +120,17 @@ function FavouritesPage() {
 
 
   // console.log(data)
-  console.log(filteredData)
+  // console.log(filteredData)
   //If the length of returned data is 0, then display "No Item Favourite Items Added For this user"
   if (isLoading == false && filteredData?.length == 0 && query == "") {
-    return <>No Item Favourite Items Added For this user </>;
+    return (
+      <div className="overflow-hidden" >
+      <Header val={1} />
+      <div className="flex items-center justify-center h-[90vh] bg-gray-100">
+  <p className="text-xl text-gray-700">No Data Found</p>
+</div>
+      </div>
+    );
   }
 
   //If the length of returned data is greater than 0, then display the data
