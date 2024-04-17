@@ -56,7 +56,7 @@ function App() {
         <Route path="/learn_with_context" element={< Upcomingpage />} />
         <Route path="/learn_with_story" element={< Upcomingpage />} />
         <Route path="/learn_with_friends" element={< Upcomingpage />} />
-        <Route path="/somethingwentwrong" element={< SomethingwentwrongPage />} />
+        <Route path="/error" element={< SomethingwentwrongPage />} />
         <Route path="*" element={< ErrorPage />} />
 
         {/* <Route path="/story" element={<Stories/>} /> */}
@@ -88,10 +88,10 @@ function App() {
         <Route
           path="/forgotpass"
           element={
-
-            <OpenRoute>
-              < ForgotPasspage />
-            </OpenRoute>
+           
+            // <OpenRoute>
+              <ForgotPasspage/>
+            // </OpenRoute> 
 
           }
         />
@@ -137,14 +137,6 @@ function App() {
               <MynotesPage />
             </PrivateRoute>
 
-          }
-        />
-        <Route
-          path="/notecard"
-          element={
-            <PrivateRoute path={"/notecard"}>
-              <Notecard />
-            </PrivateRoute>
           }
         />
       

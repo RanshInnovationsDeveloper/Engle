@@ -2,6 +2,8 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { RiSearch2Line } from "react-icons/ri";
 import { MdOutlineFilterAlt } from "react-icons/md";
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 import Header from "../components/Header";
 import { useSelector, useDispatch } from "react-redux";
 import { apiConnector } from "../services/apiConnector";
@@ -68,7 +70,11 @@ function FavouritesPage() {
 
         setIsLoading(false);
       } catch (error) {
+
         console.log(error);
+        toast.error('Failed to fetch favourites.Server Error.');
+        navigate("/error");
+        
       }
     };
     fetchData();
@@ -120,7 +126,6 @@ function FavouritesPage() {
 
 
   // console.log(data)
-  // console.log(filteredData)
   //If the length of returned data is 0, then display "No Item Favourite Items Added For this user"
   if (isLoading == false && filteredData?.length == 0 && query == "") {
     return (
@@ -157,7 +162,6 @@ function FavouritesPage() {
     // Calculate the ending index of the current page
     const endIndex = Math.min(startIndex + itemsPerPage, filteredData.length);
 
-    console.log("indices::", startIndex, endIndex);
 
     const currentPageItems = filteredData.slice(startIndex, endIndex);
 

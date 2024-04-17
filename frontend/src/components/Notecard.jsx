@@ -7,6 +7,7 @@ import { FaPlus, FaWindowClose } from 'react-icons/fa';
 import "../styles/Notecard.css";
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from "react-responsive";
+import {useNavigate} from 'react-router-dom';
 
 const Notecard = () => {
   // Fetching userid
@@ -15,6 +16,10 @@ const Notecard = () => {
   const [noteCreated,setnoteCreated]=useState(false)
   const [selectedWord, setSelectedWord] = useState(null); // State variable to store the selected word
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
+
+  const navigate = useNavigate();
+
+
   // State object to store input values
   const [formData, setFormData] = useState({
     word: '',
@@ -52,6 +57,11 @@ const Notecard = () => {
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(authUserId==null){
+      navigate('/login');
+      localStorage.setItem("path", "/flashcards");
+    }
+
     try {
       // Add authUserId to formData
       const formDataWithUserId = {
@@ -88,6 +98,7 @@ const Notecard = () => {
       }
     } catch (error) {
       console.error('Error during fetch:', error.message);
+      navigate('/error');      
     }
 
     setFormData({
@@ -122,6 +133,7 @@ const Notecard = () => {
       }
     } catch (error) {
       console.error('Error during fetch:', error.message);
+      navigate('/error');
     }}
      getnotes();
   }, [noteCreated]);
@@ -154,7 +166,7 @@ const Notecard = () => {
                   </button>
                 </div>
               </div>
-              <div className='p-3'>
+              <div className='p-3 '>
                 <form onSubmit={handleSubmit} className=' p-3 bg-[#F3F5FF] border border-[#5B7ADE] rounded-[0.625rem]'>
                   {/* Input fields with placeholders only */}
 
@@ -221,10 +233,12 @@ const Notecard = () => {
                     <button type="submit" onClick={handleSubmit} className='bg-customBlue px-20 text-white rounded-md py-2'>Save</button>
                   </div>
                 </form>
-                <div>
+                </div>
+                <div className="px-3  h-[8rem] bg-[#F3F5FF] border border-[#5B7ADE] rounded-[0.625rem] mx-3">
+                <div className='p-3   b flex flex-row gap-2 overflow-auto'>
                   {suggestedWords.map((data, index) => (
-                    <div key={index} style={{ display: 'flex', flexDirection: 'row' }}>
-                      <p onClick={() => handleWordClick(data)} style={{ cursor: 'pointer' }}>{data.word}</p> {/* Attach onClick handler to each word */}
+                    <div key={index} className='flex flex-row gap-1 h-[1.8rem] px-5 rounded-lg items-center bg-[#FFFFFF] border-[0.4px] text-[#818181] border-[#6C87DF]'>
+                      <p onClick={() => handleWordClick(data)} className='cursor-pointer'>{data.word}</p> {/* Attach onClick handler to each word */}
                       <FaWindowClose onClick={() => {
                         setsuggestedWords((prevWords) => {
                           // Create a new array excluding the word at the specified index
@@ -234,7 +248,9 @@ const Notecard = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+                </div>
+               
+
             </div>
           </div>
         </div>
