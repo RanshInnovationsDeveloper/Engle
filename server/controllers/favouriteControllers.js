@@ -7,6 +7,7 @@ const {
   updateDoc,
   arrayUnion,
   setDoc,
+  collection,
 } = require("firebase/firestore");
 
 const axios = require("axios");
@@ -22,16 +23,27 @@ const { SINGLE_NOTE_FETCHING_API_URL } = require("../constants/constants");
 //it will give true else false so can be used to set the status of button on frontend
 const fetchFavouriteButtonStatus = async (req, res) => {
   try {
-    const { itemId, type, userId } = req.query;
+    //Taknig the input from query
+    let { itemId, type, userId } = req.query;
+    //Converting the input ot string
+    itemId.toString()
+    type.toString()
+    userId.toString()
+  //Taking the reference to the document in firebase with favourite as collection name and userId as document name
+    const docRef = doc(db, "favourite", userId);
+  //Taking the reference to the subcollection in the document
+    const subCollectionRef = collection(docRef, type);
+  //Taking the reference to the document in the subcollection  
+    const subDocRef = doc(subCollectionRef, userId)
+
     if (userId) {
       //Looking for doc at firebase database
-      //it is looking for a doc with collection name favourite and document name as userId
-      const docRef = doc(db, "favourite", userId);
+      //Fetching contents of doc and subdoc
       const docSnap = await getDoc(docRef);
-
+      const subDocSnap=await getDoc(subDocRef)
       //If the document exists this block will be executed
-      if (docSnap.exists()) {
-        const data = docSnap.data();
+      if (docSnap.exists() && subDocSnap.exists()) {
+        const data = subDocSnap.data();
         //In the document if the type of item(notes,sampleStory etc..) is present then it will check if the item is present in the list or not
         const itemExists = data[type]?.some((item) => item.itemId == itemId );
         //if item is present status is returned as true else false
@@ -52,39 +64,58 @@ const fetchFavouriteButtonStatus = async (req, res) => {
 //it takes 4 input from body
 const addToFavourite = async (req, res) => {
   try {
-    //itemId is the index of object
-    //type is the file name from which item to be fetched
-    //userId is id of user
-    // name is name of from which it is to be displayed in () at favourite page
-    const { itemId, type, userId, name  } = req.body;
-    const docRef = doc(db, "favourite", userId); //docRef is the reference to the document in firebase in favourote collection where document name is userId
-    //Object which will be added to the db
+    let { itemId, type, userId, name  } = req.body;
+    //Taking the reference to the document in firebase with favourite as collection name and userId as document name
+    const docRef = doc(db, "favourite", userId);
+    // Convert all items from the body to strings
+    itemId = itemId.toString();
+    type = type.toString();
+    userId = userId.toString();
+    name = name.toString();
+    
+  //Creating an object with the input data
     const obj = {
       itemId,
-      createdAt: new Date(),
-      isFavourite: true,
       name,
     };
-    //Taking docSnap to check if document exists or not
+  //Fetching the doc and subdoc from the db
     const docSnap = await getDoc(docRef);
-
-    //If doc sanp exist then this block will be executed
-    if (docSnap.exists()) {
-      await updateDoc(docRef, {
-        //Adding the object to the array of type(here type is the name of file from which item is fetched) check db for better understainding
-        [type]: arrayUnion(obj),
-      });
-    }
-    //If docSanp don't exist then this block will be executed 
-    //It is setting the document with the object
-    else {
-      await setDoc(docRef, {
+  
+  //If docSnap does not exist this block will be executed and will create doc
+    if (!docSnap.exists()) {
+      await setDoc(docRef, { userId });
+       //Taking the reference to the subcollection in the document
+    const subCollectionRef = collection(docRef, type);
+    //Taking the reference to the document in the subcollection
+    const subDocRef = doc(subCollectionRef, userId)
+      await setDoc(subDocRef, {
         [type]: [obj],
       });
     }
-    res.status(200).json({ status: "Item added to favourites" });
+     //Taking the reference to the subcollection in the document
+     const subCollectionRef = collection(docRef, type);
+     //Taking the reference to the document in the subcollection
+     const subDocRef = doc(subCollectionRef, userId)
+     const subDocSnap = await getDoc(subDocRef);
+
+    if (!subDocSnap.exists()){
+      await setDoc(subDocRef, {
+        [type]: [obj],
+      });
+    }
+    //If both doc and subDoc exists this block will be executed
+    else {
+       //Taking the reference to the subcollection in the document
+    const subCollectionRef = collection(docRef, type);
+    //Taking the reference to the document in the subcollection
+    const subDocRef = doc(subCollectionRef, userId)
+      await updateDoc(subDocRef, {
+        [type]: arrayUnion(obj),
+      });
+    }
+
+    res.json({ status: "success", message: "Item added to favourite" });
   } catch (error) {
-    // console.log(error);
     res.status(500).json({ status: "error", message: error.message });
   }
 };
@@ -93,20 +124,22 @@ const addToFavourite = async (req, res) => {
 const removeFromFavourite = async (req, res) => {
   try {
     //These needed to be passed from frontend here we are taking from body
-    //int type need to pass the name of file in which item is there originally
+    //in type need to pass the name of file in which item is there originally
     const { itemId, type, userId } = req.body;
     const docRef = doc(db, "favourite", userId); //Takng the reference to the document in firebase with favourite s collection name and userId as document name 
-    const docSnap = await getDoc(docRef); 
-
+    const subcollectionRef = collection(docRef, type); //Taking the reference to the subcollection in the document
+    const subDocRef = doc(subcollectionRef, userId); //Taking the reference to the document in the subcollection
+    const docSnap = await getDoc(docRef);  //Fetching the document from the db
+    const subDocSnap = await getDoc(subDocRef); //Fetching the sub document from the db
     //If docSnap exist this block will be executed
-    if (docSnap.exists()) {
-      const data = docSnap.data();
+    if (docSnap.exists() && subDocSnap.exists()) {
+      const data = subDocSnap.data();
       const newArray = data[type].filter((item) => item.itemId !== itemId );
       //Remoinv the item from the db
-      await updateDoc(docRef, {
+      await updateDoc(subDocRef, {
         [type]: newArray,
       });
-      res.status(200).json({ status: "Item removed from favourites" });
+      res.status(200).json({ status:"success",message: "Item removed from favourites" });
     }
   } catch (error) {
     console.log(error);
@@ -141,90 +174,82 @@ const removeFromFavourite = async (req, res) => {
 //This is used to fetch all the contents of favourite
 const fetchFavouriteItems = async (req, res) => {
   try {
-    const { userId } = req.query;
+    //Can take a particular reqType from quey to reduce read data at favourites
+    let { userId} = req.query;
+    userId = userId.toString();
+    //If userId is not provided this block will be executed
     if (!userId) {
       return res.status(400).json({ status: "error", message: "No userId is provided"});
     }
+  //Taking the reference to the document in firebase with favourite as collection name and userId as document name
     const docRef = doc(db, "favourite", userId); //Taknig the reference to the document in firebase with favourite as collection name and userId as document name
-    const docSnap = await getDoc(docRef);
-    //If docSnap exist this block will be executed
+    const docSnap = await getDoc(docRef); //Fetching the document from the db
+    //If docSnap doesn't exist this block will be executed and doc will be created
     if (!docSnap.exists()) {
       await setDoc(docRef, { userId });
-      return res
-        .status(200)
-        .json({ status: "No favourite found for this user" });
+      res.status(200).send();
     }
-
-    const data = docSnap.data(); //The data which we fetched from db
+    else{
+    //Types of data that can be stored in favourite
+    const types =['words','notes']; //TODO:Add more types as needed
     const result = []; //Initialized an empty array for further purposes
     const promises = []; //Initialized an empty array for further purposes
 
     //Using a loop to iterate over the data
-    for (const key in data) {
-      // checking if array an extra check
-      if (Array.isArray(data[key])) {
-    // const checkSeenPromises = data[key].map(item => checkSeenStatus(userId, key, item));
-    // const isSeenResults = await Promise.all(checkSeenPromises);
-      let wordsArrayLength=data["words"]?.length;
-      //Iterating over the array
-      for (let i = 0; i < data[key].length; i++) {
-        const item = data[key][i];
-      // const isSeen = isSeenResults[i];
-          // Convert Firestore Timestamp to JavaScript Date
-          const createdAt = new Date(item.createdAt.seconds * 1000);
-          // Format date as needed
-          const createdAtFormatted = createdAt.toISOString();
-
-          //TODO: Every time you are trying to add a new datatype handle it over here too 
-          //Checking as per the values of keys as different key have different data type some coming from firebase some from storage
-          if (key == "sampleStory") {
-            promises.push({
-              ...item,
-              type: key,
-              val: keyArr[key][Number(item.itemId)],
-              createdAt: createdAtFormatted,
-              // isSeen
-            });
-          }
-
-
-          else if (key =="words"){
-            wordsArrayLength=wordsArrayLength-1;
-            promises.push({
-              ...item,
-              type: key,
-              val: keyArr[key][Number(item.itemId)],
-              createdAt: createdAtFormatted,
-              viewIndex:wordsArrayLength
-          })
+    for (const type of types) {
+      //If type is words this block will be executed
+      if (type=="words"){
+      //Taking the reference to the subcollection in the document
+      const subCollectionRef = collection(docRef, type);
+      //Taking the reference to the document in the subcollection
+      const subDocRef = doc(subCollectionRef, userId);
+      //Fetching the sub document from the db
+      const subDocSnap = await getDoc(subDocRef);
+      
+      //If subDocSnap exists and it have data then this block will be executed
+      if (subDocSnap.exists() && subDocSnap.data()) {
+        const data = subDocSnap.data()[type];
+        let size=data.length-1 //Taking the size of the data will be used for viewIndex
+        for (const item of data){
+          promises.push({
+            ...item,
+            type,
+            val:keyArr[type][Number(item.itemId)],
+            viewIndex:size
+        })
+        size-=1;
         }
-          else if (key == "notes") {
-            const noteId = item?.itemId;
-            promises.push(
-              //Using axios to fetch notes data 
-              axios
-                .get(SINGLE_NOTE_FETCHING_API_URL + noteId)
-                .then((response) => {
-                  const data = response.data;
-                  return {
-                    ...item,
-                    type: key,
-                    val: data,
-                    createdAt: createdAtFormatted,
-                    // isSeen
-
-                  };
-                })
-                .catch((error) => {
-                  // console.error(error.message);
-                  res.status(500).json({status:"error",message:error.message})
-                  return null; // Return null to handle the error case
-                })
-            );
-          }
-        };
       }
     }
+    //If type is notes this block will be executed
+     else if (type==="notes"){
+      //Taking the reference to the subcollection in the document
+      const subCollectionRef = collection(docRef, type);
+      //Taking the reference to the document in the subcollection
+      const subDocRef = doc(subCollectionRef, userId);
+      //Fetching the sub document from the db
+      const subDocSnap = await getDoc(subDocRef);
+      //If subDocSnap exists and it have data then this block will be executed
+      if (subDocSnap.exists() && subDocSnap.data()) {
+        const data = subDocSnap.data()[type];
+        for (const item of data){
+        const noteId=item?.itemId;
+        promises.push(
+          axios
+            .get(SINGLE_NOTE_FETCHING_API_URL + noteId)
+            .then((response) => {
+              const fetchedData = response.data;
+              return {
+                ...item,
+                type,
+                val: fetchedData,
+              }
+            }
+          ))
+        }
+      }
+    }
+  }
 
     // Wait for all promises to resolve
     Promise.all(promises)
@@ -235,14 +260,16 @@ const fetchFavouriteItems = async (req, res) => {
         result.push(...filteredResults);
         // Now you can proceed with the rest of your code that depends on 'result'
         //Sorting the data as per the date
-        result.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         res.status(200).json(result);
       })
       .catch((error) => {
         // console.error(error); // Handle errors from Promise.all()
         res.status(500).json({status:"error",message:error.message})
       });
-  } catch (error) {
+    }
+  }
+ catch (error) {
+  console.log(error.message)
     res.status(500).json({ status: "error", message: error.message });
   }
 };

@@ -48,9 +48,9 @@ function FavouritesPage() {
           null,
           {
             userId: String(authUserId), //this is the user Id of the logged in user use it in production
-            // userId: "qEMYBI4erFNruO1L0iHQknbxXdD2", //TODO:this is just a test userId to be removed in production it is here so you can better test out code
           }
         );
+        // console.log(response?.data)
         if (paramValue == "all") setData(response);
         else if (paramValue == "unseen-words") {
           let unseenWords = response?.data.filter((item) => item?.type == "words" && item?.name == "Flashcards-Unseen")
@@ -71,7 +71,7 @@ function FavouritesPage() {
         setIsLoading(false);
       } catch (error) {
 
-        console.log(error);
+        // console.log(error);
         toast.error('Failed to fetch favourites.Server Error.');
         navigate("/error");
         
@@ -299,24 +299,24 @@ function FavouritesPage() {
                         //   );
                         // }
 
-                        // if (item?.type === "notes") {
-                        //   return (
-                        //     <>
-                        //     <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                        //     <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.word}</td>
-                        //     <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.definitions}</td>
-                        //     <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
-                        //     <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
-                        //           <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
+                         if (item?.type === "notes") {
+                           return (
+                             <>
+                             <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                             <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.word}</td>
+                             <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.definitions}</td>
+                             <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
+                             <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
+                                   <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
 
-                        //         </td>
-                        //         <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
+                                 </td>
+                                 <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
 
-                        //       <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
-                        //       </td>
-                        //       </>
-                        //   );
-                        // }
+                               <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                               </td>
+                               </>
+                           );
+                         }
                       })()}
                     </React.Fragment>
                   </tr>
