@@ -56,7 +56,7 @@ export default function MynotesPage() {
   //States for search   
   const [query, setQuery] = useState('');
   const [notes,setNotes] = useState([]);
-
+  const [flattenedNotes, setFlattenedNotes] = useState([]);
   // State to store grouped notes
   const [groupedNotes, setGroupedNotes] = useState([]);
   const { authUserId ,loading } = useSelector((state) => state.auth);
@@ -94,6 +94,16 @@ export default function MynotesPage() {
     fetchNotes();
   }, []);
 
+// Flattening the notes
+useEffect(() => {
+  const flattenNotes = () => {
+    const flattenedNotes = Object.values(groupedNotes).reduce((acc, curr) => acc.concat(curr), []);
+    setFlattenedNotes(flattenedNotes);
+  }
+
+  flattenNotes();
+
+}, [groupedNotes]);
   //Filtering
   useEffect(() => {
 
@@ -146,6 +156,7 @@ export default function MynotesPage() {
   };
   
 
+  // console.log(notes)
   // Rendering the component
   return (
     <>
@@ -192,10 +203,10 @@ export default function MynotesPage() {
     <tbody className='border-t border-[#5B7ADE]'>
       {/* {console.log("notes",notes)}  */}
 
-      
-        {currentItems.map((note,index) => (
+        {/* {console.log(flattenedNotes)} */}
+        {flattenedNotes.map((note,index) => 
           <tr key={startIndex + index} className="h-[3.5rem]">
-            <td className="text-center border-y border-r w-24 border-[#5B7ADE]">{startIndex + index + 1}.</td>
+            <td className="text-center border-y border-r w-24 border-[#5B7ADE]">{index + 1}.</td>
             <td className="text-center border w-64 border-[#5B7ADE]">{note.word}</td>
             <td className="text-center border  border-[#5B7ADE]">{note.definitions}</td>
             {/* <td className="text-center border w-40  border-blue-700">Empty</td> */}
@@ -207,7 +218,7 @@ export default function MynotesPage() {
               />
             </td>
           </tr>
-        ))
+        )
       }
     </tbody>
   </table>

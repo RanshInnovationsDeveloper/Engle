@@ -9,7 +9,7 @@ const getAllStrories = async (req, res) => {
         res.status(200).send(story);
     } catch (error) {
         console.log("Error in getAllStrories", error)
-        res.status(500).json({status:"error",error:error.message})
+        res.status(500).json({status:"error",message:error.message})
     }
 }
 
@@ -21,12 +21,12 @@ try {
     res.status(200).send(story[id]);
 }
 else {
-    res.status(404).json({status:"error",error:"Story not found"});
+    res.status(404).json({status:"error",message:"Story not found"});
 }
 
 } catch (error) {
     console.log("Error in getStoryById", error)
-    res.status(500).json({status:"error",error:error.message})
+    res.status(500).json({status:"error",message:error.message})
 }
 }
 //Exporting the controllers

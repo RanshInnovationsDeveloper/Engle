@@ -48,9 +48,9 @@ function FavouritesPage() {
           null,
           {
             userId: String(authUserId), //this is the user Id of the logged in user use it in production
-            // userId: "qEMYBI4erFNruO1L0iHQknbxXdD2", //TODO:this is just a test userId to be removed in production it is here so you can better test out code
           }
         );
+        // console.log(response?.data)
         if (paramValue == "all") setData(response);
         else if (paramValue == "unseen-words") {
           let unseenWords = response?.data.filter((item) => item?.type == "words" && item?.name == "Flashcards-Unseen")
@@ -71,7 +71,7 @@ function FavouritesPage() {
         setIsLoading(false);
       } catch (error) {
 
-        console.log(error);
+        // console.log(error);
         toast.error('Failed to fetch favourites.Server Error.');
         navigate("/error");
         
@@ -82,7 +82,7 @@ function FavouritesPage() {
 
   //Filtering the data
   useEffect(() => {
-    if (query == "") {
+    if (query === "") {
       setFilteredData(data?.data);
     } else {
       const dataArr = data?.data;
@@ -91,7 +91,7 @@ function FavouritesPage() {
       // console.log(dataArr[0])
       for (let i = 0; i < dataArr?.length; i++) {
         if (
-          dataArr[i]?.type == "words" &&
+          dataArr[i]?.type === "words" &&
           (
             typeof dataArr[i]?.val?.word === 'string' && dataArr[i]?.val?.word.toLowerCase().includes(query.toLowerCase())
             //|| Array.isArray(dataArr[i]?.val?.definitions) && dataArr[i]?.val?.definitions.some(def => typeof def === 'string' && def.toLowerCase().includes(query.toLowerCase()))
@@ -100,7 +100,7 @@ function FavouritesPage() {
           newData.push(dataArr[i]);
         }
         if (
-          dataArr[i]?.type == "sampleStory" &&
+          dataArr[i]?.type === "sampleStory" &&
           (
             typeof dataArr[i]?.val?.title === 'string' && dataArr[i]?.val?.title.toLowerCase().includes(query.toLowerCase())
             // || typeof dataArr[i]?.val?.content === 'string' && dataArr[i]?.val?.content.toLowerCase().includes(query.toLowerCase())
@@ -128,7 +128,14 @@ function FavouritesPage() {
   // console.log(data)
   //If the length of returned data is 0, then display "No Item Favourite Items Added For this user"
   if (isLoading == false && filteredData?.length == 0 && query == "") {
-    return <>No Item Favourite Items Added For this user </>;
+    return (
+      <div className="overflow-hidden" >
+      <Header val={1} />
+      <div className="flex items-center justify-center h-[90vh] bg-gray-100">
+  <p className="text-xl text-gray-700">No Data Found</p>
+</div>
+      </div>
+    );
   }
 
   //If the length of returned data is greater than 0, then display the data
@@ -292,24 +299,25 @@ function FavouritesPage() {
                         //   );
                         // }
 
-                        // if (item?.type === "notes") {
-                        //   return (
-                        //     <>
-                        //     <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                        //     <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.word}</td>
-                        //     <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.definitions}</td>
-                        //     <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
-                        //     <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
-                        //           <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
+                         if (item?.type === "notes") {
+                           return (
+                             <>
+                             <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                             <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.word}</td>
+                             <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
+                             <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.data?.definitions}</td>
 
-                        //         </td>
-                        //         <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
+                             {/* <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
+                                   <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
 
-                        //       <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
-                        //       </td>
-                        //       </>
-                        //   );
-                        // }
+                                 </td> */}
+                                 <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
+
+                               <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                               </td>
+                               </>
+                           );
+                         }
                       })()}
                     </React.Fragment>
                   </tr>

@@ -35,7 +35,7 @@ function ContactUspage() {
         setSubject("");
         setEmail("");
       } catch (error) {
-        console.log("server error:", error.error);
+        // console.log("server error:", error?.error);
         setErrorMessage("Something went wrong!");
         setTimeout(() => {
           setErrorMessage(null);
@@ -101,7 +101,7 @@ function ContactUspage() {
               className="btn rounded-xl w-full p-2"
               type="submit"
               onClick={handleSubmit}
-              disabled={(button=="Sending...")?true:false}
+              disabled={(button==="Sending...")?true:false}
             >
               {button}
             </button>
