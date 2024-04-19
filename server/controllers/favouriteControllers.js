@@ -17,18 +17,15 @@ const words = require("../resources/words.json");
 const sampleStory = require("../resources/sampleStory.json");
 const keyArr = { words, sampleStory };
 
-const { SINGLE_NOTE_FETCHING_API_URL } = require("../constants/constants");
+const { SINGLE_NOTE_FETCHING_API_URL, NOTES_FILE_NAME,FLASH_CARD_SEEN, FLASH_CARD_UNSEEN } = require("../constants/constants");
 
 //this is to fetch the status of favourite button if item is in favourite 
 //it will give true else false so can be used to set the status of button on frontend
 const fetchFavouriteButtonStatus = async (req, res) => {
   try {
     //Taknig the input from query
-    let { itemId, type, userId } = req.query;
-    //Converting the input ot string
-    itemId.toString()
-    type.toString()
-    userId.toString()
+    const { itemId, type, userId } = req.query;
+  
   //Taking the reference to the document in firebase with favourite as collection name and userId as document name
     const docRef = doc(db, "favourite", userId);
   //Taking the reference to the subcollection in the document
@@ -45,7 +42,7 @@ const fetchFavouriteButtonStatus = async (req, res) => {
       if (docSnap.exists() && subDocSnap.exists()) {
         const data = subDocSnap.data();
         //In the document if the type of item(notes,sampleStory etc..) is present then it will check if the item is present in the list or not
-        const itemExists = data[type]?.some((item) => item.itemId == itemId );
+        let itemExists = data[type].some(item => item == itemId);
         //if item is present status is returned as true else false
         if (itemExists) {
           res.status(200).json({ isFavourite: true });
@@ -64,20 +61,10 @@ const fetchFavouriteButtonStatus = async (req, res) => {
 //it takes 4 input from body
 const addToFavourite = async (req, res) => {
   try {
-    let { itemId, type, userId, name  } = req.body;
+    const { itemId, type, userId, name  } = req.body;
     //Taking the reference to the document in firebase with favourite as collection name and userId as document name
     const docRef = doc(db, "favourite", userId);
-    // Convert all items from the body to strings
-    itemId = itemId.toString();
-    type = type.toString();
-    userId = userId.toString();
-    name = name.toString();
-    
-  //Creating an object with the input data
-    const obj = {
-      itemId,
-      name,
-    };
+  
   //Fetching the doc and subdoc from the db
     const docSnap = await getDoc(docRef);
   
@@ -89,7 +76,7 @@ const addToFavourite = async (req, res) => {
     //Taking the reference to the document in the subcollection
     const subDocRef = doc(subCollectionRef, userId)
       await setDoc(subDocRef, {
-        [type]: [obj],
+        [type]: [itemId],
       });
     }
      //Taking the reference to the subcollection in the document
@@ -100,7 +87,7 @@ const addToFavourite = async (req, res) => {
 
     if (!subDocSnap.exists()){
       await setDoc(subDocRef, {
-        [type]: [obj],
+        [type]: [itemId],
       });
     }
     //If both doc and subDoc exists this block will be executed
@@ -110,7 +97,7 @@ const addToFavourite = async (req, res) => {
     //Taking the reference to the document in the subcollection
     const subDocRef = doc(subCollectionRef, userId)
       await updateDoc(subDocRef, {
-        [type]: arrayUnion(obj),
+        [type]: arrayUnion(itemId),
       });
     }
 
@@ -125,7 +112,7 @@ const removeFromFavourite = async (req, res) => {
   try {
     //These needed to be passed from frontend here we are taking from body
     //in type need to pass the name of file in which item is there originally
-    const { itemId, type, userId } = req.body;
+    let { itemId, type, userId } = req.body;
     const docRef = doc(db, "favourite", userId); //Takng the reference to the document in firebase with favourite s collection name and userId as document name 
     const subcollectionRef = collection(docRef, type); //Taking the reference to the subcollection in the document
     const subDocRef = doc(subcollectionRef, userId); //Taking the reference to the document in the subcollection
@@ -134,7 +121,7 @@ const removeFromFavourite = async (req, res) => {
     //If docSnap exist this block will be executed
     if (docSnap.exists() && subDocSnap.exists()) {
       const data = subDocSnap.data();
-      const newArray = data[type].filter((item) => item.itemId !== itemId );
+      const newArray = data[type].filter((item) => item != itemId );
       //Remoinv the item from the db
       await updateDoc(subDocRef, {
         [type]: newArray,
@@ -142,41 +129,43 @@ const removeFromFavourite = async (req, res) => {
       res.status(200).json({ status:"success",message: "Item removed from favourites" });
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({status:"error",message:error.message})
   }
 };
-//Check seen status
-// async function checkSeenStatus(userId, key, item) {
-//   try {
-//     let isSeen = false;
-//     const docRef = doc(db, "seen", userId);
-//     const docSnap = await getDoc(docRef);
-//     if (!docSnap.exists) {
-//       console.log('No such document!');
-//     } else {
-//       let data = docSnap.data();
-//       if (key == "words" && data.word) {
-//         data.word.forEach((wordItem, index) => {
-//           if (wordItem === item.itemId) {
-//             isSeen = true;
-//           }
-//         });
-//       }
-//     }
-//     return isSeen;
-//   } catch(error) {
-//     console.error(error.message);
-//     return false;
-//   }
-// }
+
+//This is used to check the seen status of items
+const isSeen=async(userId,itemId,type="words")=>{
+  try {
+    const docRef = doc(db, "seen", userId);
+    const docSnap = await getDoc(docRef);
+    const subCollectionRef = collection(docRef, type);
+    const subDocRef = doc(subCollectionRef, userId);
+    const subDocSnap = await getDoc(subDocRef);
+    
+    if (!docSnap.exists()){
+      return false;
+    }
+    if (!subDocSnap.exists()){
+      return false;
+    }
+    else{
+      const data = subDocSnap.data();
+      const itemExists = data[type]?.some((item) => item == itemId );
+      return itemExists;
+    }
+    
+  } catch (error) {
+    console.log("Error in fetching seen Status",error.message)
+  }
+}
+
 
 //This is used to fetch all the contents of favourite
 const fetchFavouriteItems = async (req, res) => {
   try {
     //Can take a particular reqType from quey to reduce read data at favourites
-    let { userId} = req.query;
-    userId = userId.toString();
+    const { userId} = req.query;
     //If userId is not provided this block will be executed
     if (!userId) {
       return res.status(400).json({ status: "error", message: "No userId is provided"});
@@ -210,11 +199,15 @@ const fetchFavouriteItems = async (req, res) => {
       if (subDocSnap.exists() && subDocSnap.data()) {
         const data = subDocSnap.data()[type];
         let size=data.length-1 //Taking the size of the data will be used for viewIndex
+
         for (const item of data){
+          const isSeenValue = await isSeen(userId,item); 
+          const name = isSeenValue ? FLASH_CARD_SEEN : FLASH_CARD_UNSEEN;
           promises.push({
-            ...item,
+            itemId:item,
+            name,
             type,
-            val:keyArr[type][Number(item.itemId)],
+            val:keyArr[type][Number(item)],
             viewIndex:size
         })
         size-=1;
@@ -233,14 +226,15 @@ const fetchFavouriteItems = async (req, res) => {
       if (subDocSnap.exists() && subDocSnap.data()) {
         const data = subDocSnap.data()[type];
         for (const item of data){
-        const noteId=item?.itemId;
+        const noteId=item;
         promises.push(
           axios
             .get(SINGLE_NOTE_FETCHING_API_URL + noteId)
             .then((response) => {
               const fetchedData = response.data;
               return {
-                ...item,
+                itemId:item,
+                name:NOTES_FILE_NAME,
                 type,
                 val: fetchedData,
               }
@@ -269,7 +263,6 @@ const fetchFavouriteItems = async (req, res) => {
     }
   }
  catch (error) {
-  console.log(error.message)
     res.status(500).json({ status: "error", message: error.message });
   }
 };

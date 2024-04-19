@@ -239,7 +239,7 @@ function FavouritesPage() {
                 {/* {console.log(currentPageItems)} */}
                 {currentPageItems.map((item, index) => (
                   <tr className="h-[3.5rem]">
-                    <React.Fragment key={item.itemId}>
+                    <React.Fragment key={item?.itemId}>
                       {(() => {
                         if (item?.type === "words") {
                           return (

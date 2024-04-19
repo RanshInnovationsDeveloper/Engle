@@ -71,7 +71,7 @@ exports.fetchWord = async (req, res) => {
             // checK the given index is exist or not 
             if (wordCategorySizeInDatabase !== 0 && (wordCategorySizeInDatabase - parseInt(wordIndex) - 1)>=0&&(wordCategorySizeInDatabase - parseInt(wordIndex) - 1)<wordCategorySizeInDatabase) {
                 const data = subDocSnap.data()["words"];
-                newWordIndex = data[wordCategorySizeInDatabase - parseInt(wordIndex) - 1]?.itemId;
+                newWordIndex = data[wordCategorySizeInDatabase - parseInt(wordIndex) - 1];
             };
 
         }
