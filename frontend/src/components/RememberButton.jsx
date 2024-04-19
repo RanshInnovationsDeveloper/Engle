@@ -89,7 +89,7 @@ function RememberButton({ itemId, type, name = "" ,isFlipped, side }) {
                 itemId,
                 type,
                 userId,
-                name,
+                // name,
             });
 
             await apiConnector("POST", REMOVE_UNREMEMBER_API, {
