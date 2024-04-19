@@ -15,16 +15,11 @@ const addToSeen = async (req, res) => {
       //Taking the reference to the document in firebase with seen as collection name and userId as document name
       const docRef = doc(db, "seen", userId);
       // Convert all items from the body to strings
-      itemId = itemId.toString();
+      itemId = parseInt(itemId);
       type = type.toString();
       userId = userId.toString();
       name = name.toString();
       
-    //Creating an object with the input data
-      const obj = {
-        itemId,
-        name,
-      };
     //Fetching the doc and subdoc from the db
       const docSnap = await getDoc(docRef);
     
@@ -36,7 +31,7 @@ const addToSeen = async (req, res) => {
       //Taking the reference to the document in the subcollection
       const subDocRef = doc(subCollectionRef, userId)
         await setDoc(subDocRef, {
-          [type]: [obj],
+          [type]: [itemId],
         });
       }
        //Taking the reference to the subcollection in the document
@@ -47,7 +42,7 @@ const addToSeen = async (req, res) => {
   
       if (!subDocSnap.exists()){
         await setDoc(subDocRef, {
-          [type]: [obj],
+          [type]: [itemId],
         });
       }
       //If both doc and subDoc exists this block will be executed
@@ -57,7 +52,7 @@ const addToSeen = async (req, res) => {
       //Taking the reference to the document in the subcollection
       const subDocRef = doc(subCollectionRef, userId)
         await updateDoc(subDocRef, {
-          [type]: arrayUnion(obj),
+          [type]: arrayUnion(itemId),
         });
       }
     
