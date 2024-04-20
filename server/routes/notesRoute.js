@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { body, validationResult } = require('express-validator');
-const { createNote, getNotesByUserId,getNoteById,getRecentNotes} = require('../controllers/notesControllers');
+const { body } = require('express-validator');
+const { createNote, getAllNotes,getSomeRecentNotes,getNoteById} = require('../controllers/notesControllers');
 const rateLimit = require("express-rate-limit");
 
 //Middle ware to prevent DDOS
@@ -21,12 +21,12 @@ router.post('/createnote', [
 ],noteLimiter, createNote);
 
 // Route for getting all notes
-router.get('/getnotes/:userId',getNotesByUserId);
+router.post('/getallnotes',getAllNotes);
 
 // Route for getting a specific note by ID
 router.get('/getnote/:id', getNoteById);
 
 //Route for getting recent 5 notes
-router.get('/getrecentnotes',getRecentNotes);
+router.post('/getrecentnotes',getSomeRecentNotes);
 
 module.exports = router;

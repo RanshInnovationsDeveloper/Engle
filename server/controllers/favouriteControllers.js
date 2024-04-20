@@ -41,8 +41,10 @@ const fetchFavouriteButtonStatus = async (req, res) => {
       //If the document exists this block will be executed
       if (docSnap.exists() && subDocSnap.exists()) {
         const data = subDocSnap.data();
-        //In the document if the type of item(notes,sampleStory etc..) is present then it will check if the item is present in the list or not
-        let itemExists = data[type].some(item => item == itemId);
+
+        let itemExists=false;
+         itemExists = data[type].some(item => item == itemId);
+          
         //if item is present status is returned as true else false
         if (itemExists) {
           res.status(200).json({ isFavourite: true });
@@ -222,24 +224,28 @@ const fetchFavouriteItems = async (req, res) => {
       const subDocRef = doc(subCollectionRef, userId);
       //Fetching the sub document from the db
       const subDocSnap = await getDoc(subDocRef);
-      //If subDocSnap exists and it have data then this block will be executed
+      // If subDocSnap exists and it have data then this block will be executed
       if (subDocSnap.exists() && subDocSnap.data()) {
+
         const data = subDocSnap.data()[type];
         for (const item of data){
         const noteId=item;
-        promises.push(
-          axios
-            .get(SINGLE_NOTE_FETCHING_API_URL + noteId)
-            .then((response) => {
-              const fetchedData = response.data;
-              return {
-                itemId:item,
-                name:NOTES_FILE_NAME,
-                type,
-                val: fetchedData,
-              }
-            }
-          ))
+        
+        // this feature is used if we want to show Notes on favourite .   But there is some syntax error.
+
+        // promises.push(
+        //   axios
+        //     .get(SINGLE_NOTE_FETCHING_API_URL + noteId)
+        //     .then((response) => {
+        //       const fetchedData = response.data;
+        //       // return {
+        //       //   itemId:item,
+        //       //   name:NOTES_FILE_NAME,
+        //       //   type,
+        //       //   val: fetchedData,
+        //       // }
+        //     }
+        //   ))
         }
       }
     }

@@ -1,96 +1,160 @@
-// ../controllers/notes.js
 //This controller handles features related to notes
-const { db, notesCollection } = require('../config/firebase');
+const { db } = require('../config/firebase');
 const { validationResult } = require('express-validator');
-const { collection, query,orderBy,limit, getDocs, where, serverTimestamp,getDoc,doc,addDoc } = require('firebase/firestore');
+const { collection, query, orderBy, limit, getDocs,serverTimestamp, getDoc, doc, setDoc,addDoc } = require('firebase/firestore');
+const { get } = require('http');
 
 //This one is used to create a note
 exports.createNote = async (req, res) => {
   try {
+
+    const { userId } = req.body;
+    
     //Creating a jsonObject
     const jsonData = {
       ...req.body,
       timestamp: serverTimestamp(),
     };
+
     //Checking for errors validation work
     const errors = validationResult(req);
-    //If some validation fails then it will return the error
     if (!errors.isEmpty()) {
       return res.status(400).json({ status: "error", success: false, errors: errors.array() });
     }
-    //The doc reference is created and the note is added to the database 
-    //It is adding jsonData in notesCollection 
-    const docRef = await addDoc(notesCollection, jsonData);
+
+    const docRef = doc(db, "notes", userId);
+
+    //Fetching the doc and subdoc from the db
+    const docSnap = await getDoc(docRef);
+    let noteDocRef;
+
+    //If docSnap does not exist this block will be executed and will create doc
+    if (!docSnap.exists()) {
+      await setDoc(docRef, { userId });
+      //Taking the reference to the subcollection in the document
+      const subCollectionRef = collection(docRef, 'words');
+      noteDocRef=addDoc(subCollectionRef, jsonData);
+    }
+    else {
+      //Taking the reference to the subcollection in the document
+      const subCollectionRef = collection(docRef, 'words');
+      noteDocRef=addDoc(subCollectionRef, jsonData);
+      
+    }
+
     //Sending the response
-    res.status(200).json({ success: true, message: 'Note created successfully', noteId: docRef.id });
+    res.status(200).json({ success: true, message: 'Note created successfully',noteId:noteDocRef.id });
+    return;
   } catch (error) {
     res.status(500).json({ status: "error", success: false, message: 'Internal server error', error: error?.message });
-  }
-};
-
-//This one is used to get Notes By User Id
-exports.getNotesByUserId = async (req, res) => {
-  try {
-    //Taking userId from paramas
-    const { userId } = req.params;
-    const notesRef = collection(db, 'notes'); //Taking ref of notes collection
-    const q = query(notesRef, where('UserId', '==', userId)); //Running a query to fetch  notes with a particular userId
-    const querySnapshot = await getDocs(q); //Query SnapShot
-    //Fetching out Data from querySanpshot 
-    const data = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      timestamp: doc.data().timestamp ? doc.data().timestamp.toDate() : null,
-    }));
-    //Sending the response
-    res.status(200).json({ data });
-  } catch (err) {
-    //If some error occurs then this block will be executed
-    res.status(500).json({ status: "error", success: false, message: 'Internal server error', error: err?.message });
+    return ;
   }
 };
 
 
-//This is to get a single note from note ID 
-exports.getNoteById = async (req, res) => {
+
+//This is used to get ALL Notes By User Id
+exports.getAllNotes = async (req, res) => {
   try {
-    //Taking noteId from params
-    const noteId = req.params.id;
-    const noteRef = doc(notesCollection, noteId); //Taking refernce of note doc 
-    const noteDoc = await getDoc(noteRef); //Getting the doc
-    //If doc doesn;t exists sending error 
-    if (!noteDoc.exists()) {
-      res.status(404).json({ status: "error", success: false, message: 'Note not found' });
-      return;
+
+    const { userId } = req.body;
+    let querySnapshot = [];
+   
+    const docRef = doc(db, "notes", userId);
+    const docSnap = await getDoc(docRef);
+
+    //If docSnap doesexist this block will be executed
+    if (docSnap.exists()) {
+
+      //Taking the reference to the subcollection in the document
+      const subCollectionRef = collection(docRef, 'words');
+      querySnapshot = await getDocs(query(subCollectionRef, orderBy("timestamp", "desc")));
     }
-    //If doc exists then sending the data
-    const noteData = {
-      id: noteDoc.id,
-      ...noteDoc.data(),
-    };
-    res.status(200).json({ success: true, data: noteData });
-  } catch (err) {
-    res.status(500).json({ status: "error", success: false, message: 'Internal server error', error: err?.message });
-  }
-};
-
-//This is to getRecentNotes
-exports.getRecentNotes = async (req, res) => {
-  try {
-    //Getting a query SnapShot  from notesCollection where item is ordered by timestamp
-    const querySnapshot = await getDocs(query(notesCollection, orderBy("timestamp", "desc"), limit(5)));
     //Empty recent notes array initialized
     const recentNotes = [];
     //Iterating over the querySnapShot and adding the data to recentNotes array
     querySnapshot.forEach((doc) => {
       recentNotes.push({
-        id: doc.id,
-        ...doc.data()
+        ...doc.data(),
+        id: doc.id
       });
     });
 
     res.status(200).json({ success: true, data: recentNotes });
+    return ;
   } catch (err) {
-    res.status(500).json({ status: "error", success: false, message: 'Internal server error', error: err.message });
+    res.status(500).json({ status: "error", success: false, message: 'Internal server error to fetch Last Notes', error: err.message });
+  }
+};
+
+
+
+
+//This is to get the recent 5 notes
+exports.getSomeRecentNotes = async (req, res) => {
+  try {
+
+    const { userId } = req.body;
+    let querySnapshot = [];
+   
+    const docRef = doc(db, "notes", userId);
+    const docSnap = await getDoc(docRef);
+
+    //If docSnap doesexist this block will be executed
+    if (docSnap.exists()) {
+
+      //Taking the reference to the subcollection in the document
+      const subCollectionRef = collection(docRef, 'words');
+      querySnapshot = await getDocs(query(subCollectionRef, orderBy("timestamp", "desc"), limit(5)));
+    }
+    //Empty recent notes array initialized
+    const recentNotes = [];
+    //Iterating over the querySnapShot and adding the data to recentNotes array
+    querySnapshot.forEach((doc) => {
+      recentNotes.push({
+        ...doc.data(),
+        id: doc.id,
+      });
+    });
+
+    res.status(200).json({ success: true, data: recentNotes });
+    return ;
+  } catch (err) {
+    res.status(500).json({ status: "error", success: false, message: 'Internal server error to fetch Last Notes', error: err.message });
+  }
+};
+
+
+
+
+// this is used to get a single note from note ID
+exports.getNoteById = async (req, res) => {
+  try {
+    //Taking noteId from params
+    const noteId = req.params.id;
+    const noteRef = doc(db, "notes", noteId); //Taking reference of note doc 
+    const noteDoc = await getDoc(noteRef); //Getting the note doc
+
+    //If note doc doesn't exist, send error 
+    if (!noteDoc.exists()) {
+      res.status(404).json({ status: "error", success: false, message: 'Note not found',data:[] });
+      return;
+    }
+
+    //If note doc exists, get the 'Words' subcollection
+    const wordsCollectionRef = collection(noteRef, 'words');
+    const wordsSnapshot = await getDocs(wordsCollectionRef);
+    const wordsData = wordsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    //Prepare the note data
+    const noteData = {
+      id: noteDoc.id,
+      ...noteDoc.data(),
+      words: wordsData, //Include the 'Words' data in the response
+    };
+
+    res.status(200).json({ success: true, data: noteData });
+  } catch (err) {
+    res.status(500).json({ status: "error", success: false, message: 'Internal server error', error: err?.message });
   }
 };

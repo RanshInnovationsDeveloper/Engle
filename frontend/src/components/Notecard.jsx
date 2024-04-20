@@ -7,13 +7,13 @@ import { FaPlus, FaWindowClose } from 'react-icons/fa';
 import "../styles/Notecard.css";
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from "react-responsive";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Notecard = () => {
   // Fetching userid
   const { authUserId } = useSelector((state) => state.auth);
   const [suggestedWords, setsuggestedWords] = useState([]);
-  const [noteCreated,setnoteCreated]=useState(false)
+  const [noteCreated, setnoteCreated] = useState(false)
   const [selectedWord, setSelectedWord] = useState(null); // State variable to store the selected word
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
 
@@ -56,18 +56,23 @@ const Notecard = () => {
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
+
     e.preventDefault();
-    if(authUserId==null){
+    if (authUserId == null) {
       navigate('/login');
+      toast.warning("Please login to create notes!");
       localStorage.setItem("path", "/flashcards");
+      return;
     }
 
     try {
+
       // Add authUserId to formData
       const formDataWithUserId = {
         ...formData,
-        UserId: authUserId,
+        userId: authUserId,
       };
+
       // Prepare the request options
       const options = {
         method: 'POST',
@@ -79,63 +84,83 @@ const Notecard = () => {
       // Send the POST request to create a new note
       const response = await fetch(notesEndpoints.CREATENOTES_API, options);
 
+
       // Check the response status
       if (response.ok) {
         toast.success("Notes Created Successfully");
         setnoteCreated(!noteCreated);
+        setFormData({
+          word: '',
+          type: '',
+          definitions: '',
+          example: '',
+          breakdown: '',
+        });
+        return;
       }
-       else {
+
+      else {
         // Handle errors in the response
         const responseData = await response.json();
+
         if (responseData.errors && responseData.errors.length > 0) {
-          // Display errors as alerts
-          responseData.errors.forEach((error) => {
-            toast.error(`Error in ${error.path}: ${error.msg}`);
-          });
+          // Display errors as alert     
+          toast.warn("Please fill all fields!");
+
         } else {
           console.error('Failed to create note. Status:', response.status);
+          toast.error('Failed to create note!');
         }
+        return;
       }
+      
     } catch (error) {
-      console.error('Error during fetch:', error.message);
-      navigate('/error');      
+      console.error('Server error', error.message);
+      toast.error('Server error!');
+      navigate('/error');
+      return ;
     }
 
-    setFormData({
-      word: '',
-      type: '',
-      definitions: '',
-      example: '',
-      breakdown: '',
-    });
   };
 
 
   useEffect(() => {
-   async function getnotes (){
-    try {
-      // Prepare the request options
-      const options = {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
-      // Send the POST request to create a new note
-      const response = await fetch(notesEndpoints.GETRECENTNOTES_API, options);
-      const responseData = await response.json();
-      // Check the response status
-      if (response.ok) {
-        setsuggestedWords(responseData.data);
+    async function getRecent_5_Notes() {
+      try {
+
+        if (authUserId == null) {
+          return;
+        }
+
+        // Prepare the request options
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userId: authUserId }),
+        };
+
+        // Send the POST request to create a new note
+        const response = await fetch(notesEndpoints.GETRECENT_5_NOTES_API, options);
+        const responseData = await response.json();
+
+        // Check the response status
+        if (response.ok) {
+          setsuggestedWords(responseData.data);
+        }
+        else {
+          toast.error("Recent notes fetching failed!");
+        }
+        return;
+
+      } catch (error) {
+        console.error('Error during fetch:', error.message);
+        navigate('/error');
+        return ;
       }
-      else {
-        toast.error("Recent notes fetching failed");
-      }
-    } catch (error) {
-      console.error('Error during fetch:', error.message);
-      navigate('/error');
-    }}
-     getnotes();
+    }
+    getRecent_5_Notes();
   }, [noteCreated]);
 
   // Function to handle clicking on a word
@@ -233,8 +258,8 @@ const Notecard = () => {
                     <button type="submit" onClick={handleSubmit} className='bg-customBlue px-20 text-white rounded-md py-2'>Save</button>
                   </div>
                 </form>
-                </div>
-                <div className="px-3  h-[8rem] bg-[#F3F5FF] border border-[#5B7ADE] rounded-[0.625rem] mx-3">
+              </div>
+              <div className="px-3  h-[8rem] bg-[#F3F5FF] border border-[#5B7ADE] rounded-[0.625rem] mx-3">
                 <div className='p-3   b flex flex-row gap-2 overflow-auto'>
                   {suggestedWords.map((data, index) => (
                     <div key={index} className='flex flex-row gap-1 h-[1.8rem] px-5 rounded-lg items-center bg-[#FFFFFF] border-[0.4px] text-[#818181] border-[#6C87DF]'>
@@ -248,8 +273,8 @@ const Notecard = () => {
                     </div>
                   ))}
                 </div>
-                </div>
-               
+              </div>
+
 
             </div>
           </div>
@@ -270,7 +295,7 @@ const Notecard = () => {
                   <li>{selectedWord.example}</li>
                 </ul>
               </div>
-              <button onClick={closePrompt} style={{fontWeight:'bolder',color:'red'}}>Close</button>
+              <button onClick={closePrompt} style={{ fontWeight: 'bolder', color: 'red' }}>Close</button>
             </div>
           </div>
         </div>
