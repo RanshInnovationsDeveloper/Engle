@@ -504,8 +504,8 @@ function FlashCardpage() {
                            </div>
                        </div>
                    </div>
-                   <div className={`cube-face cube-face-right ${rightclicked? "move":""} shadow-xl rounded-2xl border border-[#5B7ADE] items-center flex flex-row justify-center text-lg font-normal text-[#757575] `}>Tap to Next</div>
-           <div className={`cube-face cube-face-left ${leftclicked? "move":""}  shadow-xl rounded-2xl border border-[#5B7ADE] items-center flex flex-row justify-center text-[#757575] text-lg font-normal`}>
+                   <div onClick={handleClickRight} className={` cursor-pointer cube-face cube-face-right ${rightclicked? "move":""} shadow-xl rounded-2xl border border-[#5B7ADE] items-center flex flex-row justify-center text-lg font-normal text-[#757575] `}>Tap to Next</div>
+           <div onClick={handleClickLeft} className={` cursor-pointer cube-face cube-face-left ${leftclicked? "move":""}  shadow-xl rounded-2xl border border-[#5B7ADE] items-center flex flex-row justify-center text-[#757575] text-lg font-normal`}>
             Tap to Prev
            </div>
                </div>

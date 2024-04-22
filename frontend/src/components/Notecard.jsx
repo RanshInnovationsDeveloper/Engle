@@ -30,8 +30,14 @@ const Notecard = () => {
   });
   const [showModal, setShowModal] = useState(false);
   const toggleModal = () => {
-    setShowModal(!showModal);
+    if(authUserId === null )
+    {
+      return navigate('/login');
+    }
+    else {
+      setShowModal(!showModal);
   }
+}
 
   useEffect(() => {
     if (showModal) {
@@ -172,6 +178,8 @@ const Notecard = () => {
   const closePrompt = () => {
     setSelectedWord(null);
   };
+
+
 
   return (
 
