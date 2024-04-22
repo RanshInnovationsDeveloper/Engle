@@ -40,7 +40,6 @@ function FavouriteButton({ itemId, type, name = "", isFlipped }) {
       }
       catch (err) {
         console.log("There is some error to fetch the status of favourite button -", err);
-        toast.error("There is some server error!");
         navigate("/error");
       }
       return;

@@ -41,7 +41,6 @@ function RememberButton({ itemId, type, name = "" ,isFlipped, side }) {
            }
            catch(err){
             console.log("There is some error to fetch the status of remember button -", err);
-            toast.error("There is some server error!");
             navigate("/error");
            }
             return;

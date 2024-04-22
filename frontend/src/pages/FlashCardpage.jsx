@@ -96,7 +96,6 @@ function FlashCardpage() {
 
         } catch (err) {
             console.log("there is error to fetchWord => ", err);
-            toast.error("There is some server error!");
             return;
         }
     }

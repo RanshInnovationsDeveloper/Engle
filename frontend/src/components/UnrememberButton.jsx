@@ -42,7 +42,6 @@ function UnrememberButton({ itemId, type, name = "",isFlipped, side }) {
             }
             catch(error){
                 console.log("There is some error to fetch the status of unremember button -", error);
-                toast.error("There is some server error!");
                 navigate("/error");
             }
   
