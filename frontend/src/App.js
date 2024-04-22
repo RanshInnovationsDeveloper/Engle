@@ -80,7 +80,7 @@ function App() {
 
             <OpenRoute>
               <Registerpage />
-            </OpenRoute>
+             </OpenRoute>
 
           }
         />
@@ -89,9 +89,9 @@ function App() {
           path="/forgotpass"
           element={
            
-            // <OpenRoute>
+             <OpenRoute>
               <ForgotPasspage/>
-            // </OpenRoute> 
+             </OpenRoute> 
 
           }
         />
