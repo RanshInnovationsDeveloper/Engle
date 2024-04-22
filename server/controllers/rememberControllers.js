@@ -41,7 +41,7 @@ const fetchRememberButtonStatus = async (req, res) => {
             const docSnap = await getDoc(docRef);
             const subDocSnap=await getDoc(subDocRef)
             //If the document exists this block will be executed
-            if (docSnap.exists() && subDocSnap.exists()) {
+            if (subDocSnap.exists() && subDocSnap.data()[type]&&subDocSnap.data()[type].length>0) {
               const data = subDocSnap.data();
               //In the document if the type of item(notes,sampleStory etc..) is present then it will check if the item is present in the list or not
               const itemExists = data[type]?.some((item) => item == itemId );
@@ -128,7 +128,7 @@ const removeFromRemember = async (req, res) => {
         const docSnap = await getDoc(docRef);  //Fetching the document from the db
         const subDocSnap = await getDoc(subDocRef); //Fetching the sub document from the db
         //If docSnap exist this block will be executed
-        if (docSnap.exists() && subDocSnap.exists()) {
+        if (subDocSnap.exists() && subDocSnap.data()[type]&&subDocSnap.data()[type].length>0) {
           const data = subDocSnap.data();
           const newArray = data[type].filter((item) => item != itemId );
           //Remoinv the item from the db
@@ -208,7 +208,7 @@ const fetchAllRememberItems = async (req, res) => {
           const subDocSnap = await getDoc(subDocRef);
           
           //If subDocSnap exists and it have data then this block will be executed
-          if (subDocSnap.exists() && subDocSnap.data()) {
+          if (subDocSnap.exists() && subDocSnap.data()[type]&&subDocSnap.data()[type].length>0) {
             const data = subDocSnap.data()[type];
         let size=data.length-1 //Taking the size of the data will be used for viewIndex
 
@@ -235,7 +235,7 @@ const fetchAllRememberItems = async (req, res) => {
           //Fetching the sub document from the db
           const subDocSnap = await getDoc(subDocRef);
           //If subDocSnap exists and it have data then this block will be executed
-          if (subDocSnap.exists() && subDocSnap.data()) {
+          if (subDocSnap.exists() && subDocSnap.data()[type]&&subDocSnap.data()[type].length>0) {
             const data = subDocSnap.data()[type];
             for (const item of data){
             const noteId=item;

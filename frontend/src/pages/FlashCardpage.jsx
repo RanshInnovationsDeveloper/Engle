@@ -146,11 +146,11 @@ function FlashCardpage() {
                 localStorage.setItem(`currentCategoryWordIndex_${flashCardCategory}`, 0);
                 dispatch(setCurrentCategoryWordFileActualIndex(0));
                 localStorage.setItem(`currentCategoryWordFileActualIndex_${flashCardCategory}`, 0);
+                return ;
             }
           }
           catch(err){
             console.log("error in fetching word",err);
-            toast.error("There is some server error!");
             navigate("/error");
           }
             return;

@@ -39,11 +39,13 @@ const fetchFavouriteButtonStatus = async (req, res) => {
       const docSnap = await getDoc(docRef);
       const subDocSnap=await getDoc(subDocRef)
       //If the document exists this block will be executed
-      if (docSnap.exists() && subDocSnap.exists()) {
+      if (subDocSnap.exists() && subDocSnap.data()[type]&&subDocSnap.data()[type].length>0) {
         const data = subDocSnap.data();
 
         let itemExists=false;
-         itemExists = data[type].some(item => item == itemId);
+        if (data[type] && data[type].length > 0) {
+          itemExists = data[type].some(item => item === itemId);
+        }
           
         //if item is present status is returned as true else false
         if (itemExists) {
@@ -121,9 +123,13 @@ const removeFromFavourite = async (req, res) => {
     const docSnap = await getDoc(docRef);  //Fetching the document from the db
     const subDocSnap = await getDoc(subDocRef); //Fetching the sub document from the db
     //If docSnap exist this block will be executed
-    if (docSnap.exists() && subDocSnap.exists()) {
+    if (subDocSnap.exists() && subDocSnap.data()[type]&&subDocSnap.data()[type].length>0) {
       const data = subDocSnap.data();
-      const newArray = data[type].filter((item) => item != itemId );
+      let newArray = [];
+      if (data[type] && data[type].length > 0) {
+        newArray=data[type].filter((item) => item != itemId );
+      }
+
       //Remoinv the item from the db
       await updateDoc(subDocRef, {
         [type]: newArray,
@@ -198,7 +204,7 @@ const fetchFavouriteItems = async (req, res) => {
       const subDocSnap = await getDoc(subDocRef);
       
       //If subDocSnap exists and it have data then this block will be executed
-      if (subDocSnap.exists() && subDocSnap.data()) {
+      if (subDocSnap.exists() && subDocSnap.data()[type]&&subDocSnap.data()[type].length>0) {
         const data = subDocSnap.data()[type];
         let size=data.length-1 //Taking the size of the data will be used for viewIndex
 
@@ -225,7 +231,7 @@ const fetchFavouriteItems = async (req, res) => {
       //Fetching the sub document from the db
       const subDocSnap = await getDoc(subDocRef);
       // If subDocSnap exists and it have data then this block will be executed
-      if (subDocSnap.exists() && subDocSnap.data()) {
+      if (subDocSnap.exists() && subDocSnap.data()[type]&&subDocSnap.data()[type].length>0) {
 
         const data = subDocSnap.data()[type];
         for (const item of data){

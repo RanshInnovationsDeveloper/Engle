@@ -93,7 +93,7 @@ export default function MynotesPage() {
       } catch (error) {
         // Log an error message if there is an issue with the fetch operation
         console.error('There was a problem with the fetch operation:', error);
-        toast.error('Failed to fetch notes. Please try again later.');
+        toast.error('There is some server error!');
         return ;
       }
     };

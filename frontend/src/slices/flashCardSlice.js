@@ -5,6 +5,7 @@ const initialState={
     flashCardCategory:localStorage.getItem("flashCardCategory") || "unseen",
     currentCategoryWordIndex:parseInt(localStorage.getItem(`currentCategoryWordIndex_${localStorage.getItem("flashCardCategory") || "unseen"}`)) || 0,
     currentCategoryWordFileActualIndex:parseInt(localStorage.getItem(`currentCategoryWordFileActualIndex_${localStorage.getItem("flashCardCategory") || "unseen"}`)) || 0,
+    nextWordTimeSpan:parseInt(localStorage.getItem("nextWordTimeSpan")) || 800,
 
 };
 const flashCardSlice = createSlice({
@@ -20,8 +21,11 @@ const flashCardSlice = createSlice({
         setCurrentCategoryWordFileActualIndex(state, value) {
             state.currentCategoryWordFileActualIndex = value.payload;
         },
+        setNextWordTimeSpan(state, value) {
+            state.nextWordTimeSpan = value.payload;
+        }
     },
 });
 
-export const { setFlashCardCategory,setCurrentCategoryWordIndex,setCurrentCategoryWordFileActualIndex } = flashCardSlice.actions;
+export const { setFlashCardCategory,setCurrentCategoryWordIndex,setCurrentCategoryWordFileActualIndex ,setNextWordTimeSpan} = flashCardSlice.actions;
 export default flashCardSlice.reducer;
