@@ -53,9 +53,9 @@ if(loading)
 
   return (
 
-      <div className="z-10 mt-2 lg:w-[42%] w-[80%] rounded-[2.5rem] bg-white lg:px-12 px-6  lg:py-10 py-6 shadow-2xl ">
+      <div className="z-10 mt-2 lg:w-[42%] w-[80%] rounded-[2.5rem] bg-white md:px-12 px-6  lg:py-10 py-6 shadow-2xl ">
         <div className='mb-10'>
-          <h2 className=" text-center text-3xl font-bold text-gray-900 tracking-widest">
+          <h2 className=" text-center text-3xl font-bold text-gray-900 tracking-wider">
             LOG IN
           </h2>
         </div>
@@ -124,13 +124,13 @@ if(loading)
         <hr className="w-[100%] h-px my-6 bg-black opacity-20 border-0 " />
         <span className="absolute px-2 font-normal text-black -translate-x-1/2 bg-white left-1/2"><p className=' opacity-70 text-sm'>OR</p></span>
       </div>
-      <div className='inline-flex items-center justify-center gap-1 mb-10'>
+      {/* <div className='inline-flex items-center justify-center gap-1 mb-10'>
         <button><RiFacebookCircleFill className='w-[2.5rem] h-[2.5rem] text-[#34468A]'/></button>
         <button><AiFillGoogleCircle className='w-[2.5rem] h-[2.5rem] text-[#34468A]'/></button>
         <button><FaGithub className='w-[2.5rem] h-[2.5rem] text-[#34468A]'/></button>
-      </div>
+      </div> */}
       <div className="flex items-center justify-center ">
-              <p className="text-pretty font-medium text-sm text-gray-600 "> Don't have an account <a href="/register" className='text-red-500' >
+              <p className="text-pretty font-medium text-md text-gray-600 "> Don't have an account <a href="/register" className='text-red-500' >
                  Sign up?</a></p>
         
             </div>
