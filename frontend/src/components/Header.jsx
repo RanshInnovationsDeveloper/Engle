@@ -49,6 +49,8 @@ const Header = ({ val }) => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    // toggleCategoryMenu();
+    // toggleProfile();
   };
 
   const toggleProfile = () => {
@@ -65,6 +67,8 @@ const Header = ({ val }) => {
   const closeMobileMenu = () => {
     if (isMobile) {
       setIsMenuOpen(false);
+      setIsOpen(false);
+      setIsProfileOpen(false);
     }
   };
 
@@ -146,14 +150,18 @@ const Header = ({ val }) => {
                 </li>
               </>
             ) : (<>
-              <li className="mt-10 flex flex-row justify-between items-center  w-[100%]">
-                <div className=" flex flex-row gap-4 items-center ">
+              <li className="mt-10 flex flex-row justify-between items-center  w-[100%]" onClick={toggleProfile}>
+                <div className=" flex flex-row gap-4 items-center " >
                   <button className='btn pr-1 pl-3 py-3'>
                     <IoPerson className="w-[1.75rem] h-[1.75rem]" />
                   </button>
                   <h2 className={`${linkClassName}`}>{userName}</h2>
                 </div>
-                <MdKeyboardArrowRight />
+                {isProfileOpen ? <FaAngleUp/> :  <FaAngleDown />}
+
+              </li>
+              <li className=" w-[100%]">
+              {isMobile && <ProfileDropdown isOpen={isProfileOpen} isMobile={isMobile}/>}
               </li>
               <li className="w-full">
                 <hr className="border-t-2 border-gray-400 " />
@@ -189,7 +197,7 @@ const Header = ({ val }) => {
               id="nav-menu"
             >
 
-              <div className=" flex flex-row-reverse pb-20 gap-6" id="nav-close" onClick={toggleMenu}>
+              <div className=" flex flex-row-reverse pb-20 gap-6" id="nav-close" onClick={closeMobileMenu}>
 
                 <div className=" flex flex-col justify-center items-center   ">
                   <IoClose className=" text-black text-4xl cursor-pointer" /></div>
@@ -248,10 +256,11 @@ const Header = ({ val }) => {
                       <FaBell className="w-[1.25rem] h-[1.5rem]" />
                     </button>
                   </li>
-                  <li>
+                  <li >
                     <button id="profileButton" className='btn pr-1 pl-3 py-3' onClick={toggleProfile}>
                       <IoPerson className="w-[1.5rem] h-[1.5rem]" />
-                      <FaAngleDown className="w-[1rem] h-[0.8rem] font-bold" />
+                      {!isProfileOpen ? <FaAngleDown className="w-[1rem] h-[0.8rem] font-bold"   onClick={toggleProfile}/>:
+                      <FaAngleUp className="w-[1rem] h-[0.8rem] font-bold"  onClick={toggleProfile}/>}
                     </button>
                     {!isMobile && <ProfileDropdown isOpen={isProfileOpen}/>}
                   </li>

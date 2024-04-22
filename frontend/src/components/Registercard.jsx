@@ -71,7 +71,7 @@ function Registercard() {
     <div className="z-10 lg:mt-0 mt-2 mb-4 lg:w-[42%] lg:h-[50%] w-[80%] rounded-3xl bg-white lg:py-8 py-6 lg:px-12 px-6">
  
       <div className=''>
-        <h2 className=" text-center text-3xl font-extrabold text-gray-900">
+        <h2 className=" text-center text-3xl font-bold text-gray-900 tracking-wider">
           SIGN UP
         </h2>
       </div>
@@ -100,8 +100,8 @@ function Registercard() {
               <input
                 id="useremail"
                 name="useremail"
-                type="useremail"
-                autoComplete="useremail"
+                type="email"
+                autoComplete="email"
                 required
                 className="appearance-none rounded-r-lg  bg-[#F4F6FC] relative block w-full px-3 py-4  placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                 placeholder="Enter Email"
@@ -176,13 +176,13 @@ function Registercard() {
         <hr className="w-[100%] h-px my-8 bg-black opacity-20 border-0 " />
         <span className="absolute px-2 font-normal text-black -translate-x-1/2 bg-white left-1/2"><p className=' opacity-70 text-sm'>OR</p></span>
       </div>
-      <div className='inline-flex items-center justify-center gap-1 mb-6'>
+      {/* <div className='inline-flex items-center justify-center gap-1 mb-6'>
         <button><RiFacebookCircleFill className='w-[2.5rem] h-[2.5rem] text-[#34468A]'/></button>
         <button><AiFillGoogleCircle className='w-[2.5rem] h-[2.5rem] text-[#34468A]'/></button>
         <button><FaGithub className='w-[2.5rem] h-[2.5rem] text-[#34468A]'/></button>
-      </div>
+      </div> */}
       <div className="flex items-center justify-center ">
-              <p className="text-pretty font-medium text-sm text-gray-600 "> Already have an account <a href="/login" className='text-red-500' >
+              <p className="text-pretty font-medium text-md text-gray-600 "> Already have an account <a href="/login" className='text-red-500' >
                  Log In?</a></p>
         
             </div>

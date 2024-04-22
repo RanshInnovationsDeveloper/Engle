@@ -10,7 +10,7 @@ function Homepage() {
     <>
     <Header val={0} />
     <div className="container mt-12">
-      <div className="bg-[rgb(0,8,52)] mt-10 text-white p-10 lg:mx-10 rounded-3xl shadow-2xl flex flex-col ">
+      <div className=" mt-10 text-white p-12 lg:mx-10 bg-cover rounded-[3rem] shadow-2xl flex flex-col " style={{backgroundImage: "url('home_0_img.png')"}}>
         <header className="flex-grow flex lg:flex-row flex-col justify-center items-center">
           <img className="lg:w-[30%] lg:h-[30%] w-[90%] h-[90%]  " src='home_1_img.png' alt='home_image' />
           <div className='flex-grow flex flex-col lg:pr-5'>
