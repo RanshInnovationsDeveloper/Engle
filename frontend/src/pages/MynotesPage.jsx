@@ -66,7 +66,7 @@ export default function MynotesPage() {
   // State to store grouped notes
   const [groupedNotes, setGroupedNotes] = useState([]);
   const { authUserId} = useSelector((state) => state.auth);
-  const [loading ,setLoading]=useState(false);
+  const [loading ,setLoading]=useState(true);
 
   const dispatch=useDispatch();
 
@@ -88,8 +88,9 @@ export default function MynotesPage() {
 
         setNotes(sortedNotes)
         setGroupedNotes(groupNotesByDate(sortedNotes));
+        setLoading(false);
         return ;
-
+       
       } catch (error) {
         // Log an error message if there is an issue with the fetch operation
         console.error('There was a problem with the fetch operation:', error);
@@ -97,9 +98,9 @@ export default function MynotesPage() {
         return ;
       }
     };
-    setLoading(true);
+    // setLoading(true);
     fetchNotes();
-    setLoading(false);
+   
   }, []);
 
 
@@ -171,6 +172,18 @@ export default function MynotesPage() {
   const handleInputBlur = () => {
     handleInputSubmit();
   };
+
+
+  if (loading == false && flattenedNotes?.length == 0 && query == "") {
+    return (
+      <div className="overflow-hidden" >
+      <Header val={1} />
+      <div className="flex items-center justify-center h-[90vh] bg-gray-100">
+  <p className="text-xl text-gray-700">No Data Found</p>
+</div>
+      </div>
+    );
+  }
 
   return loading ? <Spinner /> : <> <Header val={1} />
 
