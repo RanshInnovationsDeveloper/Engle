@@ -1,7 +1,7 @@
 import  { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { signin } from '../services/operations/authServices';
 import { setLoading } from '../slices/authSlice';
 import { useDispatch, useSelector } from "react-redux"
@@ -104,9 +104,9 @@ if(loading)
 
             </div>
             <div className="flex items-center justify-end">
-              <a href="/forgotpass" className="text-pretty font-medium text-sm text-gray-600 hover:text-red-500 mt-3">
+              <NavLink to="/forgotpass" className="text-pretty font-medium text-sm text-gray-600 hover:text-red-500 mt-3">
                 Forgot password?
-              </a>
+              </NavLink>
             </div>
           </div>
 
@@ -130,8 +130,8 @@ if(loading)
         <button><FaGithub className='w-[2.5rem] h-[2.5rem] text-[#34468A]'/></button>
       </div> */}
       <div className="flex items-center justify-center ">
-              <p className="text-pretty font-medium text-md text-gray-600 "> Don't have an account <a href="/register" className='text-red-500' >
-                 Sign up?</a></p>
+              <p className="text-pretty font-medium text-md text-gray-600 "> Don't have an account <NavLink to="/register" className='text-red-500' >
+                 Sign up?</NavLink></p>
         
             </div>
         </div>

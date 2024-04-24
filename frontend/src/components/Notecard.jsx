@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { notesEndpoints } from '../services/apis';
 import { IoClose } from "react-icons/io5";
 import { FaPlus, FaWindowClose } from 'react-icons/fa';
+
 import "../styles/Notecard.css";
 import { Link } from 'react-router-dom';
 import { useMediaQuery } from "react-responsive";
@@ -208,7 +209,7 @@ const Notecard = () => {
                       <input
                         type="text"
                         name="word"
-                        value={formData.word}
+                        value={ selectedWord ? selectedWord.word : formData.word}
                         onChange={handleInputChange}
                         placeholder="Word"
                         className='border-[0.03rem] border-[#5B7ADE] rounded-[0.44rem] p-2 mb-3 '
@@ -219,7 +220,7 @@ const Notecard = () => {
                       <input
                         type="text"
                         name="type"
-                        value={formData.type}
+                        value={ selectedWord ? selectedWord.type : formData.type}
                         onChange={handleInputChange}
                         placeholder="Type"
                         className='border-[0.03rem] border-[#5B7ADE] rounded-[0.44rem] p-2 mb-3 w-full'
@@ -231,7 +232,7 @@ const Notecard = () => {
                       <input
                         type="text"
                         name="definitions"
-                        value={formData.definitions}
+                        value={ selectedWord ? selectedWord.definitions : formData.definitions}
                         onChange={handleInputChange}
                         placeholder="Definition"
                         className='pb-8 border-[0.03rem] border-[#5B7ADE] rounded-[0.44rem] p-2 w-full mb-3 '
@@ -242,7 +243,7 @@ const Notecard = () => {
                       <input
                         type="text"
                         name="example"
-                        value={formData.example}
+                        value={ selectedWord ? selectedWord.example : formData.example}
                         onChange={handleInputChange}
                         placeholder="Example"
                         className='pb-8 border-[0.03rem] border-[#5B7ADE] rounded-[0.44rem] p-2 w-full mb-3 '
@@ -252,7 +253,7 @@ const Notecard = () => {
                       <input
                         type="text"
                         name="breakdown"
-                        value={formData.breakdown}
+                        value={ selectedWord ? selectedWord.breakdown : formData.breakdown}
                         onChange={handleInputChange}
                         placeholder="Word breakdown"
                         className='pb-8 border-[0.03rem] border-[#5B7ADE] rounded-[0.44rem] p-2 w-full mb-3 '
@@ -268,12 +269,14 @@ const Notecard = () => {
                 </form>
               </div>
               <div className="px-3  h-[8rem] bg-[#F3F5FF] border border-[#5B7ADE] rounded-[0.625rem] mx-3">
-                <div className='p-3   b flex flex-row gap-2 overflow-auto'>
+                <div className='p-3 grid grid-cols-2 gap-y-1' >
                   {suggestedWords.map((data, index) => (
-                    <div key={index} className='flex flex-row gap-1 h-[1.8rem] px-5 rounded-lg items-center bg-[#FFFFFF] border-[0.4px] text-[#818181] border-[#6C87DF]'>
-                      <p onClick={() => handleWordClick(data)} className='cursor-pointer'>{data.word}</p> {/* Attach onClick handler to each word */}
-                      <FaWindowClose onClick={() => {
+                    <div key={index} onClick={() => handleWordClick(data)} className='flex flex-row gap-1 w-[7rem] h-[1.875rem] justify-center rounded-lg items-center bg-[#FFFFFF] border-[0.4px] text-[#818181] border-[#6C87DF]'>
+                      <p  className='cursor-pointer'>{data.word}</p> {/* Attach onClick handler to each word */}
+                      <IoClose onClick={(e) => {
+                        e.stopPropagation();
                         setsuggestedWords((prevWords) => {
+                          
                           // Create a new array excluding the word at the specified index
                           return prevWords.filter((_, indextoremove) => indextoremove !== index);
                         });
@@ -291,18 +294,8 @@ const Notecard = () => {
       {/* Prompt to show full data when a word is clicked */}
       {selectedWord && (
         <div>
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50" onClick={closePrompt}></div>
           <div className="fixed bottom-0 right-0 m-4 z-50">
             <div className="bg-white p-4 rounded-lg">
-              <div>
-                <ul>
-                  <li>{selectedWord.word}</li>
-                  <li>{selectedWord.type}</li>
-                  <li>{selectedWord.definitions}</li>
-                  <li>{selectedWord.breakdown}</li>
-                  <li>{selectedWord.example}</li>
-                </ul>
-              </div>
               <button onClick={closePrompt} style={{ fontWeight: 'bolder', color: 'red' }}>Close</button>
             </div>
           </div>
