@@ -256,11 +256,11 @@ const Header = ({ val }) => {
                       <FaBell className="w-[1.25rem] h-[1.5rem]" />
                     </button>
                   </li>
-                  <li >
+                  <li onClick={toggleProfile}>
                     <button id="profileButton" className='btn pr-1 pl-3 py-3' onClick={toggleProfile}>
                       <IoPerson className="w-[1.5rem] h-[1.5rem]" />
-                      {!isProfileOpen ? <FaAngleDown className="w-[1rem] h-[0.8rem] font-bold"   onClick={toggleProfile}/>:
-                      <FaAngleUp className="w-[1rem] h-[0.8rem] font-bold"  onClick={toggleProfile}/>}
+                      <FaAngleDown className={`w-[1rem] h-[0.8rem] font-bold ${isProfileOpen ? "hidden" : "visible"}`}   onClick={toggleProfile}/>
+                      <FaAngleUp className={`w-[1rem] h-[0.8rem] font-bold ${!isProfileOpen ? "hidden" : "visible"}`}  onClick={toggleProfile}/>
                     </button>
                     {!isMobile && <ProfileDropdown isOpen={isProfileOpen}/>}
                   </li>
