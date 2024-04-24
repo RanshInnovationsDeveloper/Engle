@@ -18,7 +18,6 @@ const addToSeen = async (req, res) => {
       itemId = parseInt(itemId);
       type = type.toString();
       userId = userId.toString();
-      name = name.toString();
       
     //Fetching the doc and subdoc from the db
       const docSnap = await getDoc(docRef);

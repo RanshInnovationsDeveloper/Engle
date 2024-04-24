@@ -67,6 +67,7 @@ function ContactUspage() {
           <form className="border border-[#5B7ADE] rounded-2xl  bg-[#34468A]  shadow-md p-6">
             <h1 className="text-white text-3xl mb-5">Contact Us!</h1>
             <input
+            aria-label="Name"
               required
               type="text"
               placeholder="Name"
@@ -75,6 +76,7 @@ function ContactUspage() {
               className="bg-[#F4F6FC]  rounded-xl w-full  py-4 px-3 text-gray-700 leading-tight  mb-4"
             />
             <input
+            aria-label="Email"
               required
               type="text"
               placeholder="Email"
@@ -83,6 +85,7 @@ function ContactUspage() {
               className="bg-[#F4F6FC] shadow appearance-none border rounded-xl w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
             />
             <input
+            aria-label="Subject"
               required
               type="text"
               placeholder="Subject"
@@ -91,6 +94,7 @@ function ContactUspage() {
               className="bg-[#F4F6FC] shadow appearance-none border rounded-xl w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
             />
             <textarea
+            aria-label="Message"
               required
               value={message}
               placeholder="How can we help?"
@@ -98,6 +102,7 @@ function ContactUspage() {
               className="bg-[#F4F6FC] shadow appearance-none border rounded-xl w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4 h-32"
             />
             <button
+            aria-label="Submit"
               className="btn rounded-xl w-full p-2"
               type="submit"
               onClick={handleSubmit}

@@ -12,7 +12,8 @@
     "firebase": "^10.10.0",
     "node": "^21.6.2",
     "nodemailer": "^6.9.12",
-    "supertest": "^6.3.4"
+    "supertest": "^6.3.4",
+    "util": "^0.12.5"
   },
   "scripts": {
     "start": "node index.js",
@@ -25,5 +26,8 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "nodemon": "^3.1.0"
+  },
+  "jest": {
+    "setupFiles": ["jest.setup.js"]
   }
 }
