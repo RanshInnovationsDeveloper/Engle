@@ -23,7 +23,8 @@ const FavouritesCategoryPage = () => {
     { heading: "Idioms MCQ", comment: "(Play with Friends)" },
     { heading: "Match Words", comment: "(Play with Friends)" },
     { heading: "Antonyms MCQ", comment: "(Play with Friends)" },
-    { heading: "Synonyms MCQ", comment: "(Play with Friends)" }
+    { heading: "Synonyms MCQ", comment: "(Play with Friends)" },
+    { heading: "My Notes" }
   ];
   // To navigate to desired page
   const navigate = useNavigate();
@@ -40,8 +41,15 @@ const FavouritesCategoryPage = () => {
     //if the heading is not in the above then it will go to a page for that type of favourite 
     //which is dealt here using navigate 
     else {
+      if(heading === "My Notes")
+      {
+        navigate('/mynotes');
+      }
+      else
+      {
       const link = heading.split(' ').map(word => word.toLowerCase()).join('-');
       navigate(`/favourites/${link}`);
+      }
     }
   }
 

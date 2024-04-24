@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import {  toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { signup } from '../services/operations/authServices';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoPerson } from "react-icons/io5";
@@ -182,8 +182,8 @@ function Registercard() {
         <button><FaGithub className='w-[2.5rem] h-[2.5rem] text-[#34468A]'/></button>
       </div> */}
       <div className="flex items-center justify-center ">
-              <p className="text-pretty font-medium text-md text-gray-600 "> Already have an account <a href="/login" className='text-red-500' >
-                 Log In?</a></p>
+              <p className="text-pretty font-medium text-md text-gray-600 "> Already have an account <NavLink to="/login" className='text-red-500' >
+                 Log In?</NavLink></p>
         
             </div>
         </div>
