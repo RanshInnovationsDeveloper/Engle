@@ -369,11 +369,11 @@ function FavouritesPage() {
 
 
         </div>
-        <Notecard />
+        <Notecard data-testid="notecard" />
       </div>
     );
   }
-  return isLoading ? <Spinner /> : <></>
+  return isLoading ? <Spinner role="status" /> : <></>
 
 }
 

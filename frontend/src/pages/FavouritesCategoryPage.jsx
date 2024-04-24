@@ -57,6 +57,7 @@ const FavouritesCategoryPage = () => {
             <button
               onClick={() => handleTo(item.heading)}
               key={index}
+              role="listitem"
               className="border h-[4.3rem] w-[12.5rem] border-[#5B7ADE] bg-[#EBEDFF] hover:bg-[#CDD3FF] hover:border items-center rounded-xl"
 
             >
