@@ -101,12 +101,12 @@ if (isMobile === undefined) {
               <NavLink to={option.link} className={`text-white ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "}  text-[1rem] hover:opacity-100  tracking-wide  `}>
                   {option.text}
                 </NavLink>
-                {isFlashOpen ? <button className={` text-white ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "} text-[1rem] hover:opacity-100  `} id="flashcard-menu-button" >
+                 <button className={` text-white ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "} text-[1rem] hover:opacity-100 ${!isFlashOpen ? "hidden" : "visible"}  `} id="flashcard-menu-button" >
                   <FaAngleUp/>
-                </button>:
-                <button className={` text-white ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "} text-[1rem] hover:opacity-100  `} id="flashcard-menu-button" >
+                </button>
+                <button className={` text-white ${currentPath !== option.link ? "opacity-[80%]":"font-extrabold "} text-[1rem] hover:opacity-100 ${isFlashOpen ? "hidden" : "visible"}  `} id="flashcard-menu-button" >
                 <FaAngleDown/>
-              </button>}
+              </button>
 
                 
               </div>
