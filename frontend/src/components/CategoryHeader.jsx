@@ -54,7 +54,7 @@ if (isMobile === undefined) {
   return (
     <>
     {isMobile? (
-       <div className={`menu-transition ${isOpen ? "menu-open" : ''}`}>
+       <div className={`menu-transition ${isOpen ? "menu-open" : ''}`} role="navigation">
        {(
          <div className={`flex flex-row justify-center bg-transparent z-10 ml-10`}>
            <ul className={`flex flex-col mt-2 gap-1 justify-start items-start `}>
@@ -90,7 +90,7 @@ if (isMobile === undefined) {
      </div>
     )
     :
-    (<>{shouldRender && <>{(<>
+    (<div role="navigation">{shouldRender && <>{(<>
       <div  className={`flex flex-row justify-center items-center bg-[#34468A]  h-[3rem] z-10`}>
         <ul className={`flex flex-row gap-20  `}>
 
@@ -128,7 +128,7 @@ if (isMobile === undefined) {
       </>
     )}</>
 }
-        </>)}
+        </div>)}
     </>
    
   );
