@@ -35,7 +35,9 @@ export const notesEndpoints = {
   //mynotesRoute Endpoints
   CREATENOTES_API: BASE_URL + "/notes/createnote",
   GETALLNOTES_API: BASE_URL + "/notes/getallnotes",
-  GETRECENT_5_NOTES_API:BASE_URL+"/notes/getrecentnotes"
+  GETRECENT_5_NOTES_API:BASE_URL+"/notes/getrecentnotes",
+  DELETENOTE_API:BASE_URL+"/notes/deletenote",
+  UPDATENOTE_API:BASE_URL+"/notes/updatenote",
 };
 
 export const contactEndpoints = {

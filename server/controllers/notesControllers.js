@@ -1,7 +1,7 @@
 //This controller handles features related to notes
 const { db } = require('../config/firebase');
 const { validationResult } = require('express-validator');
-const { collection, query, orderBy, limit, getDocs,serverTimestamp, getDoc, doc, setDoc,addDoc } = require('firebase/firestore');
+const { collection, query, orderBy, limit, getDocs,serverTimestamp, getDoc, doc, setDoc,addDoc,deleteDoc,updateDoc } = require('firebase/firestore');
 const { get } = require('http');
 
 //This one is used to create a note
@@ -156,5 +156,41 @@ exports.getNoteById = async (req, res) => {
     res.status(200).json({ success: true, data: noteData });
   } catch (err) {
     res.status(500).json({ status: "error", success: false, message: 'Internal server error', error: err?.message });
+  }
+};
+
+
+
+// this is used to delete a note
+exports.deleteNote = async (req, res) => {
+  try {
+    const { userId, noteId } = req.body;
+
+    const docRef = doc(db, "notes", userId, "words", noteId);
+    await deleteDoc(docRef);
+
+    res.status(200).json({ success: true, message: 'Note deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ status: "error", success: false, message: 'Internal server error to delete note', error: err.message });
+  }
+};
+
+
+
+// this is used to update a note
+exports.updateNote = async (req, res) => {
+  try {
+    const { userId, noteId } = req.body;
+
+    const docRef = doc(db, "notes", userId, "words", noteId);
+
+    await updateDoc(docRef, {
+      ...req.body,
+      timestamp: serverTimestamp(),
+    });
+
+    res.status(200).json({ success: true, message: 'Note updated successfully' });
+  } catch (err) {
+    res.status(500).json({ status: "error", success: false, message: 'Internal server error to update note', error: err.message });
   }
 };

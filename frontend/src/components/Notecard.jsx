@@ -131,6 +131,55 @@ const Notecard = () => {
   };
 
 
+
+  // handle updatenote
+  const handleUpdateNote = async (noteId) => { 
+    try {
+
+      const formDataWithUserId = {  
+        ...formData,
+        userId: authUserId,
+        noteId: noteId,
+
+      }
+      // Prepare the request options
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formDataWithUserId),
+      };
+
+      // Send the POST request to delete the note
+      const response = await fetch(notesEndpoints.UPDATENOTE_API, options);
+
+      // Check the response status
+      if (response.ok) {
+        toast.success("Notes Update Successfully");
+        setnoteCreated(!noteCreated);
+        setFormData({
+          word: '',
+          type: '',
+          definitions: '',
+          example: '',
+          breakdown: '',
+        });
+      } else {
+        toast.error("Failed to update note!");
+      }
+      return;
+
+    } catch (error) {
+      console.error('Error during update the note:', error.message);
+      navigate('/error');
+      return ;
+    } 
+  }
+
+
+
+
   useEffect(() => {
     async function getRecent_5_Notes() {
       try {
@@ -169,6 +218,38 @@ const Notecard = () => {
     }
     getRecent_5_Notes();
   }, [noteCreated]);
+
+
+
+  // Function to delete the note
+  const handleDeleteNote = async (noteId) => {
+    try {
+      // Prepare the request options
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: authUserId, noteId }),
+      };
+
+      // Send the POST request to delete the note
+      const response = await fetch(notesEndpoints.DELETENOTE_API, options);
+
+      // Check the response status
+      if (response.ok) {
+      } else {
+        toast.error("Failed to remove note!");
+      }
+      return;
+
+    } catch (error) {
+      console.error('Error during delete the note:', error.message);
+      navigate('/error');
+      return ;
+    }
+  }
+
 
   // Function to handle clicking on a word
   const handleWordClick = (word) => {
@@ -275,6 +356,7 @@ const Notecard = () => {
                       <p  className='cursor-pointer'>{data.word}</p> {/* Attach onClick handler to each word */}
                       <IoClose onClick={(e) => {
                         e.stopPropagation();
+                        handleDeleteNote(data?.id);
                         setsuggestedWords((prevWords) => {
                           
                           // Create a new array excluding the word at the specified index
