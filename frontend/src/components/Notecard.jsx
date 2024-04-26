@@ -37,6 +37,14 @@ const Notecard = () => {
     }
     else {
       setShowModal(!showModal);
+      setSelectedWord(null);
+      setFormData({
+        word: '',
+        type: '',
+        definitions: '',
+        example: '',
+        breakdown: '',
+      });
   }
 }
 
@@ -150,8 +158,12 @@ const Notecard = () => {
         },
         body: JSON.stringify(formDataWithUserId),
       };
-
-      // Send the POST request to delete the note
+      const isFormEmpty = Object.values(formData).some((value) => value === '');
+      if(isFormEmpty){
+      toast.warn("Please fill all the fields!");
+      return;
+    }
+      // Send the POST request to update the note
       const response = await fetch(notesEndpoints.UPDATENOTE_API, options);
 
       // Check the response status
@@ -165,9 +177,10 @@ const Notecard = () => {
           example: '',
           breakdown: '',
         });
+        setSelectedWord(null);
       } else {
         toast.error("Failed to update note!");
-      }
+    }
       return;
 
     } catch (error) {
@@ -254,6 +267,14 @@ const Notecard = () => {
   // Function to handle clicking on a word
   const handleWordClick = (word) => {
     setSelectedWord(word);
+    setFormData({
+      word: word.word,
+      type: word.type,
+      definitions: word.definitions,
+      example: word.example,
+      breakdown: word.breakdown,
+    });
+
   };
 
   // Function to close the prompt
@@ -282,7 +303,7 @@ const Notecard = () => {
                 </div>
               </div>
               <div className='p-3 '>
-                <form onSubmit={handleSubmit} className=' p-3 bg-[#F3F5FF] border border-[#5B7ADE] rounded-[0.625rem]'>
+                <form  className=' p-3 bg-[#F3F5FF] border border-[#5B7ADE] rounded-[0.625rem]'>
                   {/* Input fields with placeholders only */}
 
                   <div className='flex justify-center gap-4'>
@@ -290,7 +311,8 @@ const Notecard = () => {
                       <input
                         type="text"
                         name="word"
-                        value={ selectedWord ? selectedWord.word : formData.word}
+                        required
+                        value={  formData.word}
                         onChange={handleInputChange}
                         placeholder="Word"
                         className='border-[0.03rem] border-[#5B7ADE] rounded-[0.44rem] p-2 mb-3 '
@@ -301,7 +323,8 @@ const Notecard = () => {
                       <input
                         type="text"
                         name="type"
-                        value={ selectedWord ? selectedWord.type : formData.type}
+                        required
+                        value={  formData.type}
                         onChange={handleInputChange}
                         placeholder="Type"
                         className='border-[0.03rem] border-[#5B7ADE] rounded-[0.44rem] p-2 mb-3 w-full'
@@ -313,7 +336,8 @@ const Notecard = () => {
                       <input
                         type="text"
                         name="definitions"
-                        value={ selectedWord ? selectedWord.definitions : formData.definitions}
+                        required
+                        value={formData.definitions}
                         onChange={handleInputChange}
                         placeholder="Definition"
                         className='pb-8 border-[0.03rem] border-[#5B7ADE] rounded-[0.44rem] p-2 w-full mb-3 '
@@ -324,7 +348,8 @@ const Notecard = () => {
                       <input
                         type="text"
                         name="example"
-                        value={ selectedWord ? selectedWord.example : formData.example}
+                        required
+                        value={  formData.example}
                         onChange={handleInputChange}
                         placeholder="Example"
                         className='pb-8 border-[0.03rem] border-[#5B7ADE] rounded-[0.44rem] p-2 w-full mb-3 '
@@ -334,7 +359,8 @@ const Notecard = () => {
                       <input
                         type="text"
                         name="breakdown"
-                        value={ selectedWord ? selectedWord.breakdown : formData.breakdown}
+                        required
+                        value={ formData.breakdown}
                         onChange={handleInputChange}
                         placeholder="Word breakdown"
                         className='pb-8 border-[0.03rem] border-[#5B7ADE] rounded-[0.44rem] p-2 w-full mb-3 '
@@ -344,16 +370,27 @@ const Notecard = () => {
 
                   {/* Submit button */}
                   <div className='flex justify-between items-center'>
-                    <FaPlus className='text-[#4A5995] w-[0.875] h-[0.875] ml-1' />
-                    <button type="submit" onClick={handleSubmit} className='bg-customBlue px-20 text-white rounded-md py-2'>Save</button>
+                  
+                    <button  onClick={(e)=> {
+                      if(selectedWord){
+                        e.preventDefault();
+                        handleUpdateNote(selectedWord.id);
+                      }
+                      else {
+                        handleSubmit(e);
+                      }
+                    }} className='bg-[#4A5995] w-full px-20 text-white rounded-md py-2'>{!selectedWord? "Save" : "Edit"}</button>
                   </div>
                 </form>
               </div>
               <div className="px-3  h-[8rem] bg-[#F3F5FF] border border-[#5B7ADE] rounded-[0.625rem] mx-3">
                 <div className='p-3 grid grid-cols-2 gap-y-1' >
                   {suggestedWords.map((data, index) => (
-                    <div key={index} onClick={() => handleWordClick(data)} className='flex flex-row gap-1 w-[7rem] h-[1.875rem] justify-center rounded-lg items-center bg-[#FFFFFF] border-[0.4px] text-[#818181] border-[#6C87DF]'>
-                      <p  className='cursor-pointer'>{data.word}</p> {/* Attach onClick handler to each word */}
+                    <div key={index} onClick={() => handleWordClick(data)} className='flex flex-row gap-1 w-[9rem] h-[1.875rem] justify-between rounded-lg items-center bg-[#FFFFFF] border-[0.4px] text-[#818181] border-[#6C87DF]'>
+                      <div className="flex flex-row justify-center items-center w-[80%]">
+                      <p  className='cursor-pointer text-ellipsis max-w-[80%] overflow-hidden'>{data.word}</p> {/* Attach onClick handler to each word */}
+                      </div>
+                      <div className="flex flex-row justify-center items-center w-[20%]">
                       <IoClose onClick={(e) => {
                         e.stopPropagation();
                         handleDeleteNote(data?.id);
@@ -363,6 +400,8 @@ const Notecard = () => {
                           return prevWords.filter((_, indextoremove) => indextoremove !== index);
                         });
                       }} />
+                      </div>
+                      
                     </div>
                   ))}
                 </div>
@@ -374,15 +413,7 @@ const Notecard = () => {
         </div>
       )}
       {/* Prompt to show full data when a word is clicked */}
-      {selectedWord && (
-        <div>
-          <div className="fixed bottom-0 right-0 m-4 z-50">
-            <div className="bg-white p-4 rounded-lg">
-              <button onClick={closePrompt} style={{ fontWeight: 'bolder', color: 'red' }}>Close</button>
-            </div>
-          </div>
-        </div>
-      )}
+     
     </div>
   );
 };

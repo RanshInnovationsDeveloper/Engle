@@ -40,7 +40,7 @@ function Registercard() {
         toast.error(error);
       } else {
 
-        navigate("/");
+        navigate("/verifyemail", {state: {email}});
         toast.success("Check your email for verification")
 
       }
