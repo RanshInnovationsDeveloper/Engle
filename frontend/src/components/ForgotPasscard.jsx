@@ -2,7 +2,6 @@ import  { useState } from 'react'
 import { useNavigate } from "react-router-dom"
 import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoMdMail } from 'react-icons/io';
-import VerifyOtpcard from './VerifyOtpcard';
 import { forgotPassword } from '../services/operations/authServices';
 import { useDispatch,useSelector } from 'react-redux';
 import { setLoading } from '../slices/authSlice';

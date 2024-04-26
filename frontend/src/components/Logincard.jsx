@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react'
+import  { useState } from 'react'
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { NavLink, useNavigate } from "react-router-dom"
@@ -7,9 +7,7 @@ import { setLoading } from '../slices/authSlice';
 import { useDispatch, useSelector } from "react-redux"
 import { IoMdMail } from "react-icons/io";
 import { MdLock } from "react-icons/md";
-import { RiEyeFill,RiFacebookCircleFill, RiEyeOffFill } from 'react-icons/ri';
-import { AiFillGoogleCircle } from "react-icons/ai";
-import { FaGithub } from "react-icons/fa";
+import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import Spinner from './Spinner';
 
 function Logincard() {
@@ -124,11 +122,6 @@ if(loading)
         <hr className="w-[100%] h-px my-6 bg-black opacity-20 border-0 " />
         <span className="absolute px-2 font-normal text-black -translate-x-1/2 bg-white left-1/2"><p className=' opacity-70 text-sm'>OR</p></span>
       </div>
-      {/* <div className='inline-flex items-center justify-center gap-1 mb-10'>
-        <button><RiFacebookCircleFill className='w-[2.5rem] h-[2.5rem] text-[#34468A]'/></button>
-        <button><AiFillGoogleCircle className='w-[2.5rem] h-[2.5rem] text-[#34468A]'/></button>
-        <button><FaGithub className='w-[2.5rem] h-[2.5rem] text-[#34468A]'/></button>
-      </div> */}
       <div className="flex items-center justify-center ">
               <p className="text-pretty font-medium text-md text-gray-600 "> Don't have an account <NavLink to="/register" className='text-red-500' >
                  Sign up?</NavLink></p>

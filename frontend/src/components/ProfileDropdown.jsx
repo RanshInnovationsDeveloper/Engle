@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {useNavigate} from 'react-router-dom';
 import { logout } from '../services/operations/authServices';
@@ -11,9 +10,8 @@ import "../styles/Header.css"
 
 const ProfileDropdown = ({ isOpen, isMobile}) => {
 
-  const options = ['Username', 'Logout'];
   const navigate = useNavigate()
-  const { authUserId, userName } = useSelector((state) => state.auth)
+  const {  userName } = useSelector((state) => state.auth)
   const dispatch = useDispatch();
   const linkClassName = "nav__link";
 

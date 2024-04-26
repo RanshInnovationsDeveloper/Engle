@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {apiConnector} from '../services/apiConnector'
 import { storyEndpoints } from '../services/apis'
 import { useParams } from 'react-router-dom'

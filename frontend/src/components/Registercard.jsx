@@ -7,9 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IoPerson } from "react-icons/io5";
 import { MdLock } from "react-icons/md";
 import { IoMdMail } from "react-icons/io";
-import { RiEyeFill, RiFacebookCircleFill, RiEyeOffFill } from 'react-icons/ri';
-import { AiFillGoogleCircle } from "react-icons/ai";
-import { FaGithub } from "react-icons/fa";
+import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import { setLoading } from '../slices/authSlice';
 import Spinner from './Spinner';
 import StrongPasswordText from './StrongPasswordText';
@@ -74,11 +72,7 @@ function Registercard() {
   const handleInputBlur = () => {
     setIsFocused(false);
   };
-  // useEffect(()=> {
-  //   if(authUserData){
-  //     navigate("/");
-  //   }
-  // },[authUserData, navigate])
+
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
