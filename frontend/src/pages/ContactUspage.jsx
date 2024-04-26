@@ -70,7 +70,7 @@ function ContactUspage() {
             aria-label="Name"
               required
               type="text"
-              placeholder="Name"
+              placeholder="Your Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="bg-[#F4F6FC]  rounded-xl w-full  py-4 px-3 text-gray-700 leading-tight  mb-4"
@@ -79,7 +79,7 @@ function ContactUspage() {
             aria-label="Email"
               required
               type="text"
-              placeholder="Email"
+              placeholder="Your Email Id"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="bg-[#F4F6FC] shadow appearance-none border rounded-xl w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4"
@@ -97,7 +97,7 @@ function ContactUspage() {
             aria-label="Message"
               required
               value={message}
-              placeholder="How can we help?"
+              placeholder="How can we help you?"
               onChange={(e) => setMessage(e.target.value)}
               className="bg-[#F4F6FC] shadow appearance-none border rounded-xl w-full py-4 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-4 h-32"
             />

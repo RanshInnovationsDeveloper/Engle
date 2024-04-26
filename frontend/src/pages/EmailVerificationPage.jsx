@@ -1,19 +1,12 @@
-import { useState } from "react"
-import ForgotPasscard from "../components/ForgotPasscard"
-import VerifyOtpcard from "../components/VerifyOtpcard";
 import Header from "../components/Header";
 import EmailVerifycard from "../components/EmailVerifycard";
 import { useLocation } from "react-router-dom";
 
 function EmailVerificationPage() {
 
-  const [clicked, setClicked] = useState(false);
   const loaction = useLocation();
   const {email} = loaction.state
 
-  const handleClicked = () => {
-    setClicked(true);
-  }
 
 
   return (

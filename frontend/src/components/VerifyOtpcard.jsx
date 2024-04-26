@@ -1,12 +1,7 @@
 import  { useState } from 'react'
-import { useNavigate } from "react-router-dom"
-
-import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
 import { IoMdMail } from 'react-icons/io';
 
 function VerifyOtpcard() {
-
-  const navigate = useNavigate();
 
 
   const [otp, setOtp] = useState('');

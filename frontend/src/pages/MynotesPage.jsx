@@ -1,6 +1,6 @@
 // Importing React components and icons
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import {  useSelector } from 'react-redux';
 import { RiSearch2Line } from "react-icons/ri";
 import Header from "../components/Header";
 import { notesEndpoints } from '../services/apis';
@@ -12,7 +12,6 @@ import { FaArrowAltCircleLeft } from "react-icons/fa";
 import Notecard from "../components/Notecard";
 import { MdOutlineFilterAlt } from "react-icons/md";
 import { apiConnector } from "../services/apiConnector";
-// import { setLoading } from "../slices/authSlice";
 import Spinner from "../components/Spinner";
 
 
@@ -68,7 +67,6 @@ export default function MynotesPage() {
   const { authUserId} = useSelector((state) => state.auth);
   const [loading ,setLoading]=useState(true);
 
-  const dispatch=useDispatch();
 
 
   // Fetching notes from the server
@@ -142,7 +140,6 @@ export default function MynotesPage() {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = notes.slice(startIndex, endIndex);
 
 
 

@@ -3,10 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { apiConnector } from "../services/apiConnector";
 import { favouriteEndpoints } from "../services/apis";
 import { useSelector } from "react-redux";
-import { CiHeart } from "react-icons/ci";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { VscHeartFilled } from "react-icons/vsc";
-import { FaHeart } from "react-icons/fa";
 import { toast } from "react-toastify";
 import "../styles/FlashCard.css"
 

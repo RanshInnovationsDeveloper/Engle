@@ -1,17 +1,12 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { IoClose, IoMenu, IoPerson } from "react-icons/io5";
-import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useMediaQuery } from "react-responsive";
 import "../styles/Header.css"
-import { logout } from '../services/operations/authServices';
 import { useSelector, useDispatch } from "react-redux";
-import { setLoading } from '../slices/authSlice'
 import { onFirebaseStateChanged } from '../services/operations/authServices'
-import {  FaBell } from "react-icons/fa";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
-import { MdKeyboardArrowRight } from "react-icons/md";
 import CategoryHeader from "./CategoryHeader";
 import ProfileDropdown from "./ProfileDropdown";
 
@@ -20,7 +15,6 @@ const Header = ({ val }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: "1150px" });
-  const navigate = useNavigate()
   const { authUserId, userName } = useSelector((state) => state.auth)
   const dispatch = useDispatch();
 
@@ -49,8 +43,6 @@ const Header = ({ val }) => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
-    // toggleCategoryMenu();
-    // toggleProfile();
   };
 
   const toggleProfile = () => {
@@ -251,11 +243,11 @@ const Header = ({ val }) => {
             </div>) :
               (<div className="flex flex-row justify-center items-center gap-[0.3rem]">
                 <ul className={`${listClassName} flex flex-row justify-center items-center gap-2 lg:mt-0 mt-3`}>
-                  <li>
+                  {/* <li>
                     <button className='btn2 pr-1 pl-3 py-3 h-[3.125rem] w-[3.125rem]' >
                       <FaBell className="w-[1.25rem] h-[1.5rem]" />
                     </button>
-                  </li>
+                  </li> */}
                   <li onClick={toggleProfile}>
                     <button id="profileButton" className='btn pr-1 pl-3 py-3' onClick={toggleProfile}>
                       <IoPerson className="w-[1.5rem] h-[1.5rem]" />

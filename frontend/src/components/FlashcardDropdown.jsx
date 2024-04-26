@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import "../styles/CategoryHeader.css";
 import { useDispatch,useSelector } from 'react-redux';
 import { setFlashCardCategory } from '../slices/flashCardSlice';
@@ -15,8 +15,6 @@ const FlashcardDropdown = ({ isOpen, isMobile }) => {
     {text:'Favourite Words', category: 'favourite'},
     {text:'Remember Words', category: 'remember'},
     {text:'Unremember Words', category: 'unremember'},
-    // {text:'Idioms', category: 'idioms'},
-    // {text:'Test Vocabulary', category: 'test'},
    ];
 
 

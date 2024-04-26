@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { notesEndpoints } from '../services/apis';
 import { IoClose } from "react-icons/io5";
-import { FaPlus, FaWindowClose } from 'react-icons/fa';
-
-import "../styles/Notecard.css";
-import { Link } from 'react-router-dom';
+import { FaPlus } from 'react-icons/fa';
 import { useMediaQuery } from "react-responsive";
 import { useNavigate } from 'react-router-dom';
 
@@ -277,10 +274,6 @@ const Notecard = () => {
 
   };
 
-  // Function to close the prompt
-  const closePrompt = () => {
-    setSelectedWord(null);
-  };
 
 
 

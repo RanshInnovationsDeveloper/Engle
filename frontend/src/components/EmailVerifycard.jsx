@@ -1,15 +1,10 @@
-import  { useState } from 'react'
-import { useNavigate } from "react-router-dom"
-import { MdOutlineKeyboardArrowLeft } from "react-icons/md";
-import { IoMdMail } from 'react-icons/io';
 
-import { useDispatch,useSelector } from 'react-redux';
+import { useNavigate } from "react-router-dom"
 
 
 function EmailVerifycard({userEmail}) {
 
   const navigate = useNavigate();
-  const { loading } = useSelector((state) => state.auth);
   const maskedEmail = userEmail.replace(/^(.{2}).*@/, (_, firstThreeChars) => {
     return firstThreeChars.padEnd(userEmail.length - 10, '*') + '@'; // Mask characters before '@' with '*'
   });
@@ -32,11 +27,6 @@ function EmailVerifycard({userEmail}) {
             Just click on the link in that email to complete your signup.
             If you don't see it, you may need to check your spam folder.
           </p>
-          {/* <p className=" text-center text-lg text-black opacity-60 ">
-            Still can't find the mail ? <button>
-            <strong>Resend Email</strong>
-                </button>
-          </p> */}
         </div>
         </div>
         
