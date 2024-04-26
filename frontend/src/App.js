@@ -23,6 +23,7 @@ import { setLoading } from './slices/authSlice';
 import { useDispatch, useSelector } from "react-redux"
 import ErrorPage from "./pages/ErrorPage.jsx";
 import SomethingwentwrongPage from "./pages/SomethingwentwrongPage.jsx";
+import EmailVerificationPage from "./pages/EmailVerificationPage.jsx";
 
 function App() {
     const { loading } = useSelector((state) => state.auth);
@@ -95,7 +96,16 @@ function App() {
 
           }
         />
+   <Route
+          path="/verifyemail"
+          element={
+           
+             <OpenRoute>
+              <EmailVerificationPage/>
+             </OpenRoute> 
 
+          }
+        />
         <Route
           path="/proflie"
           element={

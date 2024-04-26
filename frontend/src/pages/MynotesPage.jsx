@@ -225,9 +225,9 @@ export default function MynotesPage() {
         </thead>
         <tbody className='border-t border-[#5B7ADE]'>
 
-          {flattenedNotes.map((note, index) =>
+          {flattenedNotes.slice(startIndex, endIndex).map((note, index) =>
             <tr key={startIndex + index} className="h-[3.5rem]">
-              <td className="text-center border-y border-r w-24 border-[#5B7ADE]">{index + 1}.</td>
+              <td className="text-center border-y border-r w-24 border-[#5B7ADE]">{startIndex+index + 1}.</td>
               <td className="text-center border w-64 border-[#5B7ADE]">{note.word}</td>
               <td className="text-center border  border-[#5B7ADE]">{note.definitions}</td>
               {/* <td className="text-center border w-40  border-blue-700">Empty</td> */}
