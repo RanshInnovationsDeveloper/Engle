@@ -8,7 +8,7 @@ function AboutUspage() {
 
       <Header val={3} />
       <div className="flex justify-center items-center">
-        <h2>About</h2>
+        <h2>About us</h2>
       </div>
 
     </>
