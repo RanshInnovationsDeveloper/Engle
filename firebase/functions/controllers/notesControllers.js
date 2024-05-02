@@ -1,15 +1,16 @@
 //This controller handles features related to notes
 const { db } = require('../config/firebase');
 const { validationResult } = require('express-validator');
-const { collection, query, orderBy, limit, getDocs,serverTimestamp, getDoc, doc, setDoc,addDoc,deleteDoc,updateDoc } = require('firebase-admin/firestore');
 const { get } = require('http');
+const admin = require('firebase-admin');
+
+const serverTimestamp = admin.firestore.FieldValue.serverTimestamp;
 
 //This one is used to create a note
 exports.createNote = async (req, res) => {
   try {
 
     const { userId } = req.body;
-    
     //Creating a jsonObject
     const jsonData = {
       ...req.body,
@@ -22,24 +23,21 @@ exports.createNote = async (req, res) => {
       return res.status(400).json({ status: "error", success: false, errors: errors.array() });
     }
 
-    const docRef = doc(db, "notes", userId);
+    const docRef = db.collection('notes').doc(userId);
 
     //Fetching the doc and subdoc from the db
-    const docSnap = await getDoc(docRef);
+    const docSnap = await docRef.get();
     let noteDocRef;
 
     //If docSnap does not exist this block will be executed and will create doc
-    if (!docSnap.exists()) {
-      await setDoc(docRef, { userId });
-      //Taking the reference to the subcollection in the document
-      const subCollectionRef = collection(docRef, 'words');
-      noteDocRef=addDoc(subCollectionRef, jsonData);
+    if (!docSnap.exists) {
+      await docRef.set({userId});
+      const subCollectionRef = docRef.collection("words");
+      noteDocRef=subCollectionRef.add(jsonData);
     }
     else {
-      //Taking the reference to the subcollection in the document
-      const subCollectionRef = collection(docRef, 'words');
-      noteDocRef=addDoc(subCollectionRef, jsonData);
-      
+      const subCollectionRef = docRef.collection("words");
+      noteDocRef = await subCollectionRef.add(jsonData);      
     }
 
     //Sending the response
@@ -60,16 +58,13 @@ exports.getAllNotes = async (req, res) => {
     const { userId } = req.body;
     let querySnapshot = [];
    
-    const docRef = doc(db, "notes", userId);
-    const docSnap = await getDoc(docRef);
+    const docRef = db.collection('notes').doc(userId);
+    const docSnap = await docRef.get();
 
     //If docSnap doesexist this block will be executed
-    if (docSnap.exists()) {
-
-      //Taking the reference to the subcollection in the document
-      const subCollectionRef = collection(docRef, 'words');
-      querySnapshot = await getDocs(query(subCollectionRef, orderBy("timestamp", "desc")));
-    }
+    if (docSnap.exists) {
+      const subCollectionRef = docRef.collection("words");
+      querySnapshot = await subCollectionRef.orderBy("timestamp", "desc").get();    }
     //Empty recent notes array initialized
     const recentNotes = [];
     //Iterating over the querySnapShot and adding the data to recentNotes array
@@ -97,17 +92,13 @@ exports.getSomeRecentNotes = async (req, res) => {
     const { userId } = req.body;
     let querySnapshot = [];
    
-    const docRef = doc(db, "notes", userId);
-    const docSnap = await getDoc(docRef);
+    const docRef = db.collection('notes').doc(userId);
+    const docSnap = await docRef.get();
 
     //If docSnap doesexist this block will be executed
-    if (docSnap.exists()) {
-
-      //Taking the reference to the subcollection in the document
-      const subCollectionRef = collection(docRef, 'words');
-      querySnapshot = await getDocs(query(subCollectionRef, orderBy("timestamp", "desc"), limit(5)));
-    }
-    //Empty recent notes array initialized
+    if (docSnap.exists) {
+      const subCollectionRef = docRef.collection("words");
+      querySnapshot = await subCollectionRef.orderBy("timestamp", "desc").limit(5).get();    }
     const recentNotes = [];
     //Iterating over the querySnapShot and adding the data to recentNotes array
     querySnapshot.forEach((doc) => {
@@ -130,20 +121,19 @@ exports.getSomeRecentNotes = async (req, res) => {
 // this is used to get a single note from note ID
 exports.getNoteById = async (req, res) => {
   try {
-    //Taking noteId from params
     const noteId = req.params.id;
-    const noteRef = doc(db, "notes", noteId); //Taking reference of note doc 
-    const noteDoc = await getDoc(noteRef); //Getting the note doc
+    const noteRef = db.collection("notes").doc(noteId);  
+    const noteDoc = await noteRef.get(); 
 
     //If note doc doesn't exist, send error 
-    if (!noteDoc.exists()) {
+    if (!noteDoc.exists) {
       res.status(404).json({ status: "error", success: false, message: 'Note not found',data:[] });
       return;
     }
 
     //If note doc exists, get the 'Words' subcollection
-    const wordsCollectionRef = collection(noteRef, 'words');
-    const wordsSnapshot = await getDocs(wordsCollectionRef);
+    const wordsCollectionRef =noteRef.collection("words");
+    const wordsSnapshot = await wordsCollectionRef.get();    
     const wordsData = wordsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
     //Prepare the note data
@@ -166,8 +156,8 @@ exports.deleteNote = async (req, res) => {
   try {
     const { userId, noteId } = req.body;
 
-    const docRef = doc(db, "notes", userId, "words", noteId);
-    await deleteDoc(docRef);
+    const docRef = db.collection("notes").doc(userId).collection("words").doc(noteId);
+    await docRef.delete();
 
     res.status(200).json({ success: true, message: 'Note deleted successfully' });
   } catch (err) {
@@ -182,11 +172,10 @@ exports.updateNote = async (req, res) => {
   try {
     const { userId, noteId } = req.body;
 
-    const docRef = doc(db, "notes", userId, "words", noteId);
-
-    await updateDoc(docRef, {
+    const docRef = db.collection("notes").doc(userId).collection("words").doc(noteId);
+    await docRef.update({
       ...req.body,
-      timestamp: serverTimestamp(),
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
     });
 
     res.status(200).json({ success: true, message: 'Note updated successfully' });

@@ -1,7 +1,6 @@
 //This is to handel word genrator
 const { db } = require("../config/firebase");
-const { doc, getDoc, updateDoc, arrayUnion, setDoc,collection } = require("firebase-admin/firestore");
-
+const admin=require("firebase-admin");
 
 const words = require("../resources/words.json");
 
@@ -29,7 +28,7 @@ exports.fetchWord = async (req, res) => {
         if (wordCategory === "unseen") {
             // fetch next word
             if (wordIndex === "-1") {
-                wordCategorySizeInDatabase = words.length; //Size of words data in database
+                wordCategorySizeInDatabase = words?.length; //Size of words data in database
                 // the proccess to generate random word is done in while loop so that random words index not present in seen word array (in  firestore database).
                 newWordIndex = generateRandomNumber(0, wordCategorySizeInDatabase - 1);
 
@@ -48,21 +47,21 @@ exports.fetchWord = async (req, res) => {
 
             // here wordIndex is the index of favourite word array in dataBase .
             let wordCategorySizeInDatabase=0
-            const docRef = doc(db, wordCategory, authUserId);//get the reference of the document
-            const subCollectionRef=collection(docRef,"words");
-            const subDocRef = doc(subCollectionRef, authUserId)
-            const docSnap=await getDoc(docRef);
-            const subDocSnap=await getDoc(subDocRef);
+            const docRef = db.collection(wordCategory).doc(authUserId);//get the reference of the document
+            const subCollectionRef=docRef.collection("words");
+            const subDocRef=subCollectionRef.doc(authUserId);
+            const docSnap=await docRef.get()
+            const subDocSnap=await subDocRef.get();
 
-            if (!docSnap.exists()){
-                await setDoc(docRef,{authUserId});
+            if (!docSnap.exists){
+                await docRef.set({authUserId});
             }
-            if (!subDocSnap.exists()){
-                await setDoc(subDocRef,{authUserId});
+            if (!subDocSnap.exists){
+                await subDocRef.set({authUserId});
             }
 
             // find the size of array in which we store the data of choose category from firestore.
-            if (docSnap.exists() && subDocSnap.exists()) {
+            if (docSnap.exists && subDocSnap.exists) {
                 // Document exists, get the data
              const data = subDocSnap.data()["words"];
                 //Length of the array wordCatrigry in the database
