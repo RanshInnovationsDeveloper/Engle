@@ -1,58 +1,37 @@
 const { db } = require("../config/firebase");
-const {
-  doc,
-  getDoc,
-  updateDoc,
-  arrayUnion,
-  setDoc,
-  collection,
-} = require("firebase-admin/firestore");
-
+const admin = require("firebase-admin");
 //This is used to add new item to Remember list it takes 4 input from body
 const addToSeen = async (req, res) => {
     try {
       let { itemId, type, userId, name  } = req.body;
-      //Taking the reference to the document in firebase with seen as collection name and userId as document name
-      const docRef = doc(db, "seen", userId);
-      // Convert all items from the body to strings
       itemId = parseInt(itemId);
-      type = type.toString();
-      userId = userId.toString();
-      
-    //Fetching the doc and subdoc from the db
-      const docSnap = await getDoc(docRef);
-    
-    //If docSnap does not exist this block will be executed and will create doc
-      if (!docSnap.exists()) {
-        await setDoc(docRef, { userId });
-         //Taking the reference to the subcollection in the document
-      const subCollectionRef = collection(docRef, type);
-      //Taking the reference to the document in the subcollection
-      const subDocRef = doc(subCollectionRef, userId)
-        await setDoc(subDocRef, {
+      const docRef = db.collection("seen").doc(userId);
+      const docSnap = await docRef.get();
+    //If docSnap does not exist this block will be executed and will create doc and subdoc
+      if (!docSnap.exists) {
+      await docRef.set({ userId });
+      const subCollectionRef =docRef.collection(type);
+      const subDocRef =subCollectionRef.doc(userId)
+        await subDocRef.set({
           [type]: [itemId],
         });
       }
-       //Taking the reference to the subcollection in the document
-       const subCollectionRef = collection(docRef, type);
-       //Taking the reference to the document in the subcollection
-       const subDocRef = doc(subCollectionRef, userId)
-       const subDocSnap = await getDoc(subDocRef);
-  
-      if (!subDocSnap.exists()){
-        await setDoc(subDocRef, {
+       const subCollectionRef = docRef.collection(type);
+       const subDocRef = subCollectionRef.doc(userId)
+       const subDocSnap = await subDocRef.get();
+       //If subDocSnap does not exist this block will be executed and will create subDoc
+      if (!subDocSnap.exists){
+        await subDocRef.set({
           [type]: [itemId],
         });
       }
       //If both doc and subDoc exists this block will be executed
       else {
-         //Taking the reference to the subcollection in the document
-      const subCollectionRef = collection(docRef, type);
-      //Taking the reference to the document in the subcollection
-      const subDocRef = doc(subCollectionRef, userId)
-        await updateDoc(subDocRef, {
-          [type]: arrayUnion(itemId),
-        });
+      const subCollectionRef = docRef.collection(type);
+      const subDocRef = subCollectionRef.doc(userId)
+      subDocRef.update({
+        [type]: admin.firestore.FieldValue.arrayUnion(itemId),
+      });
       }
     
         res.json({ status: "success", message: "Item added to seen" });
