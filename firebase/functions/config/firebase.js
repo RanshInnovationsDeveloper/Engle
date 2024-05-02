@@ -1,7 +1,8 @@
 const { getAuth } = require('firebase-admin/auth');
 const { getFirestore } = require('firebase-admin/firestore');
 var admin = require("firebase-admin");
-var serviceAccount = require("../svc/serviceAccountKey.json");
+// var serviceAccount = require("../svc/serviceAccountKey.json");    // for production
+var serviceAccount = require("../svc/serviceAccountKeyDev.json");    // for development  (Sumit personal Credentials)
 const dotenv = require('dotenv');
 
 
