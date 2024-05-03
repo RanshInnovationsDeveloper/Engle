@@ -27,6 +27,7 @@
     "jsonwebtoken": "^9.0.2",
     "node": "^21.6.2",
     "nodemailer": "^6.9.12",
+    "razorpay": "^2.9.3",
     "supertest": "^6.3.4",
     "util": "^0.12.5"
   },

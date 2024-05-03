@@ -60,3 +60,9 @@ export const subscriptionEndpoints = {
   VALIDATE_SUBSCRIPTION_TOKEN_API: BASE_URL + "/subscription/validatetoken",
   GET_SUBSCRIPTION_DATA_API: BASE_URL + "/subscription/getsubscriptiondata",
 }
+
+
+export const paymentEndpoints = {
+  CHECKOUT_API: BASE_URL + "/payment/checkout",
+  PAYMENT_VERIFICATION_API: BASE_URL + "/payment/verify",
+}

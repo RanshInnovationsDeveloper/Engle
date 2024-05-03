@@ -14,9 +14,9 @@ const createSubscription = async (req, res) => {
 
         const jsonData = {
             email: email,
-            noOfDaysInPlan: null,
-            planEndingDate: null,
-            planStartingDate: null,
+            noOfDaysInPlan: 0,
+            planEndingDate: 0,
+            planStartingDate: 0,
             userId: userId,
             timeStamp: serverTimestamp()
         }
@@ -41,11 +41,11 @@ const createSubscription = async (req, res) => {
 
 
 
-
+// after subscription it will update
 const updateSubscription = async (req, res) => {
     try {
-        const { email, userId, isSubscribed, noOfDaysInPlan, planStartingDate, planEndingDate } = req.body;
-        if (!email || !userId || !isSubscribed || !noOfDaysInPlan || !planStartingDate || !planEndingDate) {
+        const { email, userId,noOfDaysInPlan, planStartingDate, planEndingDate } = req.body;
+        if (!email || !userId  || !noOfDaysInPlan || !planStartingDate || !planEndingDate) {
             res.status(403).json({ status: "error", message: "please provide all field!", token: null });
             return;
         }
@@ -145,6 +145,7 @@ const validateToken = async (req, res) => {
         return;
     }
 }
+
 
 
 

@@ -14,6 +14,7 @@ const contactRoute = require("./routes/contactRoute");
 const storyRoute=require("./routes/storyRoute");
 const seenRoute=require("./routes/seenRoute");
 const subscriptionRoute=require("./routes/subscriptionRoute");
+const paymentRoute=require("./routes/paymentRoute");
 
 // Loading environment variables from .env file
 dotenv.config();
@@ -37,6 +38,7 @@ app.use("/api/v1/contact", contactRoute);
 app.use("/api/v1/story", storyRoute);
 app.use("/api/v1/seen", seenRoute);
 app.use("/api/v1/subscription",subscriptionRoute);
+app.use("/api/v1/payment",paymentRoute);
 
 // Testing the server
 app.get("/", (req, res) => {

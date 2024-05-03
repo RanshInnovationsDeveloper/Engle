@@ -43,6 +43,34 @@ const getSubscriptionDataToken = async (email, userId) => {
 
 
 
+const updateSubscriptionData = async (userEmail,noOfDaysInPlan,userId,dispatch) => {
+
+    try{
+        const data = {
+            email: userEmail,
+            userId: userId,
+            noOfDaysInPlan: noOfDaysInPlan,
+            planStartingDate: new Date().toISOString(),
+            planEndingDate: new Date(new Date().getTime() + noOfDaysInPlan * 24 * 60 * 60 * 1000).toISOString()
+        }
+        const response = await apiConnector("POST", subscriptionEndpoints.UPDATE_SUBSCRIPTION_API, data);
+
+        if(response?.data?.token)
+            {
+                dispatch(setSubscriptionToken(response?.data?.token));
+                localStorage.setItem("subscriptionToken", response?.data?.token);
+            }
+        return ;
+
+    }catch(error){
+        console.log("There is some error to update the subscription data -", error);
+        return ;
+    }
+}
+
+
+
+
 const validateSubscriptionToken = async (token, dispatch, email, userId) => {
     try {
 
@@ -91,4 +119,4 @@ const getSubscriptionData = async (token) => {
 }
 
 
-export { getSubscriptionDataToken, validateSubscriptionToken,getSubscriptionData };
+export { getSubscriptionDataToken, validateSubscriptionToken,getSubscriptionData,updateSubscriptionData };
