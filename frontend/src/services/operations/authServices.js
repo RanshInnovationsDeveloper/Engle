@@ -4,6 +4,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { auth, db } from '../firebase';
 import { setauthUserId, setuserEmail, setuserName } from '../../slices/authSlice';
+import { getSubscriptionDataToken } from "./subscriptionService";
+import { setSubscriptionToken } from "../../slices/subscriptionSlice";
+
+
+
 
 export const signup = async (email, password, username) => {
   let error = "";
@@ -45,7 +50,11 @@ export const signup = async (email, password, username) => {
   return { error };
 };
 
-export const signin = async (email, password) => {
+
+
+
+
+export const signin = async (email, password,dispatch) => {
   let error = "";
 
   try {
@@ -57,6 +66,17 @@ export const signin = async (email, password) => {
       } else {
         localStorage.setItem('authUserId', user.uid);
         localStorage.setItem('flashCardCategory', "unseen");
+
+        // for subscription
+        const {token} = await getSubscriptionDataToken(email, user.uid);
+        if (token) {
+          localStorage.setItem('subscriptionToken', token);
+          dispatch(setSubscriptionToken(token));
+        }else
+        {
+          localStorage.setItem('subscriptionToken', null);
+          dispatch(setSubscriptionToken(null));
+        }
       }
     }).catch((err) => {
       let errorCode = err.code;
@@ -73,11 +93,19 @@ export const signin = async (email, password) => {
   return { error };
 };
 
+
+
+
+
 export const logout = () => {
   sessionStorage.clear();
   localStorage.clear();
   signOut(auth);
 };
+
+
+
+
 
 export const forgotPassword = async ({ useremail, navigate }) => {
   try {
@@ -91,6 +119,10 @@ export const forgotPassword = async ({ useremail, navigate }) => {
     console.log(error);
   }
 };
+
+
+
+
 
 export const onFirebaseStateChanged=(dispatch)=>{
 

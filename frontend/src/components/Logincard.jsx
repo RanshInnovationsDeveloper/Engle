@@ -24,7 +24,7 @@ function Logincard() {
 
     dispatch(setLoading(true));
     e.preventDefault();
-    const { error } = await signin(useremail, password);
+    const { error } = await signin(useremail, password,dispatch);
     if (error) {
       toast.error(error);
     } else {
@@ -32,6 +32,7 @@ function Logincard() {
       const previousPath = localStorage.getItem('path');
       navigate(previousPath||"/");
       toast.success("Login Successfully")
+      
       
     }
     dispatch(setLoading(false));

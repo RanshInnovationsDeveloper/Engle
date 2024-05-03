@@ -11,8 +11,9 @@ const rememberRoute = require("./routes/rememberRoute");
 const unrememberRoute = require("./routes/unrememberRoute");
 const notesRoute = require("./routes/notesRoute");
 const contactRoute = require("./routes/contactRoute");
-const storyRoute=require("./routes/storyRoute")
-const seenRoute=require("./routes/seenRoute")
+const storyRoute=require("./routes/storyRoute");
+const seenRoute=require("./routes/seenRoute");
+const subscriptionRoute=require("./routes/subscriptionRoute");
 
 // Loading environment variables from .env file
 dotenv.config();
@@ -35,6 +36,7 @@ app.use("/api/v1/notes", notesRoute);
 app.use("/api/v1/contact", contactRoute);
 app.use("/api/v1/story", storyRoute);
 app.use("/api/v1/seen", seenRoute);
+app.use("/api/v1/subscription",subscriptionRoute);
 
 // Testing the server
 app.get("/", (req, res) => {

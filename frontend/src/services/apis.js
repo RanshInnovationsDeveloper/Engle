@@ -52,3 +52,9 @@ export const storyEndpoints = {
   FETCHALLSTORIES_API: BASE_URL + "/story/getAll",
   FETCHSTORYBYID_API: BASE_URL + "/story/getById",
 }
+
+export const subscriptionEndpoints = {
+  CREATE_SUBSCRIPTION_API: BASE_URL + "/subscription/create",
+  UPDATE_SUBSCRIPTION_API: BASE_URL + "/subscription/update",
+  GET_SUBSCRIPTION_TOKEN_API: BASE_URL + "/subscription/generatetoken",
+}
