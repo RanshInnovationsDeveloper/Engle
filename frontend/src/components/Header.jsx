@@ -9,7 +9,6 @@ import { onFirebaseStateChanged } from '../services/operations/authServices'
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import CategoryHeader from "./CategoryHeader";
 import ProfileDropdown from "./ProfileDropdown";
-import { validateSubscriptionToken } from "../services/operations/subscriptionService";
 
 const Header = ({ val }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,11 +18,9 @@ const Header = ({ val }) => {
   const { authUserId, userName ,userEmail} = useSelector((state) => state.auth)
   const dispatch = useDispatch();
 
-  const {token}=useSelector((state)=>state.subscription)
 
   useEffect(() => {
     onFirebaseStateChanged(dispatch);
-    validateSubscriptionToken(token,dispatch,authUserId,userEmail);
   });
 
 

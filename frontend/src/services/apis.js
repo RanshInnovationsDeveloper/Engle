@@ -57,4 +57,6 @@ export const subscriptionEndpoints = {
   CREATE_SUBSCRIPTION_API: BASE_URL + "/subscription/create",
   UPDATE_SUBSCRIPTION_API: BASE_URL + "/subscription/update",
   GET_SUBSCRIPTION_TOKEN_API: BASE_URL + "/subscription/generatetoken",
+  VALIDATE_SUBSCRIPTION_TOKEN_API: BASE_URL + "/subscription/validatetoken",
+  GET_SUBSCRIPTION_DATA_API: BASE_URL + "/subscription/getsubscriptiondata",
 }
