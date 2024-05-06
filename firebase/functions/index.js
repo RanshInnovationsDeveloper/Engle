@@ -16,6 +16,7 @@ const seenRoute=require("./routes/seenRoute");
 const subscriptionRoute=require("./routes/subscriptionRoute");
 const paymentRoute=require("./routes/paymentRoute");
 const dashboardRoute=require("./routes/dashboardRoute");
+const referralRoute = require("./routes/referralRoute");
 
 // Loading environment variables from .env file
 dotenv.config();
@@ -41,6 +42,7 @@ app.use("/api/v1/seen", seenRoute);
 app.use("/api/v1/subscription",subscriptionRoute);
 app.use("/api/v1/payment",paymentRoute);
 app.use("/api/v1/dashboard",dashboardRoute);
+app.use("/api/v1/referral", referralRoute);
 
 // Testing the server
 app.get("/", (req, res) => {

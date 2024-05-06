@@ -89,21 +89,21 @@ useEffect(() => {
 
     const currentScrollPercentage = scrollHeight > clientHeight ? scrolled : 100;
     setScrollPercentage(currentScrollPercentage);
-    console.log(currentScrollPercentage)
     const updateScrollPercentage= await apiConnector("POST",UPDATE_SCROLL_PERCENTAGE,{userId:authUserId,percentage:parseInt(currentScrollPercentage),storyId:id},null,null)
   };
   if (divRef.current) {
-  const observer = new MutationObserver(onScroll);
-  observer.observe(divRef.current, { childList: true, subtree: true });
+    const observer = new MutationObserver(onScroll);
+    observer.observe(divRef.current, { childList: true, subtree: true });
 
-  divRef.current.addEventListener('scroll', onScroll);
-  return () => {
-    divRef.current.removeEventListener('scroll', onScroll);
-    observer.disconnect();
-  };
-}
+    divRef.current.addEventListener('scroll', onScroll);
+    return () => {
+      if (divRef.current) {
+        divRef.current.removeEventListener('scroll', onScroll);
+        observer.disconnect();
+      }
+    };
+  }
 }, [authUserId]);
-
 
 //A conditional rendering it renders when a story with wrong id is searched
 if (!Object.keys(story).length>0){
@@ -129,8 +129,8 @@ if (!Object.keys(story).length>0){
 
 //Another conditional rendering it is based on price of story and subscription status of user
 else if (!story?.isFree && !isSubscribed) {
-  console.log(story)
   return (
+  
     <div>
       <Header val={1}/>
       <h1>Subscribe to read the story</h1>
