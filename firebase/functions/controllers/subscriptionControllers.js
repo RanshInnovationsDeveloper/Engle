@@ -175,13 +175,13 @@ const isSubscribed=async(req,res)=>{
         const subDocRef=subCollectionRef.doc(userId);
 
         const docSnapshot=await docRef.get();
+
         if(docSnapshot.exists){
             const data=await subDocRef.get();
             if(data.exists){
                 const jsonData=data.data().jsonData;
-                const currDate=new Date().getTime();//TODO:Have to work on this currdate 
-                console.log(currDate)
-                if(currDate<jsonData.planEndingDate){
+                const currDate = new Date().toISOString();
+                if(currDate<jsonData?.planEndingDate){
                     res.status(200).json({status:"success",isSubscribed:true})
                 }
                 else{

@@ -44,11 +44,10 @@ function IndividualStory() {
         fetchSubscriptionStatus();
       },[])
 
-  //This is to fetch the story by id and update the story count
+  //This is to fetch the story by id 
     useEffect(()=>{
         const fetchStory=async()=>{
             try{
-                const update=await apiConnector("POST",UPDATE_STORY_COUNT,null,null,{storyId:id})
                 const response=await apiConnector("GET",FETCHSTORYBYID_API+`/${id}`)
                 setStory(response.data)
             }catch(error){
@@ -57,6 +56,17 @@ function IndividualStory() {
         }
         fetchStory();
     },[id])
+
+  //This is to update the story count
+  useEffect(()=>{
+    const updateStoryCount=async()=>{
+    if (Object.keys(story).length>0)
+      {
+      const update=await apiConnector("POST",UPDATE_STORY_COUNT,null,null,{storyId:id})
+    }
+  }
+  updateStoryCount();
+  },[story])
 
 
  //This is to highlight the text when searched
@@ -70,7 +80,6 @@ function IndividualStory() {
       }
 
 //This to set the scroll percentage
-
 useEffect(() => {
   const onScroll = async() => {
     const scrollHeight = divRef.current.scrollHeight;
@@ -95,7 +104,32 @@ useEffect(() => {
 }
 }, [authUserId]);
 
-if (!story?.isFree && !isSubscribed) {
+
+//A conditional rendering it renders when a story with wrong id is searched
+if (!Object.keys(story).length>0){
+  return(
+    <div>
+      <Header val={1}/>
+      <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
+      <input
+        type="text"
+        placeholder="Search..."
+        className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
+      <div ref={divRef} 
+       style={{ height: '80vh', backgroundColor: 'gray', overflow: 'auto',width:"80vw", margin:"auto" }}>
+       <h1>No Such Story</h1>
+       <button onClick={()=>navigate("/")}>Go Back to Home</button>
+      </div>
+    </div>
+  )
+}
+
+//Another conditional rendering it is based on price of story and subscription status of user
+else if (!story?.isFree && !isSubscribed) {
+  console.log(story)
   return (
     <div>
       <Header val={1}/>
@@ -104,25 +138,27 @@ if (!story?.isFree && !isSubscribed) {
     </div>
   )
 }
-      
-      return (
-        <div>
-        <Header val={1}/>
-          <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <div ref={divRef} 
-           style={{ height: '80vh', backgroundColor: 'gray', overflow: 'auto',width:"80vw", margin:"auto" }}>
-          <h1>{story?.title ? highlightText(story.title, query) : ''}</h1>
-          <p>{story?.content ? highlightText(story.content, query) : ''}</p>
-          </div>
-        </div>
-      )
-    }
+
+
+//Main render    
+return (
+  <div>
+  <Header val={1}/>
+    <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
+    <input
+      type="text"
+      placeholder="Search..."
+      className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+    />
+    <div ref={divRef} 
+      style={{ height: '80vh', backgroundColor: 'gray', overflow: 'auto',width:"80vw", margin:"auto" }}>
+    <h1>{story?.title ? highlightText(story.title, query) : ''}</h1>
+    <p>{story?.content ? highlightText(story.content, query) : ''}</p>
+    </div>
+  </div>
+)
+}
 
     export default IndividualStory
