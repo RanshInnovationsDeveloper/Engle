@@ -8,15 +8,19 @@ import { handlePayment } from "../services/operations/paymentService"
 function AboutUspage() {
 
   const { subscriptionToken } = useSelector(state => state.subscription);
-  const { authUserId, userEmail,userName } = useSelector(state => state.auth)
+  const { authUserId, userEmail, userName } = useSelector(state => state.auth)
 
   const dispatch = useDispatch();
 
   async function handlebutton() {
 
-    await handlePayment({ amount: 13,userId:authUserId,userName,userEmail,noOfDaysInSubscription: 30,dispatch});
-    await validateSubscriptionToken({ token: subscriptionToken, email: userEmail, userId: authUserId, dispatch })
-    const data = await getSubscriptionData({ token: subscriptionToken });
+    await handlePayment({ amount: 13, userId: authUserId, userName, userEmail, noOfDaysInSubscription: 30, dispatch });
+    const newtoken = await validateSubscriptionToken(subscriptionToken, userEmail, authUserId, dispatch);
+    let data;
+    if (newtoken != null)
+      data = await getSubscriptionData({ token: newtoken });
+    else
+      data = await getSubscriptionData({ token: subscriptionToken });
     console.log(" Subscription data of User is -> ", data);
 
   }

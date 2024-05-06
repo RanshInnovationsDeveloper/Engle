@@ -44,8 +44,8 @@ const createSubscription = async (req, res) => {
 // after subscription it will update
 const updateSubscription = async (req, res) => {
     try {
-        const { email, userId,noOfDaysInPlan, planStartingDate, planEndingDate } = req.body;
-        if (!email || !userId  || !noOfDaysInPlan || !planStartingDate || !planEndingDate) {
+        const { email, userId, noOfDaysInPlan, planStartingDate, planEndingDate } = req.body;
+        if (!email || !userId || !noOfDaysInPlan || !planStartingDate || !planEndingDate) {
             res.status(403).json({ status: "error", message: "please provide all field!", token: null });
             return;
         }
@@ -122,24 +122,16 @@ const validateToken = async (req, res) => {
             return;
         }
 
-        const decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
-
-        if (decodedToken && decodedToken.exp) {
-            const expirationTime = decodedToken.exp * 1000; // Convert expiration time to milliseconds
-            const currentTime = new Date().getTime();
-
-            if (currentTime > expirationTime) {
-                // Token has expired
-                res.status(200).json({ status: "success", message: "Token has expired", isexpire: true });
-            } else {
-                // Token is still valid
-                res.status(200).json({ status: "success", message: "Token is still valid", isexpire: false });
+        jwt.verify(token, process.env.JWT_SECRET, (err, decodedToken) => {
+            if (err) {
+                res.status(200).json({ status: "success", message: "Token is expired", isexpire: true });
+                return;
             }
-        } else {
-            // Token doesn't have expiration information or is malformed
-            res.status(400).json({ status: "error", message: "Token doesn't have expiration information or is malformed", isexpire: true });
-        }
-        return;
+            else {
+                res.status(200).json({ status: "success", message: "Token is still valid", isexpire: false });
+                return;
+            }
+        });
     } catch (error) {
         res.status(500).json({ status: "error", message: `some error to validate token => ${error.message}`, isexpire: true });
         return;
@@ -150,24 +142,24 @@ const validateToken = async (req, res) => {
 
 
 // get subscription data from token
-const getSubscriptionData =async (req, res) => {
+const getSubscriptionData = async (req, res) => {
     try {
-     
-        let {token} = req.body;
+
+        let { token } = req.body;
         if (!token) {
             res.status(403).json({ status: "error", message: "please Provide token!", data: null });
             return;
         }
-        
-       jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
-                console.log("error",err);
+                console.log("error", err);
                 res.status(400).json({ status: "error", message: "Token doesn't have expiration information or is malformed", data: null });
                 return;
             }
-            else{
-            res.status(200).json({ status: "success", message: "Token is still valid", data: decoded });          
-            return;
+            else {
+                res.status(200).json({ status: "success", message: "Token is still valid", data: decoded });
+                return;
             }
         });
     } catch (error) {
