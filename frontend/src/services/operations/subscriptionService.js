@@ -43,9 +43,9 @@ const getSubscriptionDataToken = async (email, userId) => {
 
 
 
-const updateSubscriptionData = async (userEmail,noOfDaysInPlan,userId,dispatch) => {
+const updateSubscriptionData = async (userEmail, noOfDaysInPlan, userId, dispatch) => {
 
-    try{
+    try {
         const data = {
             email: userEmail,
             userId: userId,
@@ -55,51 +55,55 @@ const updateSubscriptionData = async (userEmail,noOfDaysInPlan,userId,dispatch) 
         }
         const response = await apiConnector("POST", subscriptionEndpoints.UPDATE_SUBSCRIPTION_API, data);
 
-        if(response?.data?.token)
-            {
-                dispatch(setSubscriptionToken(response?.data?.token));
-                localStorage.setItem("subscriptionToken", response?.data?.token);
-            }
-        return ;
+        if (response?.data?.token) {
+            dispatch(setSubscriptionToken(response?.data?.token));
+            localStorage.setItem("subscriptionToken", response?.data?.token);
+        }
+        return;
 
-    }catch(error){
+    } catch (error) {
         console.log("There is some error to update the subscription data -", error);
-        return ;
+        return;
     }
 }
 
 
 
 
-const validateSubscriptionToken = async (token, dispatch, email, userId) => {
+const validateSubscriptionToken = async (subscriptionToken, userEmail, authUserId, dispatch) => {
     try {
-
-        const response = await apiConnector("POST", subscriptionEndpoints.VALIDATE_SUBSCRIPTION_TOKEN_API, token );
+        const data = {
+            token: subscriptionToken
+        };
+        const response = await apiConnector("POST", subscriptionEndpoints.VALIDATE_SUBSCRIPTION_TOKEN_API, data);
         if (response?.data?.isexpire == false) {
             // do nothing.
-            return ;
+            return null;
         }
         else {
             // if token is expire then generate new token
+            console.log("your toekn is expiry");
             const data = {
-                email: email,
-                userId: userId
-            }
+                email: userEmail,
+                userId: authUserId
+            };
             const response = await apiConnector("POST", subscriptionEndpoints.GET_SUBSCRIPTION_TOKEN_API, data);
+
             if (response?.data?.token) {
                 dispatch(setSubscriptionToken(response?.data?.token));
                 localStorage.setItem("subscriptionToken", response?.data?.token);
+                return response?.data?.token;
             }
             else {
                 console.log("There is some error to generate the subscription token - no token in response");
             }
-            return ;
+            return null;
         }
 
 
     } catch (error) {
         console.log("There is some error to validate the subscription token -", error);
-        return ;
+        return null;
     }
 }
 
@@ -110,7 +114,7 @@ const getSubscriptionData = async (token) => {
     try {
         const response = await apiConnector("POST", subscriptionEndpoints.GET_SUBSCRIPTION_DATA_API, token);
         return response?.data?.data;
-              
+
     } catch (error) {
         console.log("There is some error to get the subscription data -", error);
         return null;
@@ -119,4 +123,4 @@ const getSubscriptionData = async (token) => {
 }
 
 
-export { getSubscriptionDataToken, validateSubscriptionToken,getSubscriptionData,updateSubscriptionData };
+export { getSubscriptionDataToken, validateSubscriptionToken, getSubscriptionData, updateSubscriptionData };
