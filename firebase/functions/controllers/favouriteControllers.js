@@ -12,7 +12,7 @@ const sampleStory = require("../resources/sampleStory.json");
 const keyArr = { words, sampleStory };
 
 const { SINGLE_NOTE_FETCHING_API_URL, NOTES_FILE_NAME,FLASH_CARD_SEEN, FLASH_CARD_UNSEEN } = require("../constants/constants");
-
+const { STORY_FILE_NAME } = require("../constants/constants");
 //this is to fetch the status of favourite button if item is in favourite 
 //it will give true else false so can be used to set the status of button on frontend
 const fetchFavouriteButtonStatus = async (req, res) => {
@@ -154,7 +154,7 @@ const fetchFavouriteItems = async (req, res) => {
     }
     else{
     //Types of data that can be stored in favourite
-    const types =['words','notes']; //TODO:Add more types as needed
+    const types =['words','notes','sampleStory']; //TODO:Add more types as needed
     const result = []; 
     const promises = []; 
 
@@ -182,6 +182,24 @@ const fetchFavouriteItems = async (req, res) => {
             viewIndex:size
         })
         size-=1;
+        }
+      }
+    }
+
+    else if (type==="sampleStory"){
+      const subCollectionRef = docRef.collection(type);
+      const subDocRef = subCollectionRef.doc(userId);
+      const subDocSnap = await subDocRef.get();
+      if (subDocSnap.exists && subDocSnap.data()) {
+        const data = subDocSnap.data()[type];
+        for (const item of data){
+          const storyId=item;
+          promises.push({
+            itemId:storyId,
+            name:STORY_FILE_NAME,
+            type,
+            val: keyArr[type][Number(storyId)],
+          })
         }
       }
     }
