@@ -1,8 +1,8 @@
 import Header from "../components/Header"
-import { getSubscriptionData } from "../services/operations/subscriptionService"
-import { validateSubscriptionToken } from "../services/operations/subscriptionService"
+import { getSubscriptionData, validateSubscriptionToken } from "../services/operations/subscriptionService"
 import { useSelector, useDispatch } from "react-redux"
 import { handlePayment } from "../services/operations/paymentService"
+import { createReferral, verifyReferralCode, updateReferralData, updateWalletAmount } from "../services/operations/referralService"
 
 
 function AboutUspage() {
@@ -24,6 +24,19 @@ function AboutUspage() {
     console.log(" Subscription data of User is -> ", data);
 
   }
+
+
+  async function referralCodeAPIHandler() {
+    console.log("Referral code API is called");
+    //  await createReferral(authUserId,30);
+
+    // const {value,count,isValid}=await verifyReferralCode("xj4dfi5l");    // here count means how many number of times this referral code has been used.
+    // console.log("Referral code is valid -> ",isValid," value is -> ",value," count is -> ",count);
+
+    // await updateReferralData("xj4dfi5l", 1);             // means we increase the count of the referral code by 1(used 1 more time)
+
+    // updateWalletAmount(authUserId, 30, 2);                // means we add 2 referral code of 30% discount in the wallet of the user
+  }
   return (
 
     <>
@@ -31,9 +44,10 @@ function AboutUspage() {
       <Header val={3} />
       <div className="flex justify-center items-center">
         <h2>About us</h2>
-        <br />
-        <button onClick={handlebutton}> GetuserData </button>
       </div>
+      <button onClick={handlebutton} className="text-2xl"> Check Payment and Subscription APIs</button>
+      <br />
+      <button onClick={referralCodeAPIHandler} className="text-2xl">Check ReferralCode APIs</button>
 
     </>
   )

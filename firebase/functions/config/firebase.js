@@ -34,4 +34,4 @@ if (!auth) {
 }
 
 // Exporting using CommonJS syntax
-module.exports = { db, auth};
+module.exports = { db, auth,admin };

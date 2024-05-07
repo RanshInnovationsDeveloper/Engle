@@ -76,3 +76,11 @@ export const dashboardEndpoints={
   ADD_STORY_PREFERENCE:BASE_URL+"/dashboard/addStoryPreference",
   FETCH_STORY_PREFERENCE:BASE_URL+"/dashboard/fetchStoryPreference"
 }
+
+
+export const referralEndpoints={
+  CREATE_REFERRAL_API:BASE_URL+"/referral/create",
+  VERIFY_REFERRAL_API:BASE_URL+"/referral/verify",
+  UPDATE_REFERRAL_API:BASE_URL+"/referral/update",
+  UPDATE_WALLET_AMOUNT_API:BASE_URL+"/referral/updatewallet"
+}
