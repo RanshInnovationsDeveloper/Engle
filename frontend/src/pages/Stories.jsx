@@ -1,77 +1,173 @@
-import React,{useEffect,useState} from 'react'
-import { apiConnector } from "../services/apiConnector";
-import { storyEndpoints } from "../services/apis";
+import React, { useEffect } from 'react'
+import { useState } from 'react';
+import { STORY_FILE_NAME, STORY_FILE_TYPE, genres } from '../constants/constants';
 import { GoSearch } from "react-icons/go";
-import { useNavigate } from 'react-router-dom';
+import { apiConnector } from "../services/apiConnector";
+import { storyEndpoints,subscriptionEndpoints,dashboardEndpoints } from "../services/apis";
+import {useNavigate} from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import FavouriteButton from '../components/FavouriteButton';
-import { STORY_FILE_NAME,STORY_FILE_TYPE } from '../constants/constants';
-
-
-
-const {FETCHALLSTORIES_API} = storyEndpoints;
+import Header from '../components/Header';
 function Stories() {
-//Navigate to navigate to the story clicked
-  const navigate=useNavigate();
-//Various states used in the component
-  const [stories, setStories] = useState([]);
-  const [filteredStories, setFilteredStories] = useState([stories]);
-  const [query, setQuery] = useState('')
-  //Fetching all the stories
-  useEffect(() => {const fetchStories = async () => {
-        try {
-            const response = await apiConnector(
-                "GET",
-                FETCHALLSTORIES_API,
-              );
-              setStories(response.data);
-        } catch (error) {
-            console.log("Error from stories",error)
-        }
+
+  const initialFilters = genres.reduce((acc, genre) => ({ ...acc, [genre]: false }), {});
+  const [filters, setFilters] = useState(initialFilters); //Initializing filter useState
+  const [query, setQuery] = useState(''); //Initializing query useState
+  const [isSubscribed,setIsSubscribed]=useState(false); //To check if the user is subscribed or not
+  const { authUserId } = useSelector((state) => state.auth);//User ID of the user
+  
+  //Data and filtered stories to handle data coming from backend and filters applied
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([data]);
+  const [queryStories, setQueryStories] = useState([filteredData]);
+
+
+  const {FETCHALLSTORIES_API} = storyEndpoints;
+  const {GET_SUBSCRIPTION_STATUS}=subscriptionEndpoints;
+  const {FETCH_STORY_PREFERENCE}=dashboardEndpoints
+  const navigate=useNavigate(); //Navigate to navigate to the story clicked
+  
+  
+  //Function to open individual story
+  const openStory = (id) => {
+          navigate(`/story/${id}`)
+         }
+
+  //Function to handle the case when user is not subscribed
+  const handleNotSubscribed=()=>{
+    navigate("/subscribe") //TODO:GIve the address of this page
+  } 
+
+//Fetching the subscription status of user
+useEffect(()=>{
+  const fetchSubscriptionStatus=async()=>{
+    try {
+      const response=await apiConnector(
+        "GET",
+        GET_SUBSCRIPTION_STATUS,
+        null,
+        null,
+        { userId: String(authUserId) }
+      );
+      setIsSubscribed(response?.data?.isSubscribed);
+    } catch (error) {
+      console.log(error.message)
     }
-    fetchStories();
-    },[])
+  };
+  fetchSubscriptionStatus();
+},[])
+
+//Fetching all the stories data
+useEffect(()=>{
+  const fetchData=async()=>{
+    try {
+      const response=await apiConnector("GET",FETCHALLSTORIES_API,null,null,{userId:authUserId});
+      setData(response.data);
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+  fetchData();
+},[])
+
+//Fetching the story preference of the user
+useEffect(()=>{
+const getStoryPreference=async()=>{
+  try {
+    const response=await apiConnector(
+      "GET",
+      FETCH_STORY_PREFERENCE,
+      null,
+      null,
+      { userId: String(authUserId) }
+    );
+    if (response.data?.filters){
+    setFilters(response.data?.filters);
+    }
+  } catch (error) {
+    console.log(error.message)
+  }
+}
+getStoryPreference();
+},[])
+
+//Filtering the stories based on the genre selected
+useEffect(() => {
+  const filterData=()=>{
+  const allFalse = Object.values(filters).every(value => value === false);
+  if (allFalse) {
+    setFilteredData(data);
+  } else {
+    const newData = data.filter(story => filters[story.genre]);
+    setFilteredData(newData);
+  }
+}
+filterData();
+}, [filters,data]);
+
+
 //Filtering the stories based on the search query
-    useEffect(() => {
-      if (query === '') setFilteredStories(stories);
-      else {
-        const tempArr=[];
-        for (let i = 0; i < stories.length; i++) {
-          if (stories[i].title.toLowerCase().includes(query.toLowerCase()) || stories[i].content.toLowerCase().includes(query.toLowerCase()) ) {
-            tempArr.push(stories[i]);
+useEffect(() => {
+        if (query === '') setQueryStories(filteredData);
+        else {
+          const tempArr=[];
+          for (let i = 0; i < filteredData.length; i++) {
+            if (filteredData[i]?.title?.toLowerCase()?.includes(query?.toLowerCase())) {
+              tempArr.push(filteredData[i]);
+            }
           }
+          setQueryStories(tempArr);
         }
-        setFilteredStories(tempArr);
-      }
-    }, [stories,query]);
+      }, [query,data,filters,filteredData]);
 
-    //Open the story clicked
-    const openStory = (id) => {
-      navigate(`/story/${id}`)
-    }
-
-    return (
+  return (
     <div>
-       <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
+    <Header val={1}/>
+      <h1>LEARN WITH STORY</h1>
+      <div>
+        {genres.map((genre,indx) => (
+          <div key={indx}>
             <input
+              type="checkbox"
+              name={genre}
+              checked={filters[genre]}
+              onChange={(e) => {
+                setFilters((prevFilters) => ({
+                  ...prevFilters,
+                  [genre]: e.target.checked,
+                }));
+              }}
+            />
+            <label htmlFor={genre}>{genre}</label>
+          </div>
+        ))}
+      </div>
+      <GoSearch className='fill-gray-500 pt-1 px-1 w-[2rem] h-[2rem] ' />
+          <input
               type="text"
               placeholder="Search..."
               className="rounded-lg py-2 px-4 mr-2 focus:outline-none"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
-      {filteredStories.map((story,indx)=>{
-        return (
-          <div key={indx} onClick={()=>openStory(indx)}>
-            <h1>{story?.title}</h1>
-            <p>{story?.content}</p>
-            <FavouriteButton
-            type={STORY_FILE_TYPE}
-            itemId={indx}
-            name={STORY_FILE_NAME}
-          />
-          </div>
-        )
-      })}
+
+       {queryStories.map((story)=>{
+         return (
+           <div key={story?.id}>
+             <h1>{story?.title}</h1>
+             <FavouriteButton
+                  itemId={story?.id}
+                  type={STORY_FILE_TYPE}
+                  name={STORY_FILE_NAME}
+             />
+           Count:{story?.count}
+            <br/>
+            Scroll Percentage:{story?.scrollPercentage}
+           <button onClick={(isSubscribed||story?.isFree)?()=>openStory(story?.id):()=>handleNotSubscribed()}>{(isSubscribed||story?.isFree)?"View":"Please Subscribe To View This"}</button>
+           </div>
+         )
+       })}
+      
     </div>
   )
 }

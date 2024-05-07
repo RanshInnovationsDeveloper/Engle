@@ -51,6 +51,10 @@ export const flashCardEndpoints = {
 export const storyEndpoints = {
   FETCHALLSTORIES_API: BASE_URL + "/story/getAll",
   FETCHSTORYBYID_API: BASE_URL + "/story/getById",
+  GET_STORY_COUNT: BASE_URL + "/story/getStoryCount",
+  UPDATE_STORY_COUNT: BASE_URL + "/story/updateStoryCount",
+  GET_SCROLL_PERCENTAGE: BASE_URL + "/story/getScrollPercentage",
+  UPDATE_SCROLL_PERCENTAGE: BASE_URL + "/story/updateScrollPercentage",
 }
 
 export const subscriptionEndpoints = {
@@ -59,10 +63,16 @@ export const subscriptionEndpoints = {
   GET_SUBSCRIPTION_TOKEN_API: BASE_URL + "/subscription/generatetoken",
   VALIDATE_SUBSCRIPTION_TOKEN_API: BASE_URL + "/subscription/validatetoken",
   GET_SUBSCRIPTION_DATA_API: BASE_URL + "/subscription/getsubscriptiondata",
+  GET_SUBSCRIPTION_STATUS:BASE_URL+"/subscription/isSubscribed"
 }
 
 
 export const paymentEndpoints = {
   CHECKOUT_API: BASE_URL + "/payment/checkout",
   PAYMENT_VERIFICATION_API: BASE_URL + "/payment/verify",
+}
+
+export const dashboardEndpoints={
+  ADD_STORY_PREFERENCE:BASE_URL+"/dashboard/addStoryPreference",
+  FETCH_STORY_PREFERENCE:BASE_URL+"/dashboard/fetchStoryPreference"
 }

@@ -39,8 +39,6 @@ const createSubscription = async (req, res) => {
 };
 
 
-
-
 // after subscription it will update
 const updateSubscription = async (req, res) => {
     try {
@@ -168,8 +166,46 @@ const getSubscriptionData = async (req, res) => {
     }
 }
 
+//To check the subscription status of the user
+const isSubscribed=async(req,res)=>{
+    try {
+        const {userId}=req.query;
+        const docRef=db.collection("subscription").doc(userId);
+        const subCollectionRef=docRef.collection("userData");
+        const subDocRef=subCollectionRef.doc(userId);
+
+        const docSnapshot=await docRef.get();
+
+        if(docSnapshot.exists){
+            const data=await subDocRef.get();
+            if(data.exists){
+                const jsonData=data.data().jsonData;
+                const currDate = new Date().toISOString();
+                if(currDate<jsonData?.planEndingDate){
+                    res.status(200).json({status:"success",isSubscribed:true})
+                }
+                else{
+                    res.status(200).json({status:"success",isSubscribed:false})
+                }
+            }
+            else{
+                res.status(200).json({status:"success",isSubscribed:false})
+            }
+            
+        }
+
+        else {
+            res.status(200).json({status:"success",isSubscribed:false})
+        }
+        
+    } catch (error) {
+        res.status(500).json({ status: "error", message: error.message });
+    }
+}
+
+
+
 
 
 module.exports = {
-    createSubscription, updateSubscription, generateToken, validateToken, getSubscriptionData
-};
+    createSubscription, updateSubscription, generateToken, validateToken, getSubscriptionData,isSubscribed};

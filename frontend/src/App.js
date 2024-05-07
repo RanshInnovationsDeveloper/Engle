@@ -19,6 +19,10 @@ import { useSelector } from "react-redux"
 import ErrorPage from "./pages/ErrorPage.jsx";
 import SomethingwentwrongPage from "./pages/SomethingwentwrongPage.jsx";
 import EmailVerificationPage from "./pages/EmailVerificationPage.jsx";
+import IndividualStory from "./pages/IndividualStory.jsx";
+
+import Stories from "./pages/Stories.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 
 function App() {
   const { loading } = useSelector(state => state.auth);
@@ -36,7 +40,7 @@ function App() {
             <Route path="/flashcards" element={<FlashCardpage />} />
             <Route path="/ambiguous_words" element={< Upcomingpage />} />
             <Route path="/learn_with_context" element={< Upcomingpage />} />
-            <Route path="/learn_with_story" element={< Upcomingpage />} />
+            {/* <Route path="/learn_with_story" element={< Upcomingpage />} /> */}
             <Route path="/learn_with_friends" element={< Upcomingpage />} />
             <Route path="/error" element={< SomethingwentwrongPage />} />
             <Route path="*" element={< ErrorPage />} />
@@ -84,6 +88,23 @@ function App() {
               }
             />
 
+            {/* Learn with story route */}
+            <Route path="/learn_with_story" element={<Stories/>}/>
+
+            {/* individual Story Route */}
+            <Route path="/story/:id" element={
+              <PrivateRoute>
+            <IndividualStory/>
+              </PrivateRoute>
+            }/>
+           
+           {/* Dashboard Route */}
+           <Route path="/dashboard" element={
+            <PrivateRoute>
+              <Dashboard/>
+            </PrivateRoute>
+           }/>
+           
             <Route
               path="/favourites/:type"
               element={

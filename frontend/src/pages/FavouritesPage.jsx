@@ -279,26 +279,41 @@ function FavouritesPage() {
                             </>
                           );
                         }
+                        if (item?.type === "sampleStory") {
+                          return (
+                            <>
+                              {/* {console.log(item)} */}
+                              <td className="text-center border-y border-r w-24  border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}.</td>
+                              <td className="text-center border   border-[#5B7ADE] ">{item?.val?.title}</td>
+                              {paramValue === "all" && 
+                                <td className="text-center border w-[24rem]  border-[#5B7ADE] ">
+                                <h1 className=" text-base font-normal ">
+                                  Story
+                                </h1>
+                                {/* <h3 className=" text-sm ">
+                                  (Flashcards)
+                                </h3> */}
+                                </td>}
 
-                        // if (item?.type === "sampleStory") {
-                        //   return (
-                        //     <>
-                        //     <td className="text-center border w-20 px-4 py-4 border-[#5B7ADE]">{(currentPage - 1) * itemsPerPage + index + 1}</td>
-                        //     <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.title}</td>
-                        //     <td className="text-center border w-64 px-4 py-4 border-[#5B7ADE]">{item?.val?.content}</td>
-                        //     <td className="text-center border px-4 py-4 border-[#5B7ADE]">{item?.name}</td>
-                        //     <td className="text-center border w-40 px-4 py-4 border-[#5B7ADE]">
-                        //           <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4">View</button>
 
-                        //         </td>
-                        //         <td className="text-center border w-28 px-4 py-4 border-[#5B7ADE]">
-                        //       <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name}  />
-                        //       </td> 
+                              <td className="text-center border w-[18rem]  border-[#5B7ADE]">
+                                <button className="bg-[#34468A] text-[#FAFAFA] rounded-md py-2 px-4 w-[4.75rem] h-9" onClick={
+                                  () => {
+                                    navigate(`/story/${item?.itemId}`);
+                                  }
+                                }>View</button>
 
-                        //     </>
-                        //   );
-                        // }
+                              </td>
 
+                              <td className="text-center border-y brder-l w-32  border-[#5B7ADE]">
+
+                                <FavouriteButton itemId={item?.itemId} type={item?.type} name={item?.name} />
+                              </td>
+                            </>
+                          );
+                        }
+
+                     
                          if (item?.type === "notes") {
                            return (
                              <>
