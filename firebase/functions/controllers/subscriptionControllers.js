@@ -174,12 +174,11 @@ const isSubscribed=async(req,res)=>{
         const subCollectionRef=docRef.collection("userData");
         const subDocRef=subCollectionRef.doc(userId);
 
-        const docSnapshot=await docRef.get();
+        const subDocSnapshot=await subDocRef.get();
 
-        if(docSnapshot.exists){
-            const data=await subDocRef.get();
-            if(data.exists){
-                const jsonData=data.data().jsonData;
+        if(subDocSnapshot.exists){
+            const data=subDocSnapshot.data();
+                const jsonData=data?.jsonData;
                 const currDate = new Date().toISOString();
                 if(currDate<jsonData?.planEndingDate){
                     res.status(200).json({status:"success",isSubscribed:true})
@@ -188,12 +187,7 @@ const isSubscribed=async(req,res)=>{
                     res.status(200).json({status:"success",isSubscribed:false})
                 }
             }
-            else{
-                res.status(200).json({status:"success",isSubscribed:false})
-            }
             
-        }
-
         else {
             res.status(200).json({status:"success",isSubscribed:false})
         }
