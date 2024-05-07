@@ -4,15 +4,19 @@ import { useState } from 'react';
 import { apiConnector } from '../services/apiConnector';
 import { dashboardEndpoints } from '../services/apis';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 function Dashboard() {
     const initialFilters = genres.reduce((acc, genre) => ({ ...acc, [genre]: false }), {});
     const [filters, setFilters] = useState(initialFilters); //Initializing filter useState
-    const {ADD_STORY_PREFERENCE}=dashboardEndpoints;
+    const {ADD_STORY_PREFERENCE,FETCH_STORY_PREFERENCE}=dashboardEndpoints;
 
     const { authUserId } = useSelector((state) => state.auth);
 
+
     const Submit=async()=>{
-        const response=await apiConnector(
+        try {
+          const response=await apiConnector(
             "POST",
             ADD_STORY_PREFERENCE,
             {
@@ -22,7 +26,35 @@ function Dashboard() {
             null,
             null
         )
+        if (response?.data?.status==="success"){
+          toast.success("Preference Updated Successfully")
+        }
+        } catch (error) {
+          
+        }
     }
+
+  //Fetching the story preference of the user
+useEffect(()=>{
+  const getStoryPreference=async()=>{
+    try {
+      const response=await apiConnector(
+        "GET",
+        FETCH_STORY_PREFERENCE,
+        null,
+        null,
+        { userId: String(authUserId) }
+      );
+      if (response.data?.filters){
+      setFilters(response.data?.filters);
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+  getStoryPreference();
+  },[])
+  
 
   return (
     <div>
@@ -45,10 +77,10 @@ function Dashboard() {
           </div>
         ))}
       </div>
-      {console.log(filters)}
       <button onClick={()=>Submit()}>Submit the Preference</button>
     </div>
   )
 }
+
 
 export default Dashboard
