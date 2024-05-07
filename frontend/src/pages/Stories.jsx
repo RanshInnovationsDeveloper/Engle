@@ -8,7 +8,10 @@ import {useNavigate} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import FavouriteButton from '../components/FavouriteButton';
 import Header from '../components/Header';
+import { useLocation } from 'react-router-dom';
 function Stories() {
+
+  const location=useLocation();
 
   const initialFilters = genres.reduce((acc, genre) => ({ ...acc, [genre]: false }), {});
   const [filters, setFilters] = useState(initialFilters); //Initializing filter useState
@@ -55,7 +58,7 @@ useEffect(()=>{
     }
   };
   fetchSubscriptionStatus();
-},[])
+},[location.key])
 
 //Fetching all the stories data
 useEffect(()=>{
@@ -68,7 +71,7 @@ useEffect(()=>{
     }
   }
   fetchData();
-},[])
+},[location.key])
 
 //Fetching the story preference of the user
 useEffect(()=>{
