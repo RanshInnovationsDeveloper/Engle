@@ -48,6 +48,17 @@ function Registercard() {
     dispatch(setLoading(false));
   }
 
+  //Check if username is valid or not
+  const validUsername = (username) => {
+
+    if (username.length > 30 ) 
+      return 'More than 30 characters are not allowed';
+    else if (/[^a-zA-Z._]/.test(username)) 
+      return "Only alphabets and . , _ are allowed";
+    else{
+      return 'good';
+    }
+  }
   const getPasswordStrength = (password) => {
     // Define regex patterns for weak, medium, and strong passwords
     const weakRegex = /^(?=.*[a-zA-Z]).{6,}$/;
@@ -112,6 +123,7 @@ function Registercard() {
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
+          {(validUsername(username) === 'good' )? <></> : <h1 className='text-sm -mt-2 mb-2' style={{color: 'red'}}>* Username should only consist of Alphabets, . , _ and should be less than 30 characters</h1> }
           <div className='flex flex-row flex-grow mb-4 shadow-md rounded-lg'>
             <label htmlFor="useremail" className="flex flex-col justify-center rounded-l-lg px-4 py-4 bg-[#F4F6FC] ">
               <IoMdMail className=' opacity-40 w-[1.25rem] h-[1.25rem]' />
@@ -192,7 +204,7 @@ function Registercard() {
           <button
             type="submit"
             disabled={
-              getPasswordStrength(password) !== 'Strong' || password !== confirmpass
+              getPasswordStrength(password) !== 'Strong' || password !== confirmpass || validUsername(username) != 'good'
             }
             className={` ${(getPasswordStrength(password) !== 'Strong' || password !== confirmpass) ? "cursor-not-allowed" : "cursor-pointer"} btn relative lg:w-[35%] w-full flex justify-center py-4 px-5   text-sm font-medium rounded-md `}
           >
