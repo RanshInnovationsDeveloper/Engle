@@ -3,7 +3,7 @@ import { getSubscriptionData, validateSubscriptionToken } from "../services/oper
 import { useSelector, useDispatch } from "react-redux"
 import { handlePayment } from "../services/operations/paymentService"
 import { createReferral, verifyReferralCode, updateReferralData, updateWalletAmount } from "../services/operations/referralService"
-
+import { onSignupSendOTP,onOTPVerify,setUserEmailAndSendVerificationLink,setUserPassword } from "../services/operations/authServices"
 
 function AboutUspage() {
 
@@ -37,6 +37,20 @@ function AboutUspage() {
 
     // updateWalletAmount(authUserId, 30, 2);                // means we add 2 referral code of 30% discount in the wallet of the user
   }
+
+  async function fnc1() {
+onSignupSendOTP('+918295515499');
+  }
+
+  async function fnc2(){
+onOTPVerify('123456');
+  }
+  async function fnc3(){
+    setUserEmailAndSendVerificationLink('parjapatsumit104@gmail.com');
+  }
+  async function fnc4(){
+    setUserPassword('123456');
+  }
   return (
 
     <>
@@ -48,6 +62,17 @@ function AboutUspage() {
       <button onClick={handlebutton} className="text-2xl"> Check Payment and Subscription APIs</button>
       <br />
       <button onClick={referralCodeAPIHandler} className="text-2xl">Check ReferralCode APIs</button>
+      <br />
+      <div id="recaptcha-container"></div>
+      <button onClick={fnc1} className="text-2xl">send otp</button>
+      <br />
+      <button onClick={fnc2} className="text-2xl">verify otp</button>
+      <br />
+      <button onClick={fnc3} className="text-2xl">set email</button>
+      <br />
+      <button onClick={fnc4} className="text-2xl">set password</button>
+      
+
 
     </>
   )

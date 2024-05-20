@@ -15,5 +15,6 @@ const firebaseConfiguration = {
 // Initialize Firebase
 export const app = initializeApp(firebaseConfiguration);
 export const auth = getAuth();
+auth.languageCode = 'en';
 export const db = getFirestore();
 export const FieldValue = serverTimestamp;

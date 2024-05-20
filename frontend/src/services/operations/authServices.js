@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signOut, sendPasswordResetEmail, signInWithEmailAndPassword ,onAuthStateChanged} from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signOut, sendPasswordResetEmail, signInWithEmailAndPassword, onAuthStateChanged, RecaptchaVerifier, signInWithPhoneNumber, updateEmail, updatePassword } from "firebase/auth";
 import { doc, setDoc, getDoc, updateDoc } from "firebase/firestore";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -54,7 +54,7 @@ export const signup = async (email, password, username) => {
 
 
 
-export const signin = async (email, password,dispatch) => {
+export const signin = async (email, password, dispatch) => {
   let error = "";
 
   try {
@@ -66,14 +66,13 @@ export const signin = async (email, password,dispatch) => {
       } else {
         localStorage.setItem('authUserId', user.uid);
         localStorage.setItem('flashCardCategory', "unseen");
-
+        console.log(user);
         // for subscription
-        const {token} = await getSubscriptionDataToken(email, user.uid);
+        const { token } = await getSubscriptionDataToken(email, user.uid);
         if (token) {
           localStorage.setItem('subscriptionToken', token);
           dispatch(setSubscriptionToken(token));
-        }else
-        {
+        } else {
           localStorage.setItem('subscriptionToken', null);
           dispatch(setSubscriptionToken(null));
         }
@@ -124,7 +123,7 @@ export const forgotPassword = async ({ useremail, navigate }) => {
 
 
 
-export const onFirebaseStateChanged=(dispatch)=>{
+export const onFirebaseStateChanged = (dispatch) => {
 
   onAuthStateChanged(auth, (user) => {
     if (user !== null && user.emailVerified === true) {
@@ -145,4 +144,101 @@ export const onFirebaseStateChanged=(dispatch)=>{
 
     }
   });
+}
+
+
+// during sign up send the otp to phone number after recapctha verification
+export async function onSignupSendOTP(phoneNumber) {
+
+  auth.languageCode = 'en';
+  await onCaptchVerify();
+  const appVerifier = await window.recaptchaVerifier;
+  await signInWithPhoneNumber(auth, phoneNumber.toString(), appVerifier)
+    .then((confirmationResult) => {
+      window.confirmationResult = confirmationResult;
+      toast.success("OTP sended successfully!");
+      return;
+    })
+    .catch((error) => {
+      toast.error(error);
+      console.log("error in onsignup function", error);
+    });
+}
+
+
+
+export async function onCaptchVerify() {
+  try {
+    auth.languageCode = 'en';
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: () => {
+          },
+          "expired-callback": () => { },
+        }
+      );
+    }
+  } catch (err) {
+    console.log("error in onCaptchVerify function", err);
+  }
+}
+
+
+
+
+export function onOTPVerify(otp) {
+
+  auth.languageCode = 'en';
+  window.confirmationResult.confirm(parseInt(otp)).then(async (res) => {
+    toast.success("OTP verified successfully !");
+  })
+    .catch((err) => {
+      // console.log("error in verify otp ", err);
+      toast.error('invalid otp !');
+    });
+}
+
+
+
+export async function setUserEmailAndSendVerificationLink(email) {
+  try {
+
+    // update the email
+    await updateEmail(auth.currentUser, email.toString()).then(async() => {
+
+      // send the verification link to the email
+      await sendEmailVerification(auth.currentUser).then(() => {
+        console.log(auth.currentUser);
+        toast.success("Email verification link sent successfully to your email");
+      }).catch((err) => {
+        console.log("There is some error to send the verification link -", err);
+        toast.error(err);
+      });
+
+
+    }).catch((error) => {
+      console.log("error in email update", error);
+      toast.error(error);
+    });
+
+  } catch (err) {
+    console.log("error in setUserEmailAndSendVerificationLink function", err);
+  }
+}
+
+
+
+export async function setUserPassword(password) {
+  try {
+    await updatePassword(auth.currentUser, password).then(() => {
+      toast.success("Password updated successfully!");
+    }).catch((error) => {
+      console.log("error in password update", error);
+    });
+  } catch (err) {
+    console.log("error in setUserPassword function", err);
+  }
 }
