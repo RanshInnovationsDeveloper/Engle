@@ -3,7 +3,7 @@
 		"_postman_id": "85c1d6ce-fa8a-4bf4-a780-4a07abeb7698",
 		"name": "API Testing",
 		"description": "This collection test all the API present in this project",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "24275789"
 	},
 	"item": [
@@ -11,7 +11,8 @@
 			"name": "Contact Us ",
 			"request": {
 				"auth": {
-					"type": "inherit"
+					"type": "inherit",
+					"inherit": {}
 				},
 				"method": "POST",
 				"header": [],
@@ -24,20 +25,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/contact/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"contact",
-						""
-					]
-				}
+				"url": "http://localhost:4000/api/v1/contact/"
 			},
 			"response": []
 		},
@@ -189,7 +177,8 @@
 			"name": "Add to Favourite",
 			"request": {
 				"auth": {
-					"type": "inherit"
+					"type": "inherit",
+					"inherit": {}
 				},
 				"method": "POST",
 				"header": [],
@@ -202,20 +191,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/favourite/add",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"favourite",
-						"add"
-					]
-				}
+				"url": "http://localhost:4000/api/v1/favourite/add"
 			},
 			"response": []
 		},
@@ -223,7 +199,8 @@
 			"name": "Add to Remember",
 			"request": {
 				"auth": {
-					"type": "inherit"
+					"type": "inherit",
+					"inherit": {}
 				},
 				"method": "POST",
 				"header": [],
@@ -236,20 +213,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/remember/add",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"remember",
-						"add"
-					]
-				}
+				"url": "http://localhost:4000/api/v1/remember/add"
 			},
 			"response": []
 		},
@@ -257,7 +221,8 @@
 			"name": "Add to Unremember",
 			"request": {
 				"auth": {
-					"type": "inherit"
+					"type": "inherit",
+					"inherit": {}
 				},
 				"method": "POST",
 				"header": [],
@@ -270,20 +235,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/unremember/add",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"unremember",
-						"add"
-					]
-				}
+				"url": "http://localhost:4000/api/v1/unremember/add"
 			},
 			"response": []
 		},
@@ -291,7 +243,8 @@
 			"name": "Add to Seen",
 			"request": {
 				"auth": {
-					"type": "inherit"
+					"type": "inherit",
+					"inherit": {}
 				},
 				"method": "POST",
 				"header": [],
@@ -304,20 +257,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/seen/add",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"seen",
-						"add"
-					]
-				}
+				"url": "http://localhost:4000/api/v1/seen/add"
 			},
 			"response": []
 		},
@@ -335,20 +275,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/favourite/remove",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"favourite",
-						"remove"
-					]
-				}
+				"url": "http://localhost:4000/api/v1/favourite/remove"
 			},
 			"response": []
 		},
@@ -366,20 +293,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/unremember/remove",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"unremember",
-						"remove"
-					]
-				}
+				"url": "http://localhost:4000/api/v1/unremember/remove"
 			},
 			"response": []
 		},
@@ -397,20 +311,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/remember/remove",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"remember",
-						"remove"
-					]
-				}
+				"url": "http://localhost:4000/api/v1/remember/remove"
 			},
 			"response": []
 		},
@@ -455,86 +356,6 @@
 			"response": []
 		},
 		{
-			"name": "Fetch  from Unremember",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/unremember/fetchAllItems?userId=1234",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"unremember",
-						"fetchAllItems"
-					],
-					"query": [
-						{
-							"key": "userId",
-							"value": "1234"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Fetch  from Remember",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/remember/fetchAllItems?userId=1234",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"remember",
-						"fetchAllItems"
-					],
-					"query": [
-						{
-							"key": "userId",
-							"value": "1234"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Create Notes",
 			"request": {
 				"method": "POST",
@@ -548,20 +369,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/notes/createnote",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"notes",
-						"createnote"
-					]
-				}
+				"url": "http://localhost:4000/api/v1/notes/createnote"
 			},
 			"response": []
 		},
@@ -569,7 +377,8 @@
 			"name": "Get All Notes",
 			"request": {
 				"auth": {
-					"type": "inherit"
+					"type": "inherit",
+					"inherit": {}
 				},
 				"method": "POST",
 				"header": [],
@@ -582,33 +391,17 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/notes/getallnotes",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"notes",
-						"getallnotes"
-					]
-				}
+				"url": "http://localhost:4000/api/v1/notes/getallnotes"
 			},
 			"response": []
 		},
 		{
 			"name": "Get Note By Id",
 			"request": {
-				"auth": {
-					"type": "inherit"
-				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:4000/api/v1/notes/getnote/?id=Note Id",
+					"raw": "http://localhost:4000/api/v1/notes/getnote/?id=Enter A Note Id",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -624,7 +417,7 @@
 					"query": [
 						{
 							"key": "id",
-							"value": "Note Id"
+							"value": "Enter A Note Id"
 						}
 					]
 				}
@@ -635,7 +428,8 @@
 			"name": "Recent Notes",
 			"request": {
 				"auth": {
-					"type": "inherit"
+					"type": "inherit",
+					"inherit": {}
 				},
 				"method": "POST",
 				"header": [],
@@ -648,20 +442,7 @@
 						}
 					}
 				},
-				"url": {
-					"raw": "http://localhost:4000/api/v1/notes/getrecentnotes",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "4000",
-					"path": [
-						"api",
-						"v1",
-						"notes",
-						"getrecentnotes"
-					]
-				}
+				"url": "http://localhost:4000/api/v1/notes/getrecentnotes"
 			},
 			"response": []
 		},
@@ -669,7 +450,8 @@
 			"name": "Word Fetch Word",
 			"request": {
 				"auth": {
-					"type": "inherit"
+					"type": "inherit",
+					"inherit": {}
 				},
 				"method": "POST",
 				"header": [],
@@ -682,8 +464,21 @@
 						}
 					}
 				},
+				"url": "http://localhost:4000/api/v1/word/fetchWord"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Stories",
+			"request": {
+				"auth": {
+					"type": "inherit",
+					"inherit": {}
+				},
+				"method": "GET",
+				"header": [],
 				"url": {
-					"raw": "http://localhost:4000/api/v1/word/fetchWord",
+					"raw": "http://localhost:4000/api/v1/story/getAll?userId=1234",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -692,10 +487,105 @@
 					"path": [
 						"api",
 						"v1",
-						"word",
-						"fetchWord"
+						"story",
+						"getAll"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "1234"
+						}
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Story By Id",
+			"request": {
+				"auth": {
+					"type": "inherit",
+					"inherit": {}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:4000/api/v1/story//getById/2"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Story Count",
+			"request": {
+				"auth": {
+					"type": "inherit",
+					"inherit": {}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:4000/api/v1/story/getStoryCount"
+			},
+			"response": []
+		},
+		{
+			"name": "Update the count of story",
+			"request": {
+				"auth": {
+					"type": "inherit",
+					"inherit": {}
+				},
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:4000/api/v1/story/updateStoryCount"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Scroll Percentage",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/api/v1/story/getScrollPercentage?userId=1234",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"api",
+						"v1",
+						"story",
+						"getScrollPercentage"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "1234"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Scroll Percentage",
+			"request": {
+				"auth": {
+					"type": "inherit",
+					"inherit": {}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"userId\":\"123\",\"storyId\":\"3\",\"percentage\":\"12\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:4000/api/v1/story/updateScrollPercentage"
 			},
 			"response": []
 		}
